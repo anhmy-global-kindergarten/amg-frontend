@@ -71,47 +71,116 @@ export default function LandingPage() {
 
             <section className="relative w-full px-6 mt-[200px] mb-20 z-70">
                 <div className="flex justify-center gap-6 max-w-7xl mx-auto">
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                         <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
                             <Image src="/gallery/photo5.png" alt="" width={300} height={200}
-                                   className="object-contain w-full h-full"/>
+                                   className="object-cover w-full h-full"/>
                         </div>
                         <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
                             <Image src="/gallery/photo6.png" alt="" width={300} height={400}
-                                   className="object-contain w-full h-full"/>
+                                   className="object-cover w-full h-full"/>
                         </div>
                         <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo2.png" alt="" width={300} height={200}
-                                   className="object-contain w-full h-full"/>
+                            <Image src="/gallery/photo7.png" alt="" width={300} height={200}
+                                   className="object-cover w-full h-full"/>
                         </div>
                     </div>
 
                     {/* Cột giữa - 2 ảnh cao hơn */}
                     <div className="flex flex-col gap-4 justify-center">
-                        <div className="w-[320px] h-[280px] rounded-2xl overflow-hidden">
+                        <div className="w-[320px] h-[330px] rounded-2xl overflow-hidden">
                             <Image src="/gallery/photo1.png" alt="" width={220} height={180}
-                                   className="object-contain w-full h-full"/>
+                                   className="object-cover w-full h-full"/>
                         </div>
-                        <div className="w-[320px] h-[280px] rounded-2xl overflow-hidden">
+                        <div className="w-[320px] h-[330px] rounded-2xl overflow-hidden">
                             <Image src="/gallery/photo8.png" alt="" width={220} height={180}
-                                   className="object-contain w-full h-full"/>
+                                   className="object-cover w-full h-full"/>
                         </div>
                     </div>
 
                     {/* Cột phải - 3 ảnh thấp hơn */}
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                         <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo7.png" alt="" width={180} height={120}
-                                   className="object-contain w-full h-full"/>
+                            <Image src="/gallery/photo2.png" alt="" width={180} height={120}
+                                   className="object-cover w-full h-full"/>
                         </div>
                         <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
                             <Image src="/gallery/photo3.png" alt="" width={180} height={120}
-                                   className="object-contain w-full h-full"/>
+                                   className="object-cover w-full h-full"/>
                         </div>
                         <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
                             <Image src="/gallery/photo4.png" alt="" width={180} height={120}
-                                   className="object-contain w-full h-full"/>
+                                   className="object-cover w-full h-full"/>
                         </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Section Giới thiệu AMG & Hệ thống lớp học */}
+            <section className="w-full bg-[#FFF6C7] px-6 py-10 relative z-10">
+                <div className="max-w-7xl mx-auto flex flex-col items-center gap-12">
+
+                    {/* Về AMG */}
+                    <div className="text-center max-w-3xl">
+                        <h2 className="text-3xl font-bold mb-4 text-[#FF6A00]">VỀ AMG</h2>
+                        <p className="text-base leading-relaxed text-[#4D4D4D]">
+                            <span className="font-semibold">AMG</span> là hệ thống giáo dục mầm non hiện đại, nơi khơi nguồn yêu thương,
+                            nuôi dưỡng tính cách và khuyến khích phát triển toàn diện cho trẻ.
+                            Với đội ngũ giáo viên tận tâm và phương pháp học tập tiên tiến, chúng tôi cam kết mang lại môi trường học tập lý tưởng cho các bé.
+                        </p>
+                        <div className="flex justify-center mt-6 gap-4 flex-wrap">
+                            <Image src="/info/amg_box1.png" alt="AMG Hà Nội" width={140} height={80}/>
+                            <Image src="/info/amg_box2.png" alt="AMG Duy Tân" width={140} height={80}/>
+                            <Image src="/info/amg_box3.png" alt="AMG Ecopark" width={140} height={80}/>
+                        </div>
+                    </div>
+
+                    {/* Hệ thống lớp học */}
+                    <div className="w-full text-center">
+                        <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">HỆ THỐNG LỚP HỌC</h2>
+                        <div className="flex flex-wrap justify-center gap-4">
+                            {["BLUEBERRY", "CHERRY", "LEMON", "MANGO", "INTERNATIONAL"].map((name, index) => (
+                                <div key={index} className="w-[180px] h-[130px] rounded-xl overflow-hidden border-4 border-dashed border-[#FFD966] bg-white">
+                                    <Image src={`/class/${name.toLowerCase()}.png`} alt={name} width={180} height={130} className="object-cover w-full h-full"/>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Section Bữa ăn của con */}
+            <section className="w-full bg-[#FFF6C7] px-6 py-10 relative z-10">
+                <div className="max-w-5xl mx-auto text-center">
+                    <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">BỮA ĂN CỦA CON</h2>
+                    <div className="grid grid-cols-3 gap-4">
+                        {[1,2,3,4,5,6,7,8].map((i) => (
+                            <div key={i} className="w-full rounded-xl overflow-hidden">
+                                <Image src={`/meal/meal${i}.png`} alt={`Bữa ăn ${i}`} width={300} height={200} className="object-cover w-full h-full"/>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Section Lý do phụ huynh tin tưởng */}
+            <section className="w-full bg-[#FFF6C7] px-6 py-10 relative z-10">
+                <div className="max-w-5xl mx-auto text-center">
+                    <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">ĐIỀU GÌ KHIẾN PHỤ HUYNH TIN TƯỞNG AMG?</h2>
+                    <div className="grid grid-cols-2 gap-6">
+                        {[
+                            { title: "Chương trình học chuẩn quốc tế", icon: "/icons/icon_environment.png" },
+                            { title: "Giáo viên tận tâm & giàu kinh nghiệm", icon: "/icons/icon_sport.png" },
+                            { title: "Cơ sở vật chất hiện đại", icon: "/icons/icon_culture.png" },
+                                { title: "Hoạt động ngoại khoá phong phú", icon: "/icons/icon_english.png" }
+                        ].map((item, idx) => (
+                            <div key={idx} className="flex items-center gap-4 bg-white rounded-xl p-4 shadow-md">
+                                <div className="w-14 h-14 relative">
+                                    <Image src={item.icon} alt={item.title} fill className="object-contain"/>
+                                </div>
+                                <p className="text-left font-semibold text-[#4D4D4D]">{item.title}</p>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </section>
