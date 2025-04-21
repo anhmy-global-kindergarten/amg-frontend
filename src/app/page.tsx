@@ -68,42 +68,54 @@ export default function LandingPage() {
             </section>
             <Image src="/banner/big_cloud.png" alt="" width={1920} height={80}
                    className="w-full absolute top-[700px] z-50"/>
-            <section className="relative z-70 top-[200px] px-6 max-w-7xl mx-auto">
-                <div className="grid grid-cols-3 gap-4">
-                    <div className="rounded-2xl overflow-hidden">
-                        <Image src="/gallery/photo1.png" alt="" width={300} height={200}
-                               className="object-cover w-full h-full"/>
+
+            <section className="relative w-full px-6 mt-[200px] mb-20 z-70">
+                <div className="flex justify-center gap-6 max-w-7xl mx-auto">
+                    <div className="flex flex-col gap-4">
+                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo5.png" alt="" width={300} height={200}
+                                   className="object-contain w-full h-full"/>
+                        </div>
+                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo6.png" alt="" width={300} height={400}
+                                   className="object-contain w-full h-full"/>
+                        </div>
+                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo2.png" alt="" width={300} height={200}
+                                   className="object-contain w-full h-full"/>
+                        </div>
                     </div>
-                    <div className="rounded-2xl overflow-hidden col-span-1 row-span-2">
-                        <Image src="/gallery/photo1.png" alt="" width={300} height={400}
-                               className="object-cover w-full h-full"/>
+
+                    {/* Cột giữa - 2 ảnh cao hơn */}
+                    <div className="flex flex-col gap-4 justify-center">
+                        <div className="w-[320px] h-[280px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo1.png" alt="" width={220} height={180}
+                                   className="object-contain w-full h-full"/>
+                        </div>
+                        <div className="w-[320px] h-[280px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo8.png" alt="" width={220} height={180}
+                                   className="object-contain w-full h-full"/>
+                        </div>
                     </div>
-                    <div className="rounded-2xl overflow-hidden">
-                        <Image src="/gallery/photo2.png" alt="" width={300} height={200}
-                               className="object-cover w-full h-full"/>
-                    </div>
-                    <div className="rounded-2xl overflow-hidden">
-                        <Image src="/gallery/photo4.png" alt="" width={300} height={200}
-                               className="object-cover w-full h-full"/>
-                    </div>
-                    <div className="rounded-2xl overflow-hidden">
-                        <Image src="/gallery/photo5.png" alt="" width={300} height={200}
-                               className="object-cover w-full h-full"/>
-                    </div>
-                    <div className="rounded-2xl overflow-hidden">
-                        <Image src="/gallery/photo6.png" alt="" width={300} height={200}
-                               className="object-cover w-full h-full"/>
-                    </div>
-                    <div className="rounded-2xl overflow-hidden">
-                        <Image src="/gallery/photo7.png" alt="" width={300} height={200}
-                               className="object-cover w-full h-full"/>
-                    </div>
-                    <div className="rounded-2xl overflow-hidden">
-                        <Image src="/gallery/photo8.png" alt="" width={300} height={200}
-                               className="object-cover w-full h-full"/>
+
+                    {/* Cột phải - 3 ảnh thấp hơn */}
+                    <div className="flex flex-col gap-4">
+                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo7.png" alt="" width={180} height={120}
+                                   className="object-contain w-full h-full"/>
+                        </div>
+                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo3.png" alt="" width={180} height={120}
+                                   className="object-contain w-full h-full"/>
+                        </div>
+                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <Image src="/gallery/photo4.png" alt="" width={180} height={120}
+                                   className="object-contain w-full h-full"/>
+                        </div>
                     </div>
                 </div>
             </section>
+
             {/* Decorative icons (clouds, stars...) */}
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={70} className="absolute left-8 top-[550px]"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
@@ -112,7 +124,8 @@ export default function LandingPage() {
                    className="absolute left-1/3 translate-x-[80px] top-[450px]"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={60} height={70}
                    className="absolute left-1/3 top-[350px]"/>
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={70} className="absolute right-10 top-[300px]"/>
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={70}
+                   className="absolute right-10 top-[300px]"/>
             {/* Add more as needed */}
 
         </div>
