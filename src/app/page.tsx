@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ClassGallery from '@/components/ClassGallery';
+import TestimonialCarousel from "@/components/TestimonialCarousel";
 
 export default function LandingPage() {
     return (
@@ -14,34 +15,74 @@ export default function LandingPage() {
                     className="object-cover z-0"
                     priority
                 />
-                <div className="absolute top-6 left-6 z-10">
+
+                {/* Logo */}
+                <div className="absolute top-4 left-4 z-10">
                     <Image src="/banner/logo.png" alt="Logo AMG" width={120} height={80}/>
                 </div>
+
+                {/* Nav Desktop */}
                 <nav
-                    className="absolute top-10 left-1/2 -translate-x-1/4 flex flex-nowrap gap-8 z-10 text-sm font-semibold">
-                    {["Trang chủ", "Giới thiệu", "Hệ thống lớp học", "Tin tức sự kiện", "Thư viện AMG", "Tuyển sinh", "Liên hệ"].map((item) => (
+                    className="hidden lg:flex absolute top-10 left-1/2 -translate-x-1/4 gap-8 z-10 text-sm font-semibold"
+                >
+                    {[
+                        "Trang chủ",
+                        "Giới thiệu",
+                        "Hệ thống lớp học",
+                        "Tin tức sự kiện",
+                        "Thư viện AMG",
+                        "Tuyển sinh",
+                        "Liên hệ",
+                    ].map((item) => (
                         <div key={item} className="relative group">
-                            <a href="#" className="px-2 py-1 hover:underline bg-[#FFE5E5] rounded">{item}</a>
-                            {/* Dropdown hoặc icon nếu cần */}
+                            <a
+                                href="#"
+                                className="px-2 py-1 hover:underline bg-[#FFE5E5] rounded"
+                            >
+                                {item}
+                            </a>
                         </div>
                     ))}
                 </nav>
+
+                {/* Nav Mobile (hamburger optional) */}
+                <div className="lg:hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-center">
+                    <div className="flex flex-wrap gap-2 justify-center text-xs font-medium px-4">
+                        {[
+                            "Trang chủ",
+                            "Giới thiệu",
+                            "Lớp học",
+                            "Sự kiện",
+                            "Thư viện",
+                            "Tuyển sinh",
+                            "Liên hệ",
+                        ].map((item) => (
+                            <a
+                                key={item}
+                                href="#"
+                                className="bg-[#FFE5E5] px-3 py-1 rounded hover:underline"
+                            >
+                                {item}
+                            </a>
+                        ))}
+                    </div>
+                </div>
             </header>
 
+
             {/* Banner Section */}
-            <section
-                className="relative px-6 pt-10 pb-20 z-10 flex flex-col lg:flex-row items-center justify-between max-w-7xl mx-auto">
+            <section className="relative px-4 sm:px-6 pt-10 pb-20 z-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
                 {/* Text Block */}
-                <div className="max-w-xl z-20 lg:pr-10">
-                    <h1 className="text-5xl font-extrabold text-[#FF6A00] leading-tight mb-3">
-                        Đăng ký<br/>Tuyển sinh
+                <div className="w-full lg:w-auto max-w-xl z-20 lg:pr-10 text-center lg:text-left">
+                    <h1 className="text-4xl sm:text-5xl font-extrabold text-[#FF6A00] leading-tight mb-3">
+                        Đăng ký<br />Tuyển sinh
                     </h1>
-                    <p className="text-3xl font-semibold text-[#FFC600] mb-4">năm học 2024-2025</p>
-                    <p className="mb-4 text-[#D93B00] text-base">
-                        Anh Mỹ Global - Môi trường giáo dục hoàn hảo<br/>
+                    <p className="text-2xl sm:text-3xl font-semibold text-[#FFC600] mb-4">năm học 2024-2025</p>
+                    <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
+                        Anh Mỹ Global - Môi trường giáo dục hoàn hảo<br className="hidden sm:block"/>
                         cho trẻ từ 15 tháng tới 6 tuổi
                     </p>
-                    <div className="relative w-fit">
+                    <div className="relative w-fit mx-auto lg:mx-0">
                         <button>
                             <Image
                                 src="/banner/button_register.png"
@@ -52,128 +93,142 @@ export default function LandingPage() {
                             />
                         </button>
                         <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                            <Image src="/banner/icon_play.png" alt="Play" fill/>
+                            <Image src="/banner/icon_play.png" alt="Play" fill />
                         </div>
                     </div>
                 </div>
 
-                {/* Banner kids */}
-                <div className="absolute right-8 w-[600px] h-[800px] z-30 mt-10 lg:mt-0">
-                    <Image src="/banner/banner_kids_1.png" alt="Kids" fill className="object-contain"/>
+                {/* Banner Kids Image */}
+                <div className="absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-30 mb-10 lg:mb-0 lg:mt-0">
+                    <Image
+                        src="/banner/banner_kids_1.png"
+                        alt="Kids"
+                        fill
+                        className="object-contain"
+                    />
                 </div>
 
-                {/* Background triangle */}
-                <div className="absolute right-20 top-0 w-[400px] h-[500px] z-10">
-                    <Image src="/banner/triangle_shade.png" alt="Triangle" fill className="object-contain"/>
-                </div>
-            </section>
-            <Image src="/banner/big_cloud.png" alt="" width={1920} height={80}
-                   className="w-full absolute top-[700px] z-50"/>
-
-            <section className="relative w-full px-6 mt-[200px] mb-20 z-70">
-                <div className="flex justify-center gap-6 max-w-7xl mx-auto">
-                    <div className="flex flex-col gap-2">
-                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo5.png" alt="" width={300} height={200}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo6.png" alt="" width={300} height={400}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo7.png" alt="" width={300} height={200}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                    </div>
-
-                    {/* Cột giữa - 2 ảnh cao hơn */}
-                    <div className="flex flex-col gap-4 justify-center">
-                        <div className="w-[320px] h-[330px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo1.png" alt="" width={220} height={180}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                        <div className="w-[320px] h-[330px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo8.png" alt="" width={220} height={180}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                    </div>
-
-                    {/* Cột phải - 3 ảnh thấp hơn */}
-                    <div className="flex flex-col gap-2">
-                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo2.png" alt="" width={180} height={120}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo3.png" alt="" width={180} height={120}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                        <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
-                            <Image src="/gallery/photo4.png" alt="" width={180} height={120}
-                                   className="object-cover w-full h-full"/>
-                        </div>
-                    </div>
+                {/* Background Triangle */}
+                <div className="absolute hidden sm:block absolute right-20 sm:right-10 top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-10">
+                    <Image
+                        src="/banner/triangle_shade.png"
+                        alt="Triangle"
+                        fill
+                        className="object-contain"
+                    />
                 </div>
             </section>
 
-            {/* Section Giới thiệu AMG & Hệ thống lớp học */}
-            <section className="w-full bg-[#FFF6C7] px-6 py-10 relative z-10">
-                <div className="max-w-7xl mx-auto flex flex-col items-center gap-12">
+            {/* Cloud Divider */}
+            <Image
+                src="/banner/big_cloud.png"
+                alt=""
+                width={1920}
+                height={80}
+                className="w-full absolute top-[700px] z-50"
+            />
+
+
+            <section className="relative w-full mt-40 mb-20 z-70 px-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                    {/* Column 1 */}
+                    <div className="flex flex-col gap-4">
+                        {["photo5", "photo6", "photo7"].map((img, i) => (
+                            <div key={i} className="w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden">
+                                <Image
+                                    src={`/gallery/${img}.png`}
+                                    alt=""
+                                    width={340}
+                                    height={260}
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Column 2 */}
+                    <div className="flex flex-col gap-6 justify-center">
+                        {["photo1", "photo8"].map((img, i) => (
+                            <div key={i} className="w-full h-[400px] md:h-[525px] rounded-2xl overflow-hidden">
+                                <Image
+                                    src={`/gallery/${img}.png`}
+                                    alt=""
+                                    width={400}
+                                    height={400}
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Column 3 */}
+                    <div className="flex flex-col gap-4">
+                        {["photo2", "photo3", "photo4"].map((img, i) => (
+                            <div key={i} className="w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden">
+                                <Image
+                                    src={`/gallery/${img}.png`}
+                                    alt=""
+                                    width={340}
+                                    height={260}
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+
+            <section className="w-full bg-[#FFF6C7] py-10 relative z-10">
+                <div className="w-[90%] mx-auto flex flex-col items-center gap-12">
 
                     {/* Về AMG */}
-                    <div className="max-w-7xl mx-auto px-4 py-8">
-                        <h2 className="text-4xl font-bold text-center text-[#FF6A00] mb-6">VỀ AMG</h2>
-                        <h3 className="text-xl font-semibold text-[#00ADEF] mb-4">GIỚI THIỆU CHUNG</h3>
+                    <div className="w-full px-4 py-8">
+                        <h2 className="text-3xl md:text-4xl font-bold text-center text-[#FF6A00] mb-6">VỀ AMG</h2>
+                        <h3 className="text-lg md:text-xl font-semibold text-[#00ADEF] mb-4">GIỚI THIỆU CHUNG</h3>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                            {/* Cột trái - Giới thiệu chung */}
-                            <div className="rounded-xl text-left">
-                                <p className="text-base leading-7 text-[#4D4D4D] rounded-xl">
-                                    <span className="bg-[#FACBCC]">mầm non <strong>AMG Kindergarten</strong> là ngôi trường được hình thành từ</span>
+                            {/* Left - Text block */}
+                            <div className="rounded-xl text-left text-base leading-7 text-[#4D4D4D] space-y-4">
+                                <p className="bg-[#FACBCC] p-4 rounded-xl">
+                                    <span>mầm non <strong>AMG Kindergarten</strong> là ngôi trường được hình thành từ </span>
                                     <span
-                                        className="text-[#EF924D] bg-[#FACBCC]"> tình yêu của người mẹ dành cho con</span><span
-                                    className="bg-[#FACBCC]">. Chúng
-                                    tôi mong muốn lan toả</span>
-                                    <span className="text-[#EF924D] bg-[#FACBCC]"> tình yêu thương và năng lượng tích cực </span>
-                                    <span className="bg-[#FACBCC]">đến con trẻ trên cơ sở tình yêu thương của người làm mẹ. Bằng việc lựa chọn, chắt
-                                        lọc các chương trình, giáo án</span>
-                                    <span className="text-[#EF924D] bg-[#FACBCC]"> tiên tiến từ Tây Âu </span><span
-                                    className="bg-[#FACBCC]"> và kết hợp cùng nhiều</span>
+                                        className="text-[#EF924D] font-semibold">tình yêu của người mẹ dành cho con</span>.
+                                    <br/>
+                                    Chúng tôi mong muốn lan toả
+                                    <span className="text-[#EF924D] font-semibold"> tình yêu thương và năng lượng tích cực </span>
+                                    đến con trẻ dựa trên tình yêu thương của người làm mẹ.
+                                    <br/>
+                                    Chúng tôi lựa chọn các chương trình
+                                    <span className="text-[#EF924D] font-semibold"> tiên tiến từ Tây Âu </span>kết hợp
+                                    cùng
+                                    <span className="text-[#EF924D] font-semibold"> chuyên gia giáo dục có chuyên môn cao</span>,
+                                    xây dựng nên
                                     <span
-                                        className="text-[#EF924D] bg-[#FACBCC]"> chuyên gia giáo dục có chuyên môn cao</span>,
-                                    <span className="bg-[#FACBCC]">chúng tôi xây dựng nên</span>
+                                        className="text-[#EF924D] font-semibold"> giáo án giáo dục mầm non độc quyền</span>.
+                                    <br/>
+                                    Mục tiêu:
+                                    <span className="text-[#EF924D] font-semibold"> Lấy trẻ làm trung tâm</span>,
+                                    thúc đẩy
                                     <span
-                                        className="text-[#EF924D] bg-[#FACBCC]"> giáo án giáo dục mầm non độc quyền </span>
-                                    <span className="bg-[#FACBCC]">của AMG Kindergaten. Với mục tiêu:</span>
-                                    <span className="text-[#EF924D] bg-[#FACBCC]"> Lấy trẻ làm trung tâm</span><span
-                                    className="bg-[#FACBCC]">, quan tâm phát triển
-                                    tới từng cá thể, thúc đẩy</span>
+                                        className="text-[#EF924D] font-semibold"> năng lượng tích cực và tính sáng tạo</span>.
+                                    <br/>
+                                    Chúng tôi chọn
+                                    <span className="text-[#EF924D] font-semibold"> Phương pháp Phần Lan </span>
+                                    làm nền tảng triển khai giảng dạy với cấu trúc bài học trải nghiệm hấp dẫn và
+                                    <span className="text-[#EF924D] font-semibold"> lịch trình linh hoạt</span>.
+                                    <br/>
+                                    AMG có
                                     <span
-                                        className="text-[#EF924D] bg-[#FACBCC]"> năng lượng tích cực và tính sáng tạo</span><span
-                                    className="bg-[#FACBCC]">. Chúng
-                                    tôi lựa chọn</span>
-                                    <span className="text-[#EF924D] bg-[#FACBCC]"> Phương pháp Phần Lan </span><span
-                                    className="bg-[#FACBCC]"> là nền tảng để triển
-                                    khai giảng dạy tại nhà trường.
-                                    Với cấu tạo bài học trải nghiệm đầy cuốn hút, thú vị cùng</span>
-                                    <span
-                                        className="text-[#EF924D] bg-[#FACBCC]"> lịch trình di chuyển linh hoạt </span><span
-                                    className="bg-[#FACBCC]"> giúp thay
-                                    đổi không gian học, AMG chắc chắn
-                                    rằng mỗi ngày đến trường sẽ là một hành trình đầy thú vị và ấn tượng với con trẻ.
-                                    AMG có</span>
-                                    <span
-                                        className="text-[#EF924D] bg-[#FACBCC]"> đội ngũ chuyên gia tư vấn toàn diện </span><span
-                                    className="bg-[#FACBCC]"> không
-                                    chỉ về học thuật mà còn cả
-                                    phương diện chăm sóc và dinh dưỡng cho trẻ. AMG Kindergarten luôn nỗ lực mang lại
-                                    một môi trường giáo dục</span>
-                                    <span className="text-[#EF924D] bg-[#FACBCC]"> an toàn, trải nghiệm thú vị, hữu ích và sự chăm sóc chu đáo, toàn diện</span>.
+                                        className="text-[#EF924D] font-semibold"> đội ngũ chuyên gia tư vấn toàn diện</span> về
+                                    học thuật, chăm sóc và dinh dưỡng,
+                                    nhằm tạo ra môi trường
+                                    <span className="text-[#EF924D] font-semibold"> an toàn, trải nghiệm hữu ích và chu đáo</span>.
                                 </p>
                             </div>
 
-                            {/* Cột phải - 4 ô box */}
-                            <div className="grid grid-cols-2 gap-4 top-3">
+                            {/* Right - Icons grid */}
+                            <div className="grid grid-cols-2 gap-4 place-items-center">
                                 <Image src="/icons/icon_about1.png" alt="Phương pháp giáo dục Phần Lan" width={200}
                                        height={140}/>
                                 <Image src="/icons/icon_about2.png" alt="Cơ sở vật chất chuẩn Quốc tế" width={200}
@@ -186,25 +241,26 @@ export default function LandingPage() {
                         </div>
                     </div>
 
-                    <ClassGallery />
+                    {/* Class Gallery Section */}
+                    <ClassGallery/>
                 </div>
             </section>
 
             {/* Section Bữa ăn của con */}
             <section className="w-full bg-[#FFF6C7] px-6 py-10 relative z-10">
-                <div className="max-w-5xl mx-auto text-center">
+                <div className="w-[90%] mx-auto text-center">
                     <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">BỮA ĂN CỦA CON</h2>
                     <div className="flex justify-center gap-6 max-w-7xl mx-auto">
                         <div className="flex flex-col gap-2">
-                            <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <div className="w-[450px] h-[350px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal1.png" alt="" width={300} height={200}
                                        className="object-cover w-full h-full"/>
                             </div>
-                            <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <div className="w-[450px] h-[350px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal2.png" alt="" width={300} height={400}
                                        className="object-cover w-full h-full"/>
                             </div>
-                            <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <div className="w-[450px] h-[350px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal3.png" alt="" width={300} height={200}
                                        className="object-cover w-full h-full"/>
                             </div>
@@ -212,11 +268,11 @@ export default function LandingPage() {
 
                         {/* Cột giữa - 2 ảnh cao hơn */}
                         <div className="flex flex-col gap-4 justify-center">
-                            <div className="w-[320px] h-[280px] rounded-2xl overflow-hidden">
+                            <div className="w-[400px] h-[425px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal4.png" alt="" width={220} height={180}
                                        className="object-cover w-full h-full"/>
                             </div>
-                            <div className="w-[320px] h-[380px] rounded-2xl overflow-hidden">
+                            <div className="w-[400px] h-[625px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal5.png" alt="" width={220} height={180}
                                        className="object-cover w-full h-full"/>
                             </div>
@@ -224,15 +280,15 @@ export default function LandingPage() {
 
                         {/* Cột phải - 3 ảnh thấp hơn */}
                         <div className="flex flex-col gap-2">
-                            <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <div className="w-[450px] h-[350px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal6.png" alt="" width={180} height={120}
                                        className="object-cover w-full h-full"/>
                             </div>
-                            <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <div className="w-[450px] h-[350px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal7.png" alt="" width={180} height={120}
                                        className="object-cover w-full h-full"/>
                             </div>
-                            <div className="w-[280px] h-[220px] rounded-2xl overflow-hidden">
+                            <div className="w-[450px] h-[350px] rounded-2xl overflow-hidden">
                                 <Image src="/meal/meal8.png" alt="" width={180} height={120}
                                        className="object-cover w-full h-full"/>
                             </div>
@@ -242,23 +298,203 @@ export default function LandingPage() {
             </section>
 
             {/* Section Lý do phụ huynh tin tưởng */}
-            <section className="w-full bg-[#FFF6C7] px-6 py-10 relative z-10">
-            <div className="max-w-5xl mx-auto text-center">
-                    <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">ĐIỀU GÌ KHIẾN PHỤ HUYNH TIN TƯỞNG AMG?</h2>
-                    <div className="grid grid-cols-2 gap-6">
-                        {[
-                            {title: "Chương trình học chuẩn quốc tế", icon: "/icons/icon_environment.png"},
-                            {title: "Giáo viên tận tâm & giàu kinh nghiệm", icon: "/icons/icon_sport.png"},
-                            {title: "Cơ sở vật chất hiện đại", icon: "/icons/icon_culture.png"},
-                            {title: "Hoạt động ngoại khoá phong phú", icon: "/icons/icon_english.png"}
-                        ].map((item, idx) => (
-                            <div key={idx} className="flex items-center gap-4 bg-white rounded-xl p-4 shadow-md">
-                                <div className="w-14 h-14 relative">
-                                    <Image src={item.icon} alt={item.title} fill className="object-contain"/>
-                                </div>
-                                <p className="text-left font-semibold text-[#4D4D4D]">{item.title}</p>
+            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-10 relative z-10">
+                <div className="w-full max-w-7xl mx-auto">
+                    {/* Heading */}
+                    <h2 className="text-center text-2xl md:text-3xl font-bold text-[#FF6A00] mb-2">
+                        ĐIỀU GÌ KHIẾN PHỤ HUYNH TIN TƯỞNG
+                    </h2>
+                    <h2 className="text-center text-2xl md:text-3xl font-bold text-[#FF6A00] mb-10">
+                        AMG?
+                    </h2>
+
+                    {/* Responsive Grid */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+                        {/* Left Column - Text + Fork */}
+                        <div className="space-y-6">
+                            <div>
+                                <h3 className="text-[#2F80ED] font-semibold text-lg">CHƯƠNG TRÌNH HỌC</h3>
+                                <h3 className="text-[#2F80ED] font-semibold text-lg mb-3">CHUẨN QUỐC TẾ</h3>
+                                <p className="text-[#4D4D4D] leading-relaxed text-sm">
+                                    AMG Kindergarten với hệ thống lớp học cho <span className="text-[#EF924D]">trẻ từ 6 tháng đến 6 tuổi</span>,
+                                    hệ thống phòng học đầy đủ <span className="text-[#EF924D]">ánh sáng tự nhiên</span>,
+                                    trang bị đầy đủ
+                                    <span className="text-[#EF924D]"> cơ sở vật chất hạ tầng hiện đại</span>, an toàn
+                                    cho trẻ cùng
+                                    <span className="text-[#EF924D]"> sân chơi nội bộ riêng biệt</span>. Nguồn
+                                    <span className="text-[#EF924D]"> thực phẩm an toàn</span> được phục vụ trong tất cả
+                                    các bữa ăn,
+                                    <span className="text-[#EF924D]"> mang lại một môi trường hạnh phúc, thân thiện, an toàn</span>.
+                                </p>
                             </div>
-                        ))}
+
+                            <div className="flex gap-4 items-start">
+                                <Image
+                                    src="/icons/icon_fork.png"
+                                    alt="fork"
+                                    width={50}
+                                    height={100}
+                                    className="object-contain"
+                                />
+                                <div className="space-y-6 text-sm text-[#4D4D4D]">
+                                    <p>
+                                        Lấy trẻ làm trung tâm,<br/>
+                                        tôn trọng tính riêng biệt của trẻ.
+                                    </p>
+                                    <p>
+                                        Tạo môi trường cho trẻ phát huy tính tự lập<br/>
+                                        và khả năng tự học.
+                                    </p>
+                                    <p>
+                                        Trẻ được phát triển toàn diện<br/>
+                                        tất cả các giác quan: thị giác, thính giác, vận động...
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Column - Feature Boxes */}
+                        <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            {[
+                                {
+                                    title: "Môi trường học tập lý tưởng",
+                                    ttColor: "#7ED3F7",
+                                    desc: "Hệ thống phòng học đầy đủ ánh sáng tự nhiên, trang bị đầy đủ cơ sở vật chất hiện đại. Thực phẩm an toàn trong mọi bữa ăn, tạo nên môi trường học tập thân thiện, hạnh phúc.",
+                                    bg: "bg-[#A4D9F3]",
+                                    icon: "/icons/icon_environment.png",
+                                },
+                                {
+                                    title: "Chương trình giáo dục thể chất quốc tế",
+                                    ttColor: "#BFD730",
+                                    desc: "Phòng Gym chuyên dụng, bể bơi, bể float, bể cát động lực, sân chơi riêng biệt — hỗ trợ toàn diện thể chất cho trẻ.",
+                                    bg: "bg-[#FBE27D]",
+                                    icon: "/icons/icon_sport.png",
+                                },
+                                {
+                                    title: "Chương trình ngoại khóa phong phú",
+                                    ttColor: "#FFD668",
+                                    desc: "Hoạt động ngoại khóa hàng tuần/tháng giúp trẻ trải nghiệm thực tế, phát triển kỹ năng sống và giá trị cốt lõi.",
+                                    bg: "bg-[#B0E59E]",
+                                    icon: "/icons/icon_culture.png",
+                                },
+                                {
+                                    title: "Chương trình tiếng Anh chuẩn quốc tế",
+                                    ttColor: "#F6ADCD",
+                                    desc: "Trẻ tiếp cận tiếng Anh tự nhiên qua vui chơi & học tập. Giáo viên bản ngữ giúp trẻ yêu thích ngôn ngữ này từ sớm.",
+                                    bg: "bg-[#F2B5F9]",
+                                    icon: "/icons/icon_english.png",
+                                },
+                            ].map((item, idx) => (
+                                <div
+                                    key={idx}
+                                    className={`rounded-2xl p-5 flex flex-col gap-4`}
+                                >
+                                    <Image
+                                        src={item.icon}
+                                        alt={item.title}
+                                        width={400}
+                                        height={150}
+                                        className="mx-auto"
+                                    />
+                                    <p style={{color: item.ttColor}} className="font-bold text-sm">
+                                        {item.title}
+                                    </p>
+                                    <p className="text-xs text-[#4D4D4D] text-justify">{item.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            {/* Section Cảm nhận phụ huynh & Footer */}
+            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-10 relative z-10 text-[#4D4D4D]">
+                <div className="w-full max-w-7xl mx-auto flex flex-col items-center gap-12">
+                    {/* Cảm nhận phụ huynh */}
+                    <TestimonialCarousel/>
+
+                    {/* Footer thông tin hệ thống AMG */}
+                    <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-10 text-sm">
+                        {/* Cột Hệ thống AMG */}
+                        <div className="space-y-1">
+                            <h3 className="font-bold text-base">HỆ THỐNG AMG</h3>
+                            <p className="font-semibold">ANHMY GLOBAL KINDERGARTEN</p>
+                            <p>Cơ sở 1: No B18-06, Vinhomes Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.</p>
+                            <p>Cơ sở 2: No B18-05A, Vinhomes Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.</p>
+                            <p>Cơ sở 3: Tầng 2, Tòa nhà Dreamland Bonanza, 23 Duy Tân, Cầu Giấy, Hà Nội</p>
+                            <p>Cơ sở 4: S301, Sky 3, Aquabay, Khu đô thị Ecopark, Hưng Yên</p>
+                            <p>Hotline: 0972999201</p>
+                            <p>Email: anhmykindergarten@gmail.com</p>
+                            <p>Youtube: AMG - AnhMy Global Kindergarten</p>
+
+                            {/* Fanpage & YouTube thumbnails */}
+                            <div className="flex flex-wrap sm:flex-nowrap gap-6 mt-4">
+                                {/* Fanpage */}
+                                <div className="flex flex-col items-start">
+                                    <h3 className="font-bold">FANPAGE</h3>
+                                    <a
+                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            alt="YouTube Thumbnail"
+                                            width={180}
+                                            height={100}
+                                            className="rounded-lg mt-2"
+                                        />
+                                    </a>
+                                </div>
+
+                                {/* YouTube */}
+                                <div className="flex flex-col items-start">
+                                    <h3 className="font-bold">YOUTUBE</h3>
+                                    <a
+                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            alt="YouTube Thumbnail"
+                                            width={180}
+                                            height={100}
+                                            className="rounded-lg mt-2"
+                                        />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Cột Liên kết */}
+                        <div>
+                            <h3 className="font-bold text-base mb-2">LIÊN KẾT</h3>
+                            <ul className="space-y-1">
+                                <li>Trang chủ</li>
+                                <li>Giới thiệu</li>
+                                <li>Hệ thống lớp học</li>
+                                <li>Tin tức sự kiện</li>
+                                <li>Thư viện AMG</li>
+                                <li>Tuyển sinh</li>
+                                <li>Liên hệ</li>
+                            </ul>
+                        </div>
+
+                        {/* Cột Hỗ trợ */}
+                        <div>
+                            <h3 className="font-bold text-base mb-2">HỖ TRỢ</h3>
+                            <ul className="space-y-1">
+                                <li>Trang chủ</li>
+                                <li>Giới thiệu</li>
+                                <li>Hệ thống lớp học</li>
+                                <li>Tin tức sự kiện</li>
+                                <li>Thư viện AMG</li>
+                                <li>Tuyển sinh</li>
+                                <li>Liên hệ</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -273,6 +509,18 @@ export default function LandingPage() {
                    className="absolute left-1/3 top-[350px]"/>
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={70}
                    className="absolute right-10 top-[300px]"/>
+
+            <Image src="/icons/icon_elephant0.png" alt="" width={100} height={70}
+                   className="absolute left-45 top-[2000px] z-99"/>
+            <Image src="/icons/icon_elephant1.png" alt="" width={100} height={50}
+                   className="absolute right-100 translate-x-[80px] top-[2800px] z-99"/>
+            <Image src="/icons/icon_elephant2.png" alt="" width={150} height={100}
+                   className="absolute left-30 top-[4550px] z-99"/>
+            <Image src="/icons/icon_elephant3.png" alt="" width={100} height={70}
+                   className="absolute right-100 top-[5500px] z-99"/>
+
+            <Image src="/icons/icon_elephant_footer.png" alt="" width={300} height={150}
+                   className="absolute right-100 top-[6100px] z-99"/>
             {/* Add more as needed */}
 
         </div>

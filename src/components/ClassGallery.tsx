@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 export default function ClassGallery() {
     const classNames = ['BLUEBERRY', 'CHERRY', 'LEMON', 'MANGO', 'INTERNATIONAL'];
@@ -28,18 +28,41 @@ export default function ClassGallery() {
         }
     };
 
-    const handleMouseUp = () => {
-        setIsMouseDown(false);
-        if (containerRef.current) {
-            setScrollLeft(containerRef.current.scrollLeft);
-        }
-    };
+    useEffect(() => {
+        const handleGlobalMouseUp = () => setIsMouseDown(false);
+        window.addEventListener('mouseup', handleGlobalMouseUp);
+        return () => window.removeEventListener('mouseup', handleGlobalMouseUp);
+    }, []);
 
     return (
-        <div className="w-full text-center">
+        <div className="w-full text-center px-4">
             <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">HỆ THỐNG LỚP HỌC</h2>
 
-            <div className="relative">
+            <div className="w-full bg-[#fff7cc] py-10 flex flex-wrap gap-4 items-center justify-center">
+                <Image
+                    src="/info/amg_box1.png"
+                    alt="Tab các cơ sở"
+                    width={300}
+                    height={100}
+                    className="mb-4"
+                />
+                <Image
+                    src="/info/amg_box2.png"
+                    alt="Tab các cơ sở"
+                    width={300}
+                    height={100}
+                    className="mb-4"
+                />
+                <Image
+                    src="/info/amg_box3.png"
+                    alt="Tab các cơ sở"
+                    width={300}
+                    height={100}
+                    className="mb-4"
+                />
+            </div>
+
+            <div className="w-full lg:w-[70%] mx-auto">
                 <div
                     ref={containerRef}
                     className="flex gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory px-2 select-none cursor-grab active:cursor-grabbing"
@@ -49,17 +72,16 @@ export default function ClassGallery() {
                     }}
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
                 >
                     {classNames.map((name, index) => (
                         <Image
                             key={index}
                             src={`/class/${name.toLowerCase()}.png`}
                             alt={name}
-                            width={320}
-                            height={220}
-                            className="min-w-[320px] h-[220px] object-contain flex-shrink-0 snap-start"
+                            width={380}
+                            height={280}
+                            onDragStart={(e) => e.preventDefault()}
+                            className="object-contain flex-shrink-0 snap-start"
                         />
                     ))}
                 </div>

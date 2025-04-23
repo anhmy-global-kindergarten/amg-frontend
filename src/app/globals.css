@@ -5,6 +5,20 @@
   --foreground: #171717;
 }
 
+@font-face {
+  font-family: 'Comic Sans';
+  src: url('/fonts/ComicNeueSansID.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pacifico';
+  src: url('/fonts/Pacifico.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
