@@ -5,15 +5,17 @@ import { useRef, useState } from 'react';
 
 export default function ClassGallery() {
     const classNames = ['BLUEBERRY', 'CHERRY', 'LEMON', 'MANGO', 'INTERNATIONAL'];
-    const containerRef = useRef<HTMLDivElement>(null); // ✅
+    const containerRef = useRef<HTMLDivElement>(null);
     const [isMouseDown, setIsMouseDown] = useState(false);
     const [startX, setStartX] = useState(0);
     const [scrollLeft, setScrollLeft] = useState(0);
 
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (e.button === 2) {
-            setIsMouseDown(true);
-            setStartX(e.clientX);
+        if (e.button !== 0) return;
+        setIsMouseDown(true);
+        setStartX(e.clientX);
+        if (containerRef.current) {
+            setScrollLeft(containerRef.current.scrollLeft);
         }
     };
 
@@ -40,7 +42,7 @@ export default function ClassGallery() {
             <div className="relative">
                 <div
                     ref={containerRef}
-                    className="flex gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory px-2"
+                    className="flex gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory px-2 select-none cursor-grab active:cursor-grabbing"
                     style={{
                         scrollbarWidth: 'none',
                         msOverflowStyle: 'none',
@@ -48,25 +50,20 @@ export default function ClassGallery() {
                     onMouseDown={handleMouseDown}
                     onMouseMove={handleMouseMove}
                     onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp} // Also stop dragging if mouse leaves the container
+                    onMouseLeave={handleMouseUp}
                 >
                     {classNames.map((name, index) => (
-                        <div
+                        <Image
                             key={index}
-                            className="min-w-[260px] h-[180px] flex-shrink-0 rounded-xl overflow-hidden border-4 border-dashed border-[#FFD966] bg-white snap-start"
-                        >
-                            <Image
-                                src={`/class/${name.toLowerCase()}.png`}
-                                alt={name}
-                                width={260}
-                                height={180}
-                                className="object-cover w-full h-full"
-                            />
-                        </div>
+                            src={`/class/${name.toLowerCase()}.png`}
+                            alt={name}
+                            width={320}
+                            height={220}
+                            className="min-w-[320px] h-[220px] object-contain flex-shrink-0 snap-start"
+                        />
                     ))}
                 </div>
 
-                {/* Ẩn thanh scroll cho Chrome/Safari */}
                 <style jsx>{`
                     div::-webkit-scrollbar {
                         display: none;
