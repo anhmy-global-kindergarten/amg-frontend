@@ -190,53 +190,48 @@ export default function LandingPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                             {/* Left - Text block */}
                             <div className="rounded-xl text-left text-base leading-7 text-[#4D4D4D] space-y-4">
-                                <p className="bg-[#FACBCC] p-4 rounded-xl">
-                                    <span>mầm non <strong>AMG Kindergarten</strong> là ngôi trường được hình thành từ </span>
+                                <p className="p-4 rounded-xl">
+                                    <span className="bg-[#FACBCC]" >mầm non <strong>AMG Kindergarten</strong> là ngôi trường được hình thành từ </span>
                                     <span
-                                        className="text-[#EF924D] font-semibold">tình yêu của người mẹ dành cho con</span>.
-                                    <br/>
-                                    Chúng tôi mong muốn lan toả
-                                    <span className="text-[#EF924D] font-semibold"> tình yêu thương và năng lượng tích cực </span>
-                                    đến con trẻ dựa trên tình yêu thương của người làm mẹ.
-                                    <br/>
-                                    Chúng tôi lựa chọn các chương trình
-                                    <span className="text-[#EF924D] font-semibold"> tiên tiến từ Tây Âu </span>kết hợp
-                                    cùng
-                                    <span className="text-[#EF924D] font-semibold"> chuyên gia giáo dục có chuyên môn cao</span>,
-                                    xây dựng nên
+                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold">tình yêu của người mẹ dành cho con</span>
+                                    <span className="bg-[#FACBCC]" >Chúng tôi mong muốn lan toả</span>
+                                    <span className=" bg-[#FACBCC] text-[#EF924D] font-semibold"> tình yêu thương và năng lượng tích cực </span>
+                                    <span className="bg-[#FACBCC]" >đến con trẻ dựa trên tình yêu thương của người làm mẹ.</span>
+                                    <span className="bg-[#FACBCC]" >Chúng tôi lựa chọn các chương trình</span>
+                                    <span className=" bg-[#FACBCC] text-[#EF924D] font-semibold"> tiên tiến từ Tây Âu </span> <span className="bg-[#FACBCC]" >kết hợp
+                                    cùng</span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> chuyên gia giáo dục có chuyên môn cao</span>,
+                                    <span className="bg-[#FACBCC]" >xây dựng nên</span>
                                     <span
-                                        className="text-[#EF924D] font-semibold"> giáo án giáo dục mầm non độc quyền</span>.
-                                    <br/>
-                                    Mục tiêu:
-                                    <span className="text-[#EF924D] font-semibold"> Lấy trẻ làm trung tâm</span>,
-                                    thúc đẩy
+                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> giáo án giáo dục mầm non độc quyền</span>.
+                                    <span className="bg-[#FACBCC]" >Mục tiêu:</span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> Lấy trẻ làm trung tâm</span>,
+                                    <span className="bg-[#FACBCC]" >thúc đẩy</span>
                                     <span
-                                        className="text-[#EF924D] font-semibold"> năng lượng tích cực và tính sáng tạo</span>.
-                                    <br/>
-                                    Chúng tôi chọn
-                                    <span className="text-[#EF924D] font-semibold"> Phương pháp Phần Lan </span>
-                                    làm nền tảng triển khai giảng dạy với cấu trúc bài học trải nghiệm hấp dẫn và
-                                    <span className="text-[#EF924D] font-semibold"> lịch trình linh hoạt</span>.
-                                    <br/>
-                                    AMG có
+                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> năng lượng tích cực và tính sáng tạo</span>.
+                                    <span className="bg-[#FACBCC]" >Chúng tôi chọn</span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> Phương pháp Phần Lan </span>
+                                    <span className="bg-[#FACBCC]" >làm nền tảng triển khai giảng dạy với cấu trúc bài học trải nghiệm hấp dẫn và</span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> lịch trình linh hoạt</span>
+                                    <span className="bg-[#FACBCC]" >AMG có</span>
                                     <span
-                                        className="text-[#EF924D] font-semibold"> đội ngũ chuyên gia tư vấn toàn diện</span> về
+                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> đội ngũ chuyên gia tư vấn toàn diện</span>  <span className="bg-[#FACBCC]" >về
                                     học thuật, chăm sóc và dinh dưỡng,
-                                    nhằm tạo ra môi trường
-                                    <span className="text-[#EF924D] font-semibold"> an toàn, trải nghiệm hữu ích và chu đáo</span>.
+                                    nhằm tạo ra môi trường</span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> an toàn, trải nghiệm hữu ích và chu đáo</span>.
                                 </p>
                             </div>
 
                             {/* Right - Icons grid */}
                             <div className="grid grid-cols-2 gap-4 place-items-center">
-                                <Image src="/icons/icon_about1.png" alt="Phương pháp giáo dục Phần Lan" width={200}
-                                       height={140}/>
-                                <Image src="/icons/icon_about2.png" alt="Cơ sở vật chất chuẩn Quốc tế" width={200}
-                                       height={140}/>
-                                <Image src="/icons/icon_about3.png" alt="Lớp học từ 6 tháng đến 6 tuổi" width={200}
-                                       height={140}/>
-                                <Image src="/icons/icon_about4.png" alt="Ngôn ngữ giảng dạy Việt, Anh" width={200}
-                                       height={140}/>
+                                <Image src="/icons/icon_about1.png" alt="Phương pháp giáo dục Phần Lan" width={300}
+                                       height={170}/>
+                                <Image src="/icons/icon_about2.png" alt="Cơ sở vật chất chuẩn Quốc tế" width={300}
+                                       height={170}/>
+                                <Image src="/icons/icon_about3.png" alt="Lớp học từ 6 tháng đến 6 tuổi" width={300}
+                                       height={170}/>
+                                <Image src="/icons/icon_about4.png" alt="Ngôn ngữ giảng dạy Việt, Anh" width={300}
+                                       height={170}/>
                             </div>
                         </div>
                     </div>
@@ -510,17 +505,88 @@ export default function LandingPage() {
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={70}
                    className="absolute right-10 top-[300px]"/>
 
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute right-10 top-[650px]"/>
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute right-5 top-[750px]"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={80} height={80}
+                   className="absolute left-1/3 top-[800px] z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={60} height={60}
+                   className="absolute right-40 top-[1600px] z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute left-80 top-[2000px] z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute right-10 top-[2100px]  z-99"/>
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute right-55 top-[2150px]  z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={80} height={80}
+                   className="absolute right-60 top-[2710px] z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute left-80 top-[2750px] z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute left-30 top-[3600px]  z-99"/>
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute right-100 top-[3600px] z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute left-250 top-[4620px]  z-99"/>
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute left-100 top-[4700px] z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute right-50 top-[4700px]  z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute right-210 top-[4800px] z-99"/>
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute left-200 top-[4800px]  z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={80} height={80}
+                   className="absolute right-50 top-[5300px] z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute top-[5300px]  z-99"/>
+            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
+                   className="absolute left-20 top-[5400px] z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute left-130 top-[5500px]  z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute left-10 top-[5900px]  z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute right-10 top-[6000px]  z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={50} height={50}
+                   className="absolute left-200 top-[6050px] z-99"/>
+
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                   className="absolute right-75 top-[6100px]  z-99"/>
+            <Image src="/banner/icon_star_empty.png" alt="" width={50} height={50}
+                   className="absolute right-25 top-[6200px] z-99"/>
+
+            <Image src="/banner/icon_star_empty.png" alt="" width={50} height={50}
+                   className="absolute left-50 top-[6300px] z-99"/>
+
             <Image src="/icons/icon_elephant0.png" alt="" width={100} height={70}
                    className="absolute left-45 top-[2000px] z-99"/>
             <Image src="/icons/icon_elephant1.png" alt="" width={100} height={50}
-                   className="absolute right-100 translate-x-[80px] top-[2800px] z-99"/>
+                   className="absolute right-100 translate-x-[80px] top-[2900px] z-99"/>
             <Image src="/icons/icon_elephant2.png" alt="" width={150} height={100}
                    className="absolute left-30 top-[4550px] z-99"/>
             <Image src="/icons/icon_elephant3.png" alt="" width={100} height={70}
-                   className="absolute right-100 top-[5500px] z-99"/>
+                   className="absolute right-100 top-[5600px] z-99"/>
 
             <Image src="/icons/icon_elephant_footer.png" alt="" width={300} height={150}
-                   className="absolute right-100 top-[6100px] z-99"/>
+                   className="absolute right-100 top-[6400px] z-99"/>
             {/* Add more as needed */}
 
         </div>
