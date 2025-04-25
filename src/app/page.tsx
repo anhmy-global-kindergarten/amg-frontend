@@ -1,10 +1,11 @@
 import Image from "next/image";
 import ClassGallery from '@/components/ClassGallery';
 import TestimonialCarousel from "@/components/TestimonialCarousel";
+import HeaderMenu from "@/components/HeaderMenu";
 
 export default function LandingPage() {
     return (
-        <div className="w-full min-h-screen bg-[#FFF6C7] overflow-x-hidden relative font-sans text-[#4D4D4D]">
+        <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
 
             {/* Header */}
             <header className="relative w-full h-[330px]">
@@ -22,28 +23,7 @@ export default function LandingPage() {
                 </div>
 
                 {/* Nav Desktop */}
-                <nav
-                    className="hidden lg:flex absolute top-10 left-1/2 -translate-x-1/4 gap-8 z-10 text-sm font-semibold"
-                >
-                    {[
-                        "Trang chủ",
-                        "Giới thiệu",
-                        "Hệ thống lớp học",
-                        "Tin tức sự kiện",
-                        "Thư viện AMG",
-                        "Tuyển sinh",
-                        "Liên hệ",
-                    ].map((item) => (
-                        <div key={item} className="relative group">
-                            <a
-                                href="#"
-                                className="px-2 py-1 hover:underline bg-[#FFE5E5] rounded"
-                            >
-                                {item}
-                            </a>
-                        </div>
-                    ))}
-                </nav>
+                <HeaderMenu/>
 
                 {/* Nav Mobile (hamburger optional) */}
                 <div className="lg:hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-center">
