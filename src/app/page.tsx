@@ -1,12 +1,68 @@
+'use client';
 import Image from "next/image";
 import ClassGallery from '@/components/ClassGallery';
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import HeaderMenu from "@/components/HeaderMenu";
+import RegisterClassModal from "@/modals/RegisterClassModal";
+import {useEffect, useState} from 'react';
 
 export default function LandingPage() {
+    const [isMobile, setIsMobile] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
+
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+        window.addEventListener('resize', checkMobile);
+
+        return () => window.removeEventListener('resize', checkMobile);
+    }, []);
     return (
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
+            {/* Top Navbar */}
+            <div className="w-full bg-[#FFF6C7] text-[#FFC107] text-sm py-4 px-8 flex justify-between items-center">
 
+                {/* Left side: Phone and Email */}
+                <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                        <Image src="/icons/icon_phone.png" alt="icon phone" height={15} width={15}/>
+                        <a href="tel:0972556001" className="hover:underline">0972556001</a>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Image src="/icons/icon_email.png" alt="icon email" height={20} width={20}/>
+                        <a href="mailto:anhmykindergarten@gmail.com" className="hover:underline">anhmykindergarten@gmail.com</a>
+                    </div>
+                </div>
+
+                {/* Right side: Language and Social Icons */}
+                <div className="flex items-center space-x-4">
+                    {/* Flags */}
+                    <div className="flex space-x-2">
+                        <Image src="/icons/icon_flag_vn.png" alt="VN" height={20} width={40} className="object-cover"/>
+                        <Image src="/icons/icon_flag_eng.png" alt="ENG" height={20} width={40} className="object-cover"/>
+                    </div>
+
+                    {/* Social icons */}
+                    <div className="flex space-x-2">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                            <Image src="/icons/icon_fb.png" alt="Facebook" width={20} height={20}/>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                            <Image src="/icons/icon_ig.png" alt="Instagram" width={20} height={20}/>
+                        </a>
+                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                            <Image src="/icons/icon_ytb.png" alt="YouTube" width={20} height={20}/>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
             {/* Header */}
             <header className="relative w-full h-[330px]">
                 <Image
@@ -26,27 +82,7 @@ export default function LandingPage() {
                 <HeaderMenu/>
 
                 {/* Nav Mobile (hamburger optional) */}
-                <div className="lg:hidden absolute bottom-4 left-1/2 -translate-x-1/2 z-10 text-center">
-                    <div className="flex flex-wrap gap-2 justify-center text-xs font-medium px-4">
-                        {[
-                            "Trang chủ",
-                            "Giới thiệu",
-                            "Lớp học",
-                            "Sự kiện",
-                            "Thư viện",
-                            "Tuyển sinh",
-                            "Liên hệ",
-                        ].map((item) => (
-                            <a
-                                key={item}
-                                href="#"
-                                className="bg-[#FFE5E5] px-3 py-1 rounded hover:underline"
-                            >
-                                {item}
-                            </a>
-                        ))}
-                    </div>
-                </div>
+
             </header>
 
 
@@ -55,7 +91,7 @@ export default function LandingPage() {
                 {/* Text Block */}
                 <div className="w-full lg:w-auto max-w-xl z-20 lg:pr-10 text-center lg:text-left">
                     <h1 className="text-4xl sm:text-5xl font-extrabold text-[#FF6A00] leading-tight mb-3">
-                        Đăng ký<br />Tuyển sinh
+                        Đăng ký<br/>Tuyển sinh
                     </h1>
                     <p className="text-2xl sm:text-3xl font-semibold text-[#FFC600] mb-4">năm học 2024-2025</p>
                     <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
@@ -63,7 +99,7 @@ export default function LandingPage() {
                         cho trẻ từ 15 tháng tới 6 tuổi
                     </p>
                     <div className="relative w-fit mx-auto lg:mx-0">
-                        <button>
+                        <button onClick={openModal} className="relative">
                             <Image
                                 src="/banner/button_register.png"
                                 alt="Register"
@@ -71,15 +107,16 @@ export default function LandingPage() {
                                 height={60}
                                 className="hover:opacity-90 transition"
                             />
+                            <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
+                                <Image src="/banner/icon_play.png" alt="Play" fill className="object-contain"/>
+                            </div>
                         </button>
-                        <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                            <Image src="/banner/icon_play.png" alt="Play" fill />
-                        </div>
                     </div>
                 </div>
 
                 {/* Banner Kids Image */}
-                <div className="absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-30 mb-10 lg:mb-0 lg:mt-0">
+                <div className={`absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0
+                    ${isMobile ? 'top-50' : ''}`}>
                     <Image
                         src="/banner/banner_kids_1.png"
                         alt="Kids"
@@ -89,7 +126,8 @@ export default function LandingPage() {
                 </div>
 
                 {/* Background Triangle */}
-                <div className="absolute hidden sm:block absolute right-20 sm:right-10 top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-10">
+                <div
+                    className="absolute sm:block absolute right-20 sm:right-10 top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-9">
                     <Image
                         src="/banner/triangle_shade.png"
                         alt="Triangle"
@@ -105,7 +143,7 @@ export default function LandingPage() {
                 alt=""
                 width={1920}
                 height={80}
-                className="w-full absolute top-[700px] z-50"
+                className="w-full absolute top-[700px] z-10"
             />
 
 
@@ -568,7 +606,7 @@ export default function LandingPage() {
             <Image src="/icons/icon_elephant_footer.png" alt="" width={300} height={150}
                    className="absolute right-100 top-[6400px] z-99"/>
             {/* Add more as needed */}
-
+            {showModal && <RegisterClassModal onClose={closeModal} />}
         </div>
     );
 }
