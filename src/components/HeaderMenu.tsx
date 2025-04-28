@@ -16,7 +16,7 @@ const menuItems = [
         submenu: [
             { title: "Câu chuyện", href: "/story" },
             { title: "Thông điệp và giá trị cốt lõi", href: "/value" },
-            { title: "Phương pháp giáo dục", href: "#" },
+            { title: "Phương pháp giáo dục", href: "/method" },
             { title: "Cơ sở vật chất", href: "/facilities" },
             { title: "Nội quy An toàn trường học AMG", href: "#" },
         ]
