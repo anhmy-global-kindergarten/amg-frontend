@@ -40,11 +40,9 @@ export default function Method() {
                     <h2 className="text-xl mb-8 text-[#FFD668] z-20">
                         PHƯƠNG PHÁP GIÁO DỤC PHẦN LAN
                     </h2>
-                    <br/>
                     <h2 className="text-xl mb-8 text-[#FFD668] z-20">
                         AMG CÙNG TRẺ ĐẾN CON ĐƯỜNG HẠNH PHÚC
                     </h2>
-                    <br/>
 
                     <span className="text-black font-bold text-sm mb-10">
                         Nền giáo dục Phần Lan vô cùng phát triển và được mệnh danh là nền giáo dục hạnh phúc. Với xu hướng “chơi nhiều để học nhiều”, giáo dục Phần Lan tập trung mạnh vào các môn năng khiếu âm nhạc, nghệ thuật, xây dựng một ngôi trường tốt cho sự phát triển toàn diện của mọi đứa trẻ. Phương pháp này chú trọng đến phát triển nhận thức của trẻ với quan điểm: Trẻ học thông qua chơi và chơi là hoạt động chính của trẻ.
@@ -64,138 +62,61 @@ export default function Method() {
                     </h2>
                     <br/>
 
-                    <span className="text-black font-bold text-sm mb-10">
-                        Ngôi nhà hạnh phúc thứ hai của trẻ: môi trường học tập thông minh hiện đại phù hợp với sự phát triển của trẻ nhỏ cùng tình yêu thương của cô giáo.
+                    <span className="text-black text-sm mb-10">
+                        Ngôi nhà hạnh phúc thứ hai của trẻ: môi trường học tập thông minh hiện đại phù hợp với </span><span
+                    className="text-[#FFD668] text-sm"> sự phát triển của trẻ nhỏ cùng tình yêu thương của cô giáo.
                     </span>
                     <br/>
-                    <span className="text-black font-bold text-sm mb-10">
-                        Học tập với các tình huống thực tế: các bài giảng được xây dựng xoay quanh các tình huống cụ thể, cách giải quyết vấn đề và cách ứng xử khi gặp trong cuộc sống.
+                    <span className="text-black text-sm mb-10">
+                        Học tập với các tình huống thực tế: các</span><span className="text-[#FFD668] text-sm"> bài giảng được xây dựng xoay quanh các tình huống cụ thể, cách giải quyết vấn đề và cách ứng xử khi gặp trong cuộc sống.
                     </span>
                     <br/>
-                    <span className="text-black font-bold text-sm mb-10">
-                        Các hoạt động vui chơi trong trường học chơi được tổ chức thường xuyên đóng vai trò đặc biệt quan trọng, giúp trẻ trải nghiệm thực tế và nuôi dưỡng khả năng phán đoán logic cũng như học tập tiếp thu một cách tự nhiên
+                    <span className="text-black text-sm mb-10">
+                        Các hoạt động vui chơi trong trường học chơi được tổ chức thường xuyên đóng vai trò đặc biệt quan trọng, giúp trẻ</span><span
+                    className="text-[#FFD668] text-sm"> trải nghiệm thực tế và nuôi dưỡng khả năng phán đoán logic cũng như học tập tiếp thu một cách tự nhiên
                     </span>
                     <br/>
-                    <span className="text-black font-bold text-sm mb-10">
+                    <span className="text-black text-sm mb-10">
                         Phương thức học tập cụ thể xoay quanh các tình huống thực tế thú vị, biến tiết học trở thành một trải nghiệm ý nghĩa, không gò bó áp lực.
                     </span>
                     <br/>
-                    <span className="text-black font-bold text-sm mb-10">
+                    <span className="text-black text-sm mb-10">
                         Luôn tôn trọng giác quan, thúc đẩy tìm tòi và khám phá là những điều cực kỳ quan trọng không thể thiếu trong từng tiết học cho trẻ nhỏ.
                     </span>
+                    <br/>
+                    <h2 className="text-xl mb-8 text-[#FFD668] z-20 mt-12">
+                        Không gian học tập:
+                    </h2>
+                    <br/>
 
-                    <div className="w-full flex justify-center mb-12">
+                    <div className="w-full flex flex-col items-center mb-12">
                         <Image
-                            src="/facilities/facilities2.png"
+                            src="/facilities/facilities1.png"
                             alt="Phòng học vui nhộn cho trẻ"
                             width={800}
                             height={600}
                             className="rounded-xl shadow-md object-cover"
                         />
+                        <p className="mt-4 text-center text-gray-600 text-sm">
+                            Phòng học tại AMG được thiết kế theo đúng tiêu chuẩn yêu cầu của chuyên gia Phần Lan
+                        </p>
                     </div>
 
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities3.png"
-                            alt="Facilities 3"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities4.png"
-                            alt="Facilities 4"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
+                    <span className="text-[#FFD668] text-sm">Không gian học tập thoải mái, thư giãn:</span><span
+                    className="text-black text-sm mb-10"> AMG ưu tiên yếu tố thiên nhiên trong môi trường học tập của trẻ. Những yếu tố ánh sáng, không khí, nước và gió luôn được chú trọng và không thể thiếu trong lớp học. Sâm chơi nội bộ riêng biệt giúp các con có rất nhiều </span><span
+                    className="text-[#FFD668] text-sm"> trải nghiệm thú vị và gần gũi với thiên nhiên.
+                    </span>
                     <br/>
-                    <h2 className="text-[#F7C948] text-lg mb-6">
-                        2. Hệ thống phòng chức năng, phòng gym, bể float và sân chơi riêng cho các con
-                    </h2>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities5.png"
-                            alt="Facilities 5"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities6.png"
-                            alt="Facilities 6"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities7.png"
-                            alt="Facilities 7"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities8.png"
-                            alt="Facilities 8"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities9.png"
-                            alt="Facilities 9"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
                     <br/>
-                    <h2 className="text-[#F7C948] text-lg mb-6">
-                        3. Khuôn viên sinh hoạt các tiết học dã ngoại ngoài trời
-                    </h2>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities10.png"
-                            alt="Facilities 10"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities11.png"
-                            alt="Facilities 11"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities12.png"
-                            alt="Facilities 12"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
+                    <span className="text-black text-sm mb-10">
+                        Phương pháp giáo dục Phần Lan quan niệm: Một môi trường học tập giáo dục tốt không chỉ đơn giản là nơi có đầy đủ cơ sở vật chất, thoáng mát, rộng rãi, mà còn phải là môi trường học tập có sự tương tác giữa các bé với nhau, với cô giáo, và cả thế giới bên ngoài.
+                    </span>
+                    <br/>
+                    <br/>
+                    <span className="text-black text-sm mb-10">
+                        Trường học còn là nơi giúp trẻ trải nghiệm những kỹ năng sống rèn luyện tính cách cho các em từ những việc nhỏ nhất như dạy cách tự chăm sóc bản thân, tự mặc quần áo, tự đi vệ sinh, ăn uống, làm bài tập… dần dần các em sẽ quen hơn, quan trọng nhất là trẻ đã </span><span
+                    className="text-[#FFD668] text-sm"> học được cách tự giác, đức tính tự lập.
+                    </span>
                     <br/>
                 </div>
             </div>
