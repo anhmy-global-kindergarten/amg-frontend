@@ -32,7 +32,7 @@ export default function RegisterClassModal({ onClose }: RegisterClassModalProps)
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="absolute -top-10  right-0 w-40 h-40 bg-yellow-100 rounded-bl-[100%] z-0"></div>
+                    <div className="absolute -top-30 lg:-top-20  right-0 w-40 h-40 bg-yellow-100 rounded-bl-[100%] z-0"></div>
 
                     <h2 className="text-center text-orange-400 font-semibold text-xl mb-6 z-10">THÔNG TIN HỌC SINH</h2>
 

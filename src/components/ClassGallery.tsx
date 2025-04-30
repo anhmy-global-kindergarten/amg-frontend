@@ -62,7 +62,7 @@ export default function ClassGallery() {
                 />
             </div>
 
-            <div className="w-full lg:w-[79%] mx-auto">
+            <div className="w-full lg:w-[88%] mx-auto">
                 <div
                     ref={containerRef}
                     className="flex gap-4 overflow-x-auto pb-4 scroll-smooth snap-x snap-mandatory px-2 select-none cursor-grab active:cursor-grabbing"
