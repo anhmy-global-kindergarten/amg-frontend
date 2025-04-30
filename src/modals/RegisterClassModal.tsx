@@ -22,7 +22,7 @@ export default function RegisterClassModal({ onClose }: RegisterClassModalProps)
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                onClick={onClose} // ✅ click bên ngoài modal để đóng
+                onClick={onClose}
             >
                 <motion.div
                     className="relative bg-gradient-to-br from-yellow-100 to-white rounded-3xl border-2 border-orange-300 p-8 w-[90%] max-w-md shadow-lg overflow-hidden"
@@ -32,10 +32,8 @@ export default function RegisterClassModal({ onClose }: RegisterClassModalProps)
                     transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    {/* Góc cắt răng cưa */}
-                    <div className="absolute -top-10  right-0 w-40 h-40 bg-yellow-100 rounded-bl-[100%] z-0"></div>
+                    <div className="absolute -top-30 lg:-top-20  right-0 w-40 h-40 bg-yellow-100 rounded-bl-[100%] z-0"></div>
 
-                    {/* Nội dung form */}
                     <h2 className="text-center text-orange-400 font-semibold text-xl mb-6 z-10">THÔNG TIN HỌC SINH</h2>
 
                     <form className="flex flex-col space-y-4 text-blue-600 font-semibold">
