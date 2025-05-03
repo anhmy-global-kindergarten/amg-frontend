@@ -31,7 +31,7 @@ export default function FinancialRegulations() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase font-bold">
+                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     QUY ĐỊNH TÀI CHÍNH AMG KINDERGARTEN
                 </h3>
 
