@@ -44,7 +44,7 @@ const menuItems = [
                     { title: 'Lemon', href: '/schedule/lemon' },
                 ],
             },
-            { title: 'Tiết học của con', href: '#' },
+            { title: 'Tiết học của con', href: '/artical-lessons' },
             { title: 'Sự kiện AMG', href: '#' },
             { title: 'Tuyển dụng', href: '#' },
             {
