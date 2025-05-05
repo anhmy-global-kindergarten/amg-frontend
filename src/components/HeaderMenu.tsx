@@ -45,8 +45,8 @@ const menuItems = [
                 ],
             },
             { title: 'Tiết học của con', href: '/artical-lessons' },
-            { title: 'Sự kiện AMG', href: '/event' },
-            { title: 'Tuyển dụng', href: '#' },
+            { title: 'Sự kiện AMG', href: '/events' },
+            { title: 'Tuyển dụng', href: '/recruitments' },
             {
                 title: 'Private policy',
                 submenu: [
