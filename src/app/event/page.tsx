@@ -9,15 +9,13 @@ const lessons = [
         id: 1,
         date: "27/06/2022",
         title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo",
+        content: "Mùa hè lại đến rồi và chắc hẳn...",
         image: "/lessons/lesson1.png",
     },
     {
         id: 2,
         date: "14/06/2022",
         title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
-        author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
         image: "/lessons/lesson2.png",
     },
@@ -25,7 +23,6 @@ const lessons = [
         id: 3,
         date: "27/06/2022",
         title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
-        author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn...",
         image: "/lessons/lesson1.png",
     },
@@ -33,7 +30,6 @@ const lessons = [
         id: 4,
         date: "14/06/2022",
         title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
-        author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
         image: "/lessons/lesson2.png",
     },
@@ -41,7 +37,6 @@ const lessons = [
         id: 5,
         date: "27/06/2022",
         title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
-        author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn...",
         image: "/lessons/lesson1.png",
     },
@@ -49,7 +44,6 @@ const lessons = [
         id: 6,
         date: "14/06/2022",
         title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
-        author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
         image: "/lessons/lesson2.png",
     },
@@ -57,7 +51,6 @@ const lessons = [
         id: 7,
         date: "27/06/2022",
         title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
-        author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn...",
         image: "/lessons/lesson1.png",
     },
@@ -65,7 +58,6 @@ const lessons = [
         id: 8,
         date: "14/06/2022",
         title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
-        author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
         image: "/lessons/lesson2.png",
     },
@@ -131,12 +123,7 @@ export default function ArticalLessons() {
                                     {lesson.title}
                                 </h4>
                                 <p className="text-sm text-gray-600 line-clamp-3">
-                                    {lesson.author}
-                                </p>
-                                <p className="text-sm text-gray-600 line-clamp-3">
-                                    {lesson.content.length > 32
-                                        ? `${lesson.content.slice(0, 32)}...`
-                                        : lesson.content}
+                                    {lesson.content}
                                 </p>
                             </div>
                         </div>
