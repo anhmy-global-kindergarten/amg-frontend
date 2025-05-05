@@ -26,7 +26,7 @@ const lessons = [
         date: "27/06/2022",
         title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
         author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn...",
+        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
         image: "/lessons/lesson1.png",
     },
     {
@@ -42,7 +42,7 @@ const lessons = [
         date: "27/06/2022",
         title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
         author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn...",
+        content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
         image: "/lessons/lesson1.png",
     },
     {
@@ -113,36 +113,50 @@ export default function ArticalLessons() {
                     Tiết học của con
                 </h3>
                 {/* Grid Lessons */}
+                <div className="min-h-[800px]">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
                     {pagedLessons.map((lesson) => (
                         <div
                             key={lesson.id}
                             onClick={() => router.push(`/artical-lessons/${lesson.id}`)}
-                            className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col"
+                            className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer"
                         >
-                            <img
-                                src={lesson.image}
-                                alt={lesson.title}
-                                className="w-full h-48 object-cover"
-                            />
+                            {/* Image container with overlay date */}
+                            <div className="relative w-full h-48">
+                                <img
+                                    src={lesson.image}
+                                    alt={lesson.title}
+                                    className="w-full h-full object-cover"
+                                />
+                                <div className="absolute bottom-0">
+                                    <div
+                                        className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
+                                        style={{
+                                            backgroundImage: "url('/icons/icon_backdrop_date_outside.png')",
+                                            backgroundSize: "100% 100%",
+                                        }}
+                                    >
+                                        {lesson.date}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Text content */}
                             <div className="p-4 flex flex-col flex-1">
-                                <p className="text-[#FFC107] text-xs mb-1">{lesson.date}</p>
-                                <h4 className="font-semibold text-base text-gray-800 mb-1">
+                                <h4 className="text-[#FFD668] font-semibold text-base mb-1">
                                     {lesson.title}
                                 </h4>
-                                <p className="text-sm text-gray-600 line-clamp-3">
-                                    {lesson.author}
-                                </p>
-                                <p className="text-sm text-gray-600 line-clamp-3">
-                                    {lesson.content.length > 32
-                                        ? `${lesson.content.slice(0, 32)}...`
+                                <p className="text-xs text-black line-clamp-3">Đăng bởi: {lesson.author}</p>
+                                <p className="text-sm text-black line-clamp-3">
+                                    {lesson.content.length > 101
+                                        ? `${lesson.content.slice(0, 100)}...`
                                         : lesson.content}
                                 </p>
                             </div>
                         </div>
                     ))}
                 </div>
-
+                </div>
                 {/* Pagination Buttons */}
                 <div className="mt-8 flex items-center space-x-4">
                     <button
