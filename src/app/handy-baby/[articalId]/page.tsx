@@ -41,7 +41,14 @@ function parseContent(content: string): React.ReactNode[] {
     return parts;
 }
 
-export default function EventDetail({ params }: { params: Promise<{ eventId: string }> }) {
+const extractYouTubeId = (url: string) => {
+    const match = url.match(
+        /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/
+    );
+    return match ? match[1] : null;
+};
+
+export default function HandyBabyDetail({ params }: { params: Promise<{ articalId: string }> }) {
     const [comments, setComments] = useState([
         {
             name: "Nguyễn Văn A",
@@ -60,11 +67,25 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
         email: "",
         content: "",
     });
-    const { eventId } = use(params);
-    const events = [
+    const { articalId } = use(params);
+    const articals = [
         {
             id: "1",
-            title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
+            title: "Chuyến tàu hoả số học",
+            date: "27/06/2022",
+            author: "admin",
+            content: `“Chơi mà học” về các con số và nhận biết phương tiện tàu hoả cùng AMG Crafts Chúc ba mẹ và các con có những phút giây vui vẻ bên nhau nhé!`,
+            imageHeader: "/events/event1.png",
+            image1: "/events/event1.png",
+            image2: "/events/event2.png",
+            image3: "/events/event3.png",
+            image4: "/events/event4.png",
+            image5: "",
+            youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
+        },
+        {
+            id: "2",
+            title: "Chiếc chong chóng từ cốc giấy",
             date: "27/06/2022",
             author: "admin",
             content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
@@ -74,11 +95,68 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
             image3: "/events/event3.png",
             image4: "/events/event4.png",
             image5: "",
+            youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
+        },
+        {
+            id: "3",
+            title: "Chiếc bình số học",
+            date: "27/06/2022",
+            author: "admin",
+            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+            imageHeader: "/events/event1.png",
+            image1: "/events/event1.png",
+            image2: "/events/event2.png",
+            image3: "/events/event3.png",
+            image4: "/events/event4.png",
+            image5: "",
+            youtubeURL: "",
+        },
+        {
+            id: "4",
+            title: "Khám phá hệ mặt trời",
+            date: "27/06/2022",
+            author: "admin",
+            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+            imageHeader: "/events/event1.png",
+            image1: "/events/event1.png",
+            image2: "/events/event2.png",
+            image3: "/events/event3.png",
+            image4: "/events/event4.png",
+            image5: "",
+            youtubeURL: "",
+        },
+        {
+            id: "5",
+            title: "Quá trình phát triển của thực vật",
+            date: "27/06/2022",
+            author: "admin",
+            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+            imageHeader: "/events/event1.png",
+            image1: "/events/event1.png",
+            image2: "/events/event2.png",
+            image3: "/events/event3.png",
+            image4: "/events/event4.png",
+            image5: "",
+            youtubeURL: "",
+        },
+        {
+            id: "6",
+            title: "Học làm phương tiện giao thông",
+            date: "27/06/2022",
+            author: "admin",
+            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+            imageHeader: "/events/event1.png",
+            image1: "/events/event1.png",
+            image2: "/events/event2.png",
+            image3: "/events/event3.png",
+            image4: "/events/event4.png",
+            image5: "",
+            youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
         },
     ];
-    const event = events.find((item) => item.id === eventId);
-    if (!event) return notFound();
-    const { day, month } = formatDateDisplay(event.date);
+    const artical = articals.find((item) => item.id === articalId);
+    if (!artical) return notFound();
+    const { day, month } = formatDateDisplay(artical.date);
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
             {/* Background */}
@@ -102,33 +180,33 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
                         </Link>
                         <span>/</span>
                         <Link
-                            href="/events"
+                            href="/handy-baby"
                             className="font-medium text-[#FFC107] hover:underline"
                         >
-                            Sự kiện AMG
+                            Bé khéo tay
                         </Link>
                         <span>/</span>
                         <span className="text-[#FFC107] font-medium">
-                            {event.title}
+                            {artical.title}
                         </span>
                     </div>
                 </div>
 
                 {/* Title */}
                 <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
-                    Sự kiện AMG
+                    Bé khéo tay
                 </h3>
                 <Image
-                    src={event.imageHeader}
-                    alt={event.title}
+                    src={artical.imageHeader}
+                    alt={artical.title}
                     width={600}
                     height={300}
                     className="rounded-lg shadow mb-6"
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {event.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{event.title}</h1>
+                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {artical.author}</p>
+                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{artical.title}</h1>
                         <div
                             className="w-[70px] h-[70px] bg-[#FFD668] absolute top-5 left-7 rounded-xl flex items-center justify-center shadow-md">
                             <div
@@ -140,11 +218,11 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line mt-20">
-                            <span className="bg-[#FDCED0]">{parseContent(event.content)}</span>
+                            <span className="bg-[#FDCED0]">{parseContent(artical.content)}</span>
                         </div>
 
                         {/* Optional images */}
-                        {[event.image1, event.image2, event.image3, event.image4, event.image5]
+                        {[artical.image1, artical.image2, artical.image3, artical.image4, artical.image5]
                             .filter(Boolean)
                             .map((img, i) => (
                                 <Image
@@ -156,6 +234,19 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
                                     className="w-full h-auto rounded-lg shadow mt-6"
                                 />
                             ))}
+
+                        {artical.youtubeURL && (
+                            <div className="mt-6 w-full aspect-video rounded-xl overflow-hidden shadow-lg">
+                                <iframe
+                                    className="w-full h-full"
+                                    src={`https://www.youtube.com/embed/${extractYouTubeId(artical.youtubeURL)}`}
+                                    title="YouTube video"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                ></iframe>
+                            </div>
+                        )}
 
                         <div className="w-full max-w-4xl mt-12 px-4 md:px-0">
                             <h4 className="text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
