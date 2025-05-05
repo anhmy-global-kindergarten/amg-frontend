@@ -60,7 +60,7 @@ const menuItems = [
         title: 'Thư viện AMG',
         submenu: [
             { title: 'Bé khéo tay', href: '/handy-baby' },
-            { title: 'Cẩm nang chăm trẻ', href: '#' },
+            { title: 'Cẩm nang chăm trẻ', href: '/handbooks' },
             { title: 'Học online cùng AMG', href: '#' },
         ],
     },
