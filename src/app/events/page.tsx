@@ -11,7 +11,7 @@ const event = [
         title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
         author: "admin",
         content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event1.png",
+        image: "/events/event1.png",
     },
     {
         id: 2,
@@ -19,7 +19,7 @@ const event = [
         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event2.png",
+        image: "/events/event2.png",
     },
     {
         id: 3,
@@ -27,7 +27,7 @@ const event = [
         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
-        image: "/event/event3.png",
+        image: "/events/event3.png",
     },
     {
         id: 4,
@@ -35,7 +35,7 @@ const event = [
         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event4.png",
+        image: "/events/event4.png",
     },
     {
         id: 5,
@@ -43,7 +43,7 @@ const event = [
         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
-        image: "/event/event3.png",
+        image: "/events/event3.png",
     },
     {
         id: 6,
@@ -51,7 +51,7 @@ const event = [
         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event4.png",
+        image: "/events/event4.png",
     },
     {
         id: 7,
@@ -59,7 +59,7 @@ const event = [
         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event2.png",
+        image: "/events/event2.png",
     },
     {
         id: 8,
@@ -67,7 +67,7 @@ const event = [
         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event1.png",
+        image: "/events/event1.png",
     },
     {
         id: 1,
@@ -75,7 +75,7 @@ const event = [
         title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
         author: "admin",
         content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event1.png",
+        image: "/events/event1.png",
     },
     {
         id: 2,
@@ -83,7 +83,7 @@ const event = [
         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event2.png",
+        image: "/events/event2.png",
     },
     {
         id: 3,
@@ -91,7 +91,7 @@ const event = [
         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
-        image: "/event/event3.png",
+        image: "/events/event3.png",
     },
     {
         id: 4,
@@ -99,7 +99,7 @@ const event = [
         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event4.png",
+        image: "/events/event4.png",
     },
     {
         id: 5,
@@ -107,7 +107,7 @@ const event = [
         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
-        image: "/event/event3.png",
+        image: "/events/event3.png",
     },
     {
         id: 6,
@@ -115,7 +115,7 @@ const event = [
         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event4.png",
+        image: "/events/event4.png",
     },
     {
         id: 7,
@@ -123,7 +123,7 @@ const event = [
         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event2.png",
+        image: "/events/event2.png",
     },
     {
         id: 8,
@@ -131,7 +131,7 @@ const event = [
         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/event/event1.png",
+        image: "/events/event1.png",
     },
 ];
 
@@ -182,7 +182,7 @@ export default function EventPage() {
                         {pagedEvents.map((event) => (
                             <div
                                 key={event.id}
-                                onClick={() => router.push(`/event/${event.id}`)}
+                                onClick={() => router.push(`/events/${event.id}`)}
                                 className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer"
                             >
                                 {/* Image container with overlay date */}

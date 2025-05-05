@@ -68,11 +68,11 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
             date: "27/06/2022",
             author: "admin",
             content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
-            imageHeader: "/event/event1.png",
-            image1: "/event/event1.png",
-            image2: "/event/event2.png",
-            image3: "/event/event3.png",
-            image4: "/event/event4.png",
+            imageHeader: "/events/event1.png",
+            image1: "/events/event1.png",
+            image2: "/events/event2.png",
+            image3: "/events/event3.png",
+            image4: "/events/event4.png",
             image5: "",
         },
     ];
@@ -102,7 +102,7 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
                         </Link>
                         <span>/</span>
                         <Link
-                            href="/event"
+                            href="/events"
                             className="font-medium text-[#FFC107] hover:underline"
                         >
                             Sự kiện AMG
