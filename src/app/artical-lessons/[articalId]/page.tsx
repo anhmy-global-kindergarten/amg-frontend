@@ -130,7 +130,7 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-gray-500 mb-2">Đăng bởi: {lesson.author}</p>
+                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {lesson.author}</p>
                         <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{lesson.title}</h1>
                         <div
                             className="w-[70px] h-[70px] bg-[#FFD668] absolute top-5 left-7 rounded-xl flex items-center justify-center shadow-md">

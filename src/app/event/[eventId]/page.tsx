@@ -41,17 +41,17 @@ function parseContent(content: string): React.ReactNode[] {
     return parts;
 }
 
-export default function LessonDetail({ params }: { params: Promise<{ articalId: string }> }) {
+export default function EventDetail({ params }: { params: Promise<{ eventId: string }> }) {
     const [comments, setComments] = useState([
         {
             name: "Nguyễn Văn A",
             email: "vana@example.com",
-            content: "Bài học rất thú vị và bổ ích!",
+            content: "Một sự kiện hay!",
         },
         {
             name: "Trần Thị B",
             email: "thib@example.com",
-            content: "Cảm ơn các cô vì những tiết học tuyệt vời!",
+            content: "Cảm ơn các cô vì những sự kiện tuyệt vời!",
         },
     ]);
 
@@ -60,28 +60,25 @@ export default function LessonDetail({ params }: { params: Promise<{ articalId: 
         email: "",
         content: "",
     });
-    const { articalId } = use(params);
-    const lessons = [
+    const { eventId } = use(params);
+    const events = [
         {
             id: "1",
-            title: "Chiếc bể bơi chứa đầy nước và niềm vui",
+            title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
             date: "27/06/2022",
             author: "admin",
-            content: `Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những ngày hè oi ả chính là bơi lội. Vì vậy,[highlight] những bể bơi di động đã được các cô chuẩn bị ngay ở sân sau của cơ sở 1[/highlight] để các con thỏa sức chơi đùa với nước 
-AMG hiểu rằng vận động thể chất trong đó có các hoạt động với nước là những hoạt động cực kỳ quan trọng và tạo hứng thú lớn với con trẻ, vậy nên thầy giáo thể chất chuyên biệt của AMG luôn sẵn sàng tạo ra[highlight] những tiết học thú vị, an toàn, đúng quy cách và thật tự nhiên cho con trẻ[/highlight], với mong muốn con trẻ sẽ có những trải nghiệm vui và bổ ích nhất tại AMG 
-Có những bạn nhỏ rất thích nước nhưng cũng có những bạn lại hơi rụt rè. Các hoạt động dưới nước như tập nín thở, sải cánh tay hay đạp nước… dần dần giúp các con làm quen với nước, khắc phục sự nhút nhát ban đầu để trở nên dạn dĩ và tận hưởng thêm nhiều niềm vui 
-Tại AMG mỗi tiết học với nước của các con được diễn ra đều[highlight] đầy ắp tiếng cười và màu sắc[/highlight]. AMG lựa chọn một chiếc bể bơi không góc cạnh để làm cho tiết bơi của các con được an toàn và êm ái hơn... Những màu sắc sặc sỡ từ những bộ đồ bơi đáng yêu hay những chiếc phao bơi cùng bóng hơi đầy xinh động kèm theo đó là tiếng cười rộn ràng của con trẻ đã tạo nên những tiết bơi rất đặc trưng AMG. `,
-            imageHeader: "/lessons/lesson1.png",
-            image1: "/lessons/lesson1.png",
-            image2: "/lessons/lesson1.png",
-            image3: "/lessons/lesson1.png",
-            image4: "/lessons/lesson1.png",
+            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+            imageHeader: "/event/event1.png",
+            image1: "/event/event1.png",
+            image2: "/event/event2.png",
+            image3: "/event/event3.png",
+            image4: "/event/event4.png",
             image5: "",
         },
     ];
-    const lesson = lessons.find((item) => item.id === articalId);
-    if (!lesson) return notFound();
-    const { day, month } = formatDateDisplay(lesson.date);
+    const event = events.find((item) => item.id === eventId);
+    if (!event) return notFound();
+    const { day, month } = formatDateDisplay(event.date);
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
             {/* Background */}
@@ -105,33 +102,33 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
                         </Link>
                         <span>/</span>
                         <Link
-                            href="/artical-lessons"
+                            href="/event"
                             className="font-medium text-[#FFC107] hover:underline"
                         >
-                            Tiết học của con
+                            Sự kiện AMG
                         </Link>
                         <span>/</span>
                         <span className="text-[#FFC107] font-medium">
-                            {lesson.title}
+                            {event.title}
                         </span>
                     </div>
                 </div>
 
                 {/* Title */}
                 <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
-                    Tiết học của con
+                    Sự kiện AMG
                 </h3>
                 <Image
-                    src={lesson.imageHeader}
-                    alt={lesson.title}
+                    src={event.imageHeader}
+                    alt={event.title}
                     width={600}
                     height={300}
                     className="rounded-lg shadow mb-6"
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-gray-500 mb-2">Đăng bởi: {lesson.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{lesson.title}</h1>
+                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {event.author}</p>
+                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{event.title}</h1>
                         <div
                             className="w-[70px] h-[70px] bg-[#FFD668] absolute top-5 left-7 rounded-xl flex items-center justify-center shadow-md">
                             <div
@@ -143,17 +140,17 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line mt-20">
-                            <span className="bg-[#FDCED0]">{parseContent(lesson.content)}</span>
+                            <span className="bg-[#FDCED0]">{parseContent(event.content)}</span>
                         </div>
 
                         {/* Optional images */}
-                        {[lesson.image1, lesson.image2, lesson.image3, lesson.image4, lesson.image5]
+                        {[event.image1, event.image2, event.image3, event.image4, event.image5]
                             .filter(Boolean)
                             .map((img, i) => (
                                 <Image
                                     key={i}
                                     src={img}
-                                    alt={`Lesson image ${i + 1}`}
+                                    alt={`Event image ${i + 1}`}
                                     width={800}
                                     height={400}
                                     className="w-full h-auto rounded-lg shadow mt-6"
