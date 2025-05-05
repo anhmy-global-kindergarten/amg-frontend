@@ -24,26 +24,16 @@ const menuItems = [
     {
         title: 'Hệ thống lớp học',
         submenu: [
-            { title: 'Blueberry', href: '#' },
-            { title: 'Cherry', href: '#' },
-            { title: 'Lemon', href: '#' },
-            { title: 'Mango', href: '#' },
-            { title: 'International', href: '#' },
+            { title: 'Blueberry', href: '/schedule/blueberry' },
+            { title: 'Cherry', href: '/schedule/cherry' },
+            { title: 'Lemon', href: '/schedule/lemon' },
+            { title: 'Mango', href: '/schedule/mango' },
+            { title: 'International', href: '/schedule/international' },
         ],
     },
     {
         title: 'Tin tức sự kiện',
         submenu: [
-            {
-                title: 'Thời khóa biểu',
-                submenu: [
-                    { title: 'International', href: '/schedule/international' },
-                    { title: 'Mango', href: '/schedule/mango' },
-                    { title: 'Blueberry', href: '/schedule/blueberry' },
-                    { title: 'Cherry', href: '/schedule/cherry' },
-                    { title: 'Lemon', href: '/schedule/lemon' },
-                ],
-            },
             { title: 'Tiết học của con', href: '/artical-lessons' },
             { title: 'Sự kiện AMG', href: '/events' },
             { title: 'Tuyển dụng', href: '/recruitments' },
@@ -61,7 +51,7 @@ const menuItems = [
         submenu: [
             { title: 'Bé khéo tay', href: '/handy-baby' },
             { title: 'Cẩm nang chăm trẻ', href: '/handbooks' },
-            { title: 'Học online cùng AMG', href: '#' },
+            { title: 'Học online cùng AMG', href: '/learn-online' },
         ],
     },
     {
