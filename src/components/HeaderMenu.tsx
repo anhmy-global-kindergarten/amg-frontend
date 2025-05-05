@@ -57,7 +57,7 @@ const menuItems = [
     {
         title: 'Tuyển sinh',
         submenu: [
-            { title: 'Thông tin tuyển sinh', href: '#' },
+            { title: 'Thông tin tuyển sinh', href: '/admissions' },
             { title: 'Quy định tài chính', href: '/financial-regulations' },
         ],
     },
