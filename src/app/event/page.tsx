@@ -69,6 +69,70 @@ const event = [
         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
         image: "/event/event1.png",
     },
+    {
+        id: 1,
+        date: "27/06/2022",
+        title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
+        author: "admin",
+        content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event1.png",
+    },
+    {
+        id: 2,
+        date: "14/06/2022",
+        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event2.png",
+    },
+    {
+        id: 3,
+        date: "27/06/2022",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+        author: "admin",
+        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
+        image: "/event/event3.png",
+    },
+    {
+        id: 4,
+        date: "14/06/2022",
+        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event4.png",
+    },
+    {
+        id: 5,
+        date: "27/06/2022",
+        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+        author: "admin",
+        content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
+        image: "/event/event3.png",
+    },
+    {
+        id: 6,
+        date: "14/06/2022",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event4.png",
+    },
+    {
+        id: 7,
+        date: "27/06/2022",
+        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+        author: "admin",
+        content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event2.png",
+    },
+    {
+        id: 8,
+        date: "14/06/2022",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event1.png",
+    },
 ];
 
 export default function EventPage() {
@@ -158,34 +222,42 @@ export default function EventPage() {
                     </div>
                 </div>
                 {/* Pagination Buttons */}
-                <div className="mt-8 flex items-center space-x-4">
-                    <button
-                        onClick={() => setPage((p) => Math.max(p - 1, 0))}
-                        disabled={page === 0}
-                        className={`px-4 py-2 rounded-full shadow ${
-                            page === 0
-                                ? "bg-gray-300 cursor-not-allowed"
-                                : "bg-[#FFD668] hover:bg-[#FFC107] text-white"
-                        }`}
-                    >
-                        Trước
-                    </button>
+                <div className="w-full flex justify-end">
+                    <div className="mt-8 flex items-center space-x-2">
+                        {page > 0 && (
+                            <button
+                                onClick={() => setPage(page - 1)}
+                                className="w-8 h-8 flex items-center justify-center rounded-full text-sm text-gray-700 hover:bg-gray-200"
+                            >
+                                &laquo;
+                            </button>
+                        )}
 
-                    <span className="text-sm text-gray-700">
-            Trang {page + 1} / {totalPages}
-          </span>
+                        {Array.from({length: totalPages}, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setPage(i)}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-colors duration-200 ${
+                                    page === i
+                                        ? "bg-[#FFD668] text-black"
+                                        : "text-gray-700 hover:bg-gray-200"
+                                }`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
 
-                    <button
-                        onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
-                        disabled={page >= totalPages - 1}
-                        className={`px-4 py-2 rounded-full shadow ${
-                            page >= totalPages - 1
-                                ? "bg-gray-300 cursor-not-allowed"
-                                : "bg-[#FFD668] hover:bg-[#FFC107] text-white"
-                        }`}
-                    >
-                        Tiếp
-                    </button>
+                        {page < totalPages - 1 ? (
+                            <button
+                                onClick={() => setPage(page + 1)}
+                                className="w-8 h-8 flex items-center justify-center rounded-full text-sm text-gray-700 hover:bg-gray-200"
+                            >
+                                &raquo;
+                            </button>
+                        ) : (
+                            <div className="w-8 h-8" />
+                        )}
+                    </div>
                 </div>
             </div>
 

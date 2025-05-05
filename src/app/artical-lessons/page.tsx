@@ -114,78 +114,85 @@ export default function ArticalLessons() {
                 </h3>
                 {/* Grid Lessons */}
                 <div className="min-h-[800px]">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-                    {pagedLessons.map((lesson) => (
-                        <div
-                            key={lesson.id}
-                            onClick={() => router.push(`/artical-lessons/${lesson.id}`)}
-                            className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer"
-                        >
-                            {/* Image container with overlay date */}
-                            <div className="relative w-full h-48">
-                                <img
-                                    src={lesson.image}
-                                    alt={lesson.title}
-                                    className="w-full h-full object-cover"
-                                />
-                                <div className="absolute bottom-0">
-                                    <div
-                                        className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
-                                        style={{
-                                            backgroundImage: "url('/icons/icon_backdrop_date_outside.png')",
-                                            backgroundSize: "100% 100%",
-                                        }}
-                                    >
-                                        {lesson.date}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                        {pagedLessons.map((lesson) => (
+                            <div
+                                key={lesson.id}
+                                onClick={() => router.push(`/artical-lessons/${lesson.id}`)}
+                                className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer"
+                            >
+                                {/* Image container with overlay date */}
+                                <div className="relative w-full h-48">
+                                    <img
+                                        src={lesson.image}
+                                        alt={lesson.title}
+                                        className="w-full h-full object-cover"
+                                    />
+                                    <div className="absolute bottom-0">
+                                        <div
+                                            className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
+                                            style={{
+                                                backgroundImage: "url('/icons/icon_backdrop_date_outside.png')",
+                                                backgroundSize: "100% 100%",
+                                            }}
+                                        >
+                                            {lesson.date}
+                                        </div>
                                     </div>
                                 </div>
+
+                                {/* Text content */}
+                                <div className="p-4 flex flex-col flex-1">
+                                    <h4 className="text-[#FFD668] font-semibold text-base mb-1">
+                                        {lesson.title}
+                                    </h4>
+                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {lesson.author}</p>
+                                    <p className="text-sm text-black line-clamp-3">
+                                        {lesson.content.length > 101
+                                            ? `${lesson.content.slice(0, 100)}...`
+                                            : lesson.content}
+                                    </p>
+                                </div>
                             </div>
-
-                            {/* Text content */}
-                            <div className="p-4 flex flex-col flex-1">
-                                <h4 className="text-[#FFD668] font-semibold text-base mb-1">
-                                    {lesson.title}
-                                </h4>
-                                <p className="text-xs text-black line-clamp-3">Đăng bởi: {lesson.author}</p>
-                                <p className="text-sm text-black line-clamp-3">
-                                    {lesson.content.length > 101
-                                        ? `${lesson.content.slice(0, 100)}...`
-                                        : lesson.content}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
-                </div>
-                {/* Pagination Buttons */}
-                <div className="mt-8 flex items-center space-x-4">
-                    <button
-                        onClick={() => setPage((p) => Math.max(p - 1, 0))}
-                        disabled={page === 0}
-                        className={`px-4 py-2 rounded-full shadow ${
-                            page === 0
-                                ? "bg-gray-300 cursor-not-allowed"
-                                : "bg-[#FFD668] hover:bg-[#FFC107] text-white"
-                        }`}
-                    >
-                        Trước
-                    </button>
+                <div className="w-full flex justify-end">
+                    <div className="mt-8 flex items-center space-x-2">
+                        {page > 0 && (
+                            <button
+                                onClick={() => setPage(page - 1)}
+                                className="w-8 h-8 flex items-center justify-center rounded-full text-sm text-gray-700 hover:bg-gray-200"
+                            >
+                                &laquo;
+                            </button>
+                        )}
 
-                    <span className="text-sm text-gray-700">
-            Trang {page + 1} / {totalPages}
-          </span>
+                        {Array.from({length: totalPages}, (_, i) => (
+                            <button
+                                key={i}
+                                onClick={() => setPage(i)}
+                                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm transition-colors duration-200 ${
+                                    page === i
+                                        ? "bg-[#FFD668] text-black"
+                                        : "text-gray-700 hover:bg-gray-200"
+                                }`}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
 
-                    <button
-                        onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
-                        disabled={page >= totalPages - 1}
-                        className={`px-4 py-2 rounded-full shadow ${
-                            page >= totalPages - 1
-                                ? "bg-gray-300 cursor-not-allowed"
-                                : "bg-[#FFD668] hover:bg-[#FFC107] text-white"
-                        }`}
-                    >
-                        Tiếp
-                    </button>
+                        {page < totalPages - 1 ? (
+                            <button
+                                onClick={() => setPage(page + 1)}
+                                className="w-8 h-8 flex items-center justify-center rounded-full text-sm text-gray-700 hover:bg-gray-200"
+                            >
+                                &raquo;
+                            </button>
+                        ) : (
+                            <div className="w-8 h-8"/>
+                        )}
+                    </div>
                 </div>
             </div>
 
