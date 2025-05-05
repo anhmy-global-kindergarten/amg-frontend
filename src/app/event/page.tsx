@@ -4,79 +4,143 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-const lessons = [
+const event = [
     {
         id: 1,
         date: "27/06/2022",
-        title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
+        title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
         author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo",
-        image: "/lessons/lesson1.png",
+        content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event1.png",
     },
     {
         id: 2,
         date: "14/06/2022",
-        title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
+        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
         author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
-        image: "/lessons/lesson2.png",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event2.png",
     },
     {
         id: 3,
         date: "27/06/2022",
-        title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
-        image: "/lessons/lesson1.png",
+        image: "/event/event3.png",
     },
     {
         id: 4,
         date: "14/06/2022",
-        title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
+        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
         author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
-        image: "/lessons/lesson2.png",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event4.png",
     },
     {
         id: 5,
         date: "27/06/2022",
-        title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
+        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
         author: "admin",
         content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
-        image: "/lessons/lesson1.png",
+        image: "/event/event3.png",
     },
     {
         id: 6,
         date: "14/06/2022",
-        title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
-        image: "/lessons/lesson2.png",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event4.png",
     },
     {
         id: 7,
         date: "27/06/2022",
-        title: "CHIẾC BỂ BƠI CHỨA ĐẦY NƯỚC VÀ NIỀM VUI",
+        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
         author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn...",
-        image: "/lessons/lesson1.png",
+        content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event2.png",
     },
     {
         id: 8,
         date: "14/06/2022",
-        title: "FOREST CLASS: LỚP HỌC NGOÀI TRỜI CÙNG AMG",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
         author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi...",
-        image: "/lessons/lesson2.png",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event1.png",
+    },
+    {
+        id: 1,
+        date: "27/06/2022",
+        title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
+        author: "admin",
+        content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event1.png",
+    },
+    {
+        id: 2,
+        date: "14/06/2022",
+        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event2.png",
+    },
+    {
+        id: 3,
+        date: "27/06/2022",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+        author: "admin",
+        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
+        image: "/event/event3.png",
+    },
+    {
+        id: 4,
+        date: "14/06/2022",
+        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event4.png",
+    },
+    {
+        id: 5,
+        date: "27/06/2022",
+        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+        author: "admin",
+        content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
+        image: "/event/event3.png",
+    },
+    {
+        id: 6,
+        date: "14/06/2022",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event4.png",
+    },
+    {
+        id: 7,
+        date: "27/06/2022",
+        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+        author: "admin",
+        content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event2.png",
+    },
+    {
+        id: 8,
+        date: "14/06/2022",
+        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+        author: "admin",
+        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+        image: "/event/event1.png",
     },
 ];
 
-export default function ArticalLessons() {
+export default function EventPage() {
     const itemsPerPage = 6;
-    const totalPages = Math.ceil(lessons.length / itemsPerPage);
+    const totalPages = Math.ceil(event.length / itemsPerPage);
     const [page, setPage] = useState(0);
     const router = useRouter();
-    const pagedLessons = lessons.slice(
+    const pagedEvents = event.slice(
         page * itemsPerPage,
         (page + 1) * itemsPerPage
     );
@@ -103,29 +167,29 @@ export default function ArticalLessons() {
                         </Link>
                         <span>/</span>
                         <span className="text-[#FFC107] font-medium">
-                            Tiết học của con
+                            Sự kiện AMG
                         </span>
                     </div>
                 </div>
 
                 {/* Title */}
                 <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
-                    Tiết học của con
+                    Sự kiện AMG
                 </h3>
                 {/* Grid Lessons */}
-                <div className="min-h-[800px]">
+                <div className="min-h-[830px]">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-                        {pagedLessons.map((lesson) => (
+                        {pagedEvents.map((event) => (
                             <div
-                                key={lesson.id}
-                                onClick={() => router.push(`/artical-lessons/${lesson.id}`)}
+                                key={event.id}
+                                onClick={() => router.push(`/event/${event.id}`)}
                                 className="bg-white rounded-2xl shadow-md overflow-hidden flex flex-col cursor-pointer"
                             >
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        src={lesson.image}
-                                        alt={lesson.title}
+                                        src={event.image}
+                                        alt={event.title}
                                         className="w-full h-full object-cover"
                                     />
                                     <div className="absolute bottom-0">
@@ -136,7 +200,7 @@ export default function ArticalLessons() {
                                                 backgroundSize: "100% 100%",
                                             }}
                                         >
-                                            {lesson.date}
+                                            {event.date}
                                         </div>
                                     </div>
                                 </div>
@@ -144,19 +208,20 @@ export default function ArticalLessons() {
                                 {/* Text content */}
                                 <div className="p-4 flex flex-col flex-1">
                                     <h4 className="text-[#FFD668] font-semibold text-base mb-1">
-                                        {lesson.title}
+                                        {event.title}
                                     </h4>
-                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {lesson.author}</p>
+                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {event.author}</p>
                                     <p className="text-sm text-black line-clamp-3">
-                                        {lesson.content.length > 101
-                                            ? `${lesson.content.slice(0, 100)}...`
-                                            : lesson.content}
+                                        {event.content.length > 101
+                                            ? `${event.content.slice(0, 100)}...`
+                                            : event.content}
                                     </p>
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
+                {/* Pagination Buttons */}
                 <div className="w-full flex justify-end">
                     <div className="mt-8 flex items-center space-x-2">
                         {page > 0 && (
@@ -190,7 +255,7 @@ export default function ArticalLessons() {
                                 &raquo;
                             </button>
                         ) : (
-                            <div className="w-8 h-8"/>
+                            <div className="w-8 h-8" />
                         )}
                     </div>
                 </div>
