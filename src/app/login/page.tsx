@@ -1,42 +1,68 @@
 /* eslint-disable */
-export default function LoginPage() {
-    // @ts-ignore
-    return (
-        <div className="flex flex-col items-center min-h-screen bg-gray-900 text-white">
+import Image from "next/image";
 
-            {/* Header Navbar */}
-            <header className="w-full py-6 px-10 flex justify-between items-center border-b border-gray-700">
-                <a href="/app"> <h1 className="text-3xl font-extrabold text-blue-400">LiveNest</h1></a>
-                <nav>
-                    <ul className="flex gap-6 text-lg">
-                        <li><a href="#features" className="hover:text-blue-400 transition">Features</a></li>
-                        <li><a href="#pricing" className="hover:text-blue-400 transition">Pricing</a></li>
-                        <li><a href="#contact" className="hover:text-blue-400 transition">Contact</a></li>
-                    </ul>
-                </nav>
+export default function LoginPage() {
+    return (
+        <div className="min-h-screen bg-[#FFF6C7] text-[#333] flex flex-col px-4">
+            {/* Header */}
+            <header className="w-full py-4 px-4 lg:px-10 flex justify-between items-center bg-[#FFF6C7]">
+                <div className="flex items-center space-x-3">
+                    <a href="/" className="flex items-center space-x-2">
+                        <Image
+                            src="/banner/logo.png"
+                            alt="Logo"
+                            width={120}
+                            height={120}
+                            className="object-contain"
+                        />
+                        <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">
+                            Trang chủ
+                        </span>
+                    </a>
+                </div>
             </header>
 
-            {/* Login Form */}
-            <div className="flex flex-col items-center justify-center flex-grow">
-                <h1 className="text-3xl font-extrabold text-blue-400 mb-6">Log in to LiveNest</h1>
+            {/* Login Card */}
+            <div className="w-full items-center justify-center flex">
+            <div className="mt-10 bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
+                <h2 className="text-center text-2xl font-semibold text-[#FFC107] mb-6">
+                    Đăng nhập vào hệ thống
+                </h2>
 
-                <form className="bg-gray-800 p-6 rounded-lg shadow-md w-96">
+                <form>
                     <div className="mb-4">
-                        <label className="block text-gray-300 text-sm font-bold mb-2">Email</label>
-                        <input type="email" className="w-full p-2 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your email" />
+                        <label className="block text-sm font-medium text-[#555] mb-1">Email</label>
+                        <input
+                            type="email"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                            placeholder="Nhập email"
+                        />
                     </div>
-                    <div className="mb-4">
-                        <label className="block text-gray-300 text-sm font-bold mb-2">Password</label>
-                        <input type="password" className="w-full p-2 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your password" />
+
+                    <div className="mb-6">
+                        <label className="block text-sm font-medium text-[#555] mb-1">Mật khẩu</label>
+                        <input
+                            type="password"
+                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                            placeholder="Nhập mật khẩu"
+                        />
                     </div>
-                    <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 rounded-lg transition">
-                        Log In
+
+                    <button
+                        type="submit"
+                        className="w-full bg-[#FFC107] text-white font-semibold py-2 rounded-xl hover:bg-[#e5a906] transition"
+                    >
+                        Đăng nhập
                     </button>
                 </form>
 
-                <p className="mt-4 text-gray-400">
-                    Don't have an account? <a href="/signup" className="text-blue-400 hover:underline">Sign up</a>
+                <p className="text-center text-sm text-gray-600 mt-6">
+                    Chưa có tài khoản?{" "}
+                    <a href="/signup" className="text-[#FFC107] hover:underline">
+                        Đăng ký ngay
+                    </a>
                 </p>
+            </div>
             </div>
         </div>
     );

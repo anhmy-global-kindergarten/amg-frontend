@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import FloatingInput from "@/components/FloatingInput";
 
 interface RegisterClassModalProps {
     onClose: () => void;
@@ -14,7 +15,12 @@ export default function RegisterClassModal({ onClose }: RegisterClassModalProps)
             document.body.style.overflow = 'auto';
         };
     }, []);
-
+    const [studentName, setStudentName] = useState('');
+    const [gender, setGender] = useState('');
+    const [dob, setDob] = useState('');
+    const [parentName, setParentName] = useState('');
+    const [address, setAddress] = useState('');
+    const [phone, setPhone] = useState('');
     return (
         <AnimatePresence>
             <motion.div
@@ -36,13 +42,13 @@ export default function RegisterClassModal({ onClose }: RegisterClassModalProps)
 
                     <h2 className="text-center text-orange-400 font-semibold text-xl mb-6 z-10">THÔNG TIN HỌC SINH</h2>
 
-                    <form className="flex flex-col space-y-4 text-blue-600 font-semibold">
-                        <input type="text" placeholder="Họ tên học sinh" className="input" />
-                        <input type="text" placeholder="Giới tính" className="input" />
-                        <input type="date" placeholder="Ngày tháng năm sinh" className="input" />
-                        <input type="text" placeholder="Họ tên phụ huynh" className="input" />
-                        <input type="text" placeholder="Địa chỉ" className="input" />
-                        <input type="tel" placeholder="Số điện thoại" className="input" />
+                    <form className="flex flex-col space-y-4 text-[#1867B1] font-semibold">
+                        <FloatingInput label="Họ tên học sinh" type="text" value={studentName} onChange={(e) => setStudentName(e.target.value)} />
+                        <FloatingInput label="Giới tính" type="select" value={gender} onChangeSelect={(e) => setGender(e.target.value)} options={["Nam", "Nữ"]}/>
+                        <FloatingInput label="Ngày tháng năm sinh" type="date" value={dob} onChange={(e) => setDob(e.target.value)} />
+                        <FloatingInput label="Họ tên phụ huynh" type="text" value={parentName} onChange={(e) => setParentName(e.target.value)} />
+                        <FloatingInput label="Địa chỉ" type="text" value={address} onChange={(e) => setAddress(e.target.value)} />
+                        <FloatingInput label="Số điện thoại" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} />
 
                         <button
                             type="submit"
