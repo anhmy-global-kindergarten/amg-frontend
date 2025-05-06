@@ -32,60 +32,57 @@ const testimonials = [
 
 export default function TestimonialCarousel() {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const visibleDots = 4;
-    const currentPage = Math.floor(currentIndex / visibleDots);
+
+    const goNext = () => {
+        setCurrentIndex((prev) => (prev + 1 < testimonials.length ? prev + 1 : prev));
+    };
+
+    const goBack = () => {
+        setCurrentIndex((prev) => (prev - 1 >= 0 ? prev - 1 : prev));
+    };
 
     return (
         <div className="flex flex-col items-center space-y-6 mt-10 px-4">
-            <div
-                className="bg-[#E9F7FE] border-dashed border-2 border-[#FFA552] px-6 md:px-10 lg:px-16 py-8 lg:py-10 w-full max-w-[95%] md:max-w-[1000px] lg:max-w-[1200px] h-auto lg:h-[400px] text-center rounded-[120px] relative flex flex-col justify-center"
-            >
-                <p className="text-[#4D4D4D] text-base md:text-lg lg:text-xl leading-7 md:leading-8 font-medium mb-4 md:mb-6 px-2 md:px-6">
-                    {testimonials[currentIndex].content}
-                </p>
-                <p className="text-[#F86161] text-lg md:text-xl lg:text-2xl font-bold mb-1">
-                    {testimonials[currentIndex].name}
-                </p>
-                <p className="text-sm md:text-base italic text-[#777]">
-                    {testimonials[currentIndex].desc}
-                </p>
+            <div className="relative flex items-center justify-center w-full max-w-4xl">
+                <button
+                    onClick={goBack}
+                    disabled={currentIndex === 0}
+                    className="absolute left-0 text-3xl px-3 disabled:opacity-30"
+                >
+                    ‹
+                </button>
+
+                <div className="bg-[#E9F7FE] border-dashed border-2 border-[#FFA552] px-6 md:px-10 lg:px-16 py-8 lg:py-10 w-[360px] h-[320px] md:max-w-[1000px] lg:w-[900px] lg:h-[400px] text-center rounded-[120px] flex flex-col justify-center items-center">
+                    <p className="text-[#4D4D4D] text-base md:text-lg lg:text-xl leading-7 md:leading-8 font-medium mb-4 md:mb-6 px-2 md:px-6">
+                        {testimonials[currentIndex].content}
+                    </p>
+                    <p className="text-[#F86161] text-lg md:text-xl lg:text-2xl font-bold mb-1">
+                        {testimonials[currentIndex].name}
+                    </p>
+                    <p className="text-sm md:text-base italic text-[#777]">
+                        {testimonials[currentIndex].desc}
+                    </p>
+                </div>
+
+                <button
+                    onClick={goNext}
+                    disabled={currentIndex === testimonials.length - 1}
+                    className="absolute right-0 text-3xl px-3 disabled:opacity-30"
+                >
+                    ›
+                </button>
             </div>
 
-            <div className="flex items-center space-x-2">
-                {currentPage > 0 && (
+            <div className="flex space-x-2">
+                {testimonials.map((_, idx) => (
                     <button
-                        onClick={() => setCurrentIndex((prev) => Math.max(0, prev - visibleDots))}
-                        className="text-xl px-2"
-                    >
-                        ‹
-                    </button>
-                )}
-                {testimonials
-                    .slice(currentPage * visibleDots, currentPage * visibleDots + visibleDots)
-                    .map((_, idx) => {
-                        const actualIdx = currentPage * visibleDots + idx;
-                        return (
-                            <button
-                                key={actualIdx}
-                                onClick={() => setCurrentIndex(actualIdx)}
-                                className={`w-4 h-4 rounded-full border transition-all duration-200 ${
-                                    currentIndex === actualIdx ? "bg-[#FFA552]" : "bg-gray-300"
-                                }`}
-                            />
-                        );
-                    })}
-                {(currentPage + 1) * visibleDots < testimonials.length && (
-                    <button
-                        onClick={() =>
-                            setCurrentIndex((prev) =>
-                                Math.min(testimonials.length - 1, prev + visibleDots)
-                            )
-                        }
-                        className="text-xl px-2"
-                    >
-                        ›
-                    </button>
-                )}
+                        key={idx}
+                        onClick={() => setCurrentIndex(idx)}
+                        className={`w-4 h-4 rounded-full transition-all duration-200 border ${
+                            currentIndex === idx ? "bg-[#FFA552]" : "bg-gray-300"
+                        }`}
+                    />
+                ))}
             </div>
         </div>
     );

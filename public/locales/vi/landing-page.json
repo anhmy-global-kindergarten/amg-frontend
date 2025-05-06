@@ -1,0 +1,17 @@
+{
+  "greeting": "Xin chào",
+  "welcome": "Chào mừng bạn đến với trang web của chúng tôi!",
+  "error": {
+    "notFound": "Không tìm thấy trang",
+    "serverError": "Đã xảy ra lỗi máy chủ"
+  },
+  "button": {
+    "submit": "Gửi",
+    "cancel": "Hủy bỏ"
+  },
+  "form": {
+    "name": "Tên",
+    "email": "Email",
+    "password": "Mật khẩu"
+  }
+}

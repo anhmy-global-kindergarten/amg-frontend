@@ -76,6 +76,14 @@ export default function LandingPage() {
                             <Image src="/icons/icon_ytb.png" alt="YouTube" width={20} height={20}/>
                         </a>
                     </div>
+
+                    {/* Login Button */}
+                    <a
+                        href="/login"
+                        className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                    >
+                        Đăng nhập
+                    </a>
                 </div>
             </div>
             {/* Header */}
@@ -535,26 +543,24 @@ export default function LandingPage() {
             </section>
 
             {/* Decorative icons (clouds, stars...) */}
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={70} className="absolute left-8 top-[550px]"/>
-            <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
-                   className="absolute left-40 top-[550px] hidden lg:black"/>
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={70} className="absolute left-[5%] top-[50vh]"/>
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute left-1/3 translate-x-[80px] top-[450px]"/>
+                   className="absolute left-1/3 translate-x-[80px] top-[45vh]"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={60} height={70}
-                   className="absolute left-1/3 top-[350px]"/>
+                   className="absolute left-1/3 top-[40vh]"/>
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={70}
-                   className="absolute right-10 top-[300px]"/>
+                   className="absolute right-[5%] top-[35vh]"/>
 
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute right-10 top-[650px]"/>
+                   className="absolute right-[3%] top-[62vh]"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
-                   className="absolute right-5 top-[750px]"/>
+                   className="absolute right-[2%] top-[70vh]"/>
 
             <Image src="/banner/icon_star_empty.png" alt="" width={80} height={80}
-                   className="absolute left-1/3 top-[800px] z-99 hidden lg:block"/>
+                   className="absolute left-1/3 top-[80vh] z-99 hidden lg:block"/>
 
             <Image src="/banner/icon_star_empty.png" alt="" width={60} height={60}
-                   className="absolute right-40 top-[1600px] z-99"/>
+                   className="absolute right-[15%] top-[150vh] z-99"/>
 
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute left-80 top-[2000px] z-99"/>
@@ -575,8 +581,6 @@ export default function LandingPage() {
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute right-100 top-[3600px] z-99"/>
 
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute left-250 top-[4620px]  z-99"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute left-100 top-[4700px] z-99"/>
 
@@ -597,9 +601,6 @@ export default function LandingPage() {
                    className="absolute left-20 top-[5400px] z-99"/>
 
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute left-130 top-[5500px]  z-99"/>
-
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                    className="absolute left-10 top-[5900px]  z-99"/>
 
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
@@ -617,7 +618,7 @@ export default function LandingPage() {
                    className="absolute left-50 top-[6300px] z-99 hidden lg:block"/>
 
             <Image src="/icons/icon_elephant0.png" alt="" width={isMobile ? 70 : 100} height={isMobile ? 45 : 70}
-                   className="absolute left-20 lg:left-45 top-[3650px] lg:top-[2000px] z-99"/>
+                   className="absolute left-[10%] top-[410vh] lg:top-[2000px] z-99"/>
             <Image src="/icons/icon_elephant1.png" alt="" width={isMobile ? 60 : 100} height={isMobile ? 30 : 50}
                    className="absolute right-10 top-[5300px] lg:right-100 lg:translate-x-[80px] lg:top-[2900px] z-99"/>
             <Image src="/icons/icon_elephant2.png" alt="" width={isMobile ? 75 : 150} height={isMobile ? 50 : 100}
@@ -627,7 +628,7 @@ export default function LandingPage() {
 
             <Image src="/icons/icon_elephant_footer.png" alt="" width={isMobile ? 150 : 300}
                    height={isMobile ? 75 : 150}
-                   className="absolute right-10 top-[12200px]  lg:right-100 lg:top-[6400px] z-99"/>
+                   className="absolute right-10 top-[1300vh]  lg:right-100 lg:top-[6650px] z-99"/>
             {/* Add more as needed */}
             {showModal && <RegisterClassModal onClose={closeModal}/>}
             {showScrollToTop && (

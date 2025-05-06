@@ -97,65 +97,78 @@ const Page = async ({ params }: PageProps) => {
                 )}
             </div>
 
-            {/* Elephant Icon */}
+
+            {/* Decorative Icons */}
             <Image
                 src="/icons/icon_elephant_star.png"
                 alt="Elephant Star"
                 width={120}
                 height={120}
-                className="absolute right-70 top-20 z-10"
+                className="absolute right-10 top-10 z-10 hidden md:block"
             />
-
-            <Image src="/banner/icon_star_empty.png" alt="Star Empty" width={60} height={60}
-                   className="absolute right-20 top-50 z-10"/>
-            <Image src="/banner/icon_star_empty.png" alt="Star Empty" width={40} height={40}
-                   className="absolute right-150 top-17 z-10"/>
-            <Image src="/banner/icon_star_empty.png" alt="Star Empty" width={60} height={60}
-                   className="absolute left-20 top-30 z-10"/>
-
             <Image
                 src="/banner/icon_star_empty.png"
                 alt="Star Empty"
                 width={60}
                 height={60}
-                className="absolute left-10 top-350 z-10"
+                className="absolute right-5 top-40 z-10 hidden md:block"
             />
             <Image
                 src="/banner/icon_star_empty.png"
                 alt="Star Empty"
                 width={40}
                 height={40}
-                className="absolute right-125 top-150 z-10"
+                className="absolute right-[150px] top-[70px] z-10 hidden md:block"
             />
             <Image
                 src="/banner/icon_star_empty.png"
                 alt="Star Empty"
                 width={60}
                 height={60}
-                className="absolute left-260 top-280 z-9"
+                className="absolute left-5 top-40 z-10 hidden md:block"
+            />
+            <Image
+                src="/banner/icon_star_empty.png"
+                alt="Star Empty"
+                width={60}
+                height={60}
+                className="absolute left-10 top-[350px] z-10 hidden md:block"
+            />
+            <Image
+                src="/banner/icon_star_empty.png"
+                alt="Star Empty"
+                width={40}
+                height={40}
+                className="absolute right-[125px] top-[150px] z-10 hidden md:block"
+            />
+            <Image
+                src="/banner/icon_star_empty.png"
+                alt="Star Empty"
+                width={60}
+                height={60}
+                className="absolute left-[260px] top-[280px] z-9 hidden md:block"
             />
             <Image
                 src="/banner/icon_star_empty.png"
                 alt="Star Empty"
                 width={50}
                 height={50}
-                className="absolute right-1/2 bottom-58 z-9"
+                className="absolute right-1/2 bottom-[58px] z-9 hidden md:block"
             />
             <Image
                 src="/banner/icon_star_empty.png"
                 alt="Star Empty"
                 width={45}
                 height={45}
-                className="absolute left-36 bottom-20 z-10"
+                className="absolute left-[144px] bottom-[20px] z-10 hidden md:block"
             />
             <Image
                 src="/banner/icon_star_empty.png"
                 alt="Star Empty"
                 width={55}
                 height={55}
-                className="absolute right-24 bottom-10 z-10"
+                className="absolute right-24 bottom-[10px] z-10 hidden md:block"
             />
-
         </div>
     );
 };
