@@ -32,8 +32,8 @@ export default function UserTable() {
     return (
         <div className="bg-white p-4 rounded-xl shadow-md overflow-x-auto">
             <div className="flex justify-between items-center mb-4">
-                <span className="text-sm text-gray-600">Tổng số: {USERS.length} người dùng</span>
-                <label className="text-sm">
+                <span className="text-sm  text-orange-700">Tổng số: {USERS.length} người dùng</span>
+                <label className="text-sm text-orange-700">
                     Hiển thị mỗi trang:
                     <select
                         className="ml-2 border rounded px-2 py-1"
@@ -81,15 +81,17 @@ export default function UserTable() {
             <div className="flex justify-center mt-4 space-x-2">
                 <button
                     onClick={() => handlePageChange(currentPage - 1)}
-                    className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm"
+                    className="px-3 py-1 rounded bg-orange-100 hover:bg-orange-200 text-sm text-orange-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={currentPage === 1}
                 >
                     ← Trước
                 </button>
-                <span className="text-sm mt-1">Trang {currentPage} / {totalPages}</span>
+                <span className="text-sm text-orange-600 font-medium mt-1">
+        Trang {currentPage} / {totalPages}
+    </span>
                 <button
                     onClick={() => handlePageChange(currentPage + 1)}
-                    className="px-3 py-1 rounded bg-gray-100 hover:bg-gray-200 text-sm"
+                    className="px-3 py-1 rounded bg-orange-100 hover:bg-orange-200 text-sm text-orange-700 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={currentPage === totalPages}
                 >
                     Tiếp →
