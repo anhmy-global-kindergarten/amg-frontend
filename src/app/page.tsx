@@ -40,8 +40,9 @@ export default function LandingPage() {
     return (
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
             {/* Top Navbar */}
+            {!isMobile && (
             <div
-                className="w-full bg-[#FFF6C7] text-[#FFC107] text-sm py-4 px-4 lg:px-8 flex flex-col lg:flex-row justify-between items-center gap-4">
+                className="w-full bg-[#FFF6C7] text-[#FFC107] text-sm py-4 px-4 lg:px-8 flex flex-col lg:flex-row justify-between items-center gap-4 ">
                 {/* Left side: Phone and Email */}
                 <div className="flex flex-col sm:flex-row items-center sm:space-x-6 gap-2 sm:gap-0">
                     <div className="flex items-center space-x-2">
@@ -86,6 +87,7 @@ export default function LandingPage() {
                     </a>
                 </div>
             </div>
+            )}
             {/* Header */}
             <header className="relative w-full h-[330px]">
                 <Image
@@ -172,11 +174,14 @@ export default function LandingPage() {
 
 
             <section className="relative w-full mt-40 mb-20 z-70 px-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                         {["photo5", "photo6", "photo7"].map((img, i) => (
-                            <div key={i} className="w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden">
+                            <div
+                                key={i}
+                                className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"
+                            >
                                 <Image
                                     src={`/gallery/${img}.png`}
                                     alt=""
@@ -189,9 +194,12 @@ export default function LandingPage() {
                     </div>
 
                     {/* Column 2 */}
-                    <div className="flex flex-col gap-6 justify-center">
+                    <div className="flex flex-col gap-2 justify-center">
                         {["photo1", "photo8"].map((img, i) => (
-                            <div key={i} className="w-full h-[400px] md:h-[525px] rounded-2xl overflow-hidden">
+                            <div
+                                key={i}
+                                className="w-full h-[225px] sm:h-[300px] md:h-[400px] lg:h-[525px] rounded-2xl overflow-hidden"
+                            >
                                 <Image
                                     src={`/gallery/${img}.png`}
                                     alt=""
@@ -204,9 +212,12 @@ export default function LandingPage() {
                     </div>
 
                     {/* Column 3 */}
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                         {["photo2", "photo3", "photo4"].map((img, i) => (
-                            <div key={i} className="w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden">
+                            <div
+                                key={i}
+                                className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"
+                            >
                                 <Image
                                     src={`/gallery/${img}.png`}
                                     alt=""
@@ -219,7 +230,6 @@ export default function LandingPage() {
                     </div>
                 </div>
             </section>
-
 
             <section className="w-full bg-[#FFF6C7] py-10 relative z-10">
                 <div className="w-[90%] mx-auto flex flex-col items-center gap-12">
@@ -543,7 +553,8 @@ export default function LandingPage() {
             </section>
 
             {/* Decorative icons (clouds, stars...) */}
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={70} className="absolute left-[5%] top-[50vh]"/>
+            <Image src="/banner/icon_cloud.png" alt="" width={100} height={70}
+                   className="absolute left-[5%] top-[50vh]"/>
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                    className="absolute left-1/3 translate-x-[80px] top-[45vh]"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={60} height={70}
@@ -637,7 +648,7 @@ export default function LandingPage() {
                     className="fixed bottom-6 right-6 z-9999 bg-[#FFC107] hover:bg-[#ffb300] text-white p-3 rounded-full shadow-lg transition-opacity duration-300"
                     aria-label="Scroll to top"
                 >
-                    <FaArrowUp size={20} />
+                    <FaArrowUp size={20}/>
                 </button>
             )}
         </div>
