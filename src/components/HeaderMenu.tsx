@@ -106,7 +106,7 @@ export default function HeaderMenu() {
                         className="p-2 text-black lg:hidden"
                         onClick={handleToggleMenu}
                     >
-                        <Bars3Icon className="absolute h-6 w-6 top-15 right-4" />
+                        <Bars3Icon className="absolute h-6 w-6 top-15 left-4 text-[#FFA500]" />
                     </button>
 
                     <AnimatePresence>

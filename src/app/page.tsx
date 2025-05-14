@@ -25,7 +25,7 @@ export default function LandingPage() {
     }, []);
     useEffect(() => {
         const checkMobile = () => {
-            setIsMobile(window.innerWidth < 768);
+            setIsMobile(window.innerWidth < 1024);
         };
 
         checkMobile();
@@ -97,9 +97,8 @@ export default function LandingPage() {
                     className="object-cover z-0"
                     priority
                 />
-
-                {/* Logo */}
-                <div className="absolute top-4 left-4 z-10">
+                    {/* Logo */}
+                    <div className={`absolute top-4 z-10 ${isMobile ? 'left-1/2' : 'left-4'}`}>
                     <Image src="/banner/logo.png" alt="Logo AMG" width={120} height={80}/>
                 </div>
 
@@ -142,7 +141,7 @@ export default function LandingPage() {
 
                 {/* Banner Kids Image */}
                 <div className={`absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0
-                    ${isMobile ? 'top-50' : ''}`}>
+                        ${isMobile ? 'top-50' : ''}`}>
                     <Image
                         src="/banner/banner_kids_1.png"
                         alt="Kids"
