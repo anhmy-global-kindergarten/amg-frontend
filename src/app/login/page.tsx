@@ -1,7 +1,32 @@
+'use client';
 /* eslint-disable */
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import {signIn} from "next-auth/react";
 
 export default function LoginPage() {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const router = useRouter();
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const res = await signIn('credentials', {
+            redirect: false,
+            email,
+            password,
+        });
+
+        if (res?.ok) {
+            router.push('/');
+        } else {
+            setError('Tài khoản hoặc mật khẩu không đúng');
+        }
+    };
+
     return (
         <div className="min-h-screen bg-[#FFF6C7] text-[#333] flex flex-col px-4">
             {/* Header */}
@@ -16,53 +41,61 @@ export default function LoginPage() {
                             className="object-contain"
                         />
                         <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">
-                            Trang chủ
-                        </span>
+              Trang chủ
+            </span>
                     </a>
                 </div>
             </header>
 
             {/* Login Card */}
             <div className="w-full items-center justify-center flex">
-            <div className="mt-10 bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
-                <h2 className="text-center text-2xl font-semibold text-[#FFC107] mb-6">
-                    Đăng nhập vào hệ thống
-                </h2>
+                <div className="mt-10 bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
+                    <h2 className="text-center text-2xl font-semibold text-[#FFC107] mb-6">
+                        Đăng nhập vào hệ thống
+                    </h2>
 
-                <form>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-[#555] mb-1">Email</label>
-                        <input
-                            type="email"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
-                            placeholder="Nhập email"
-                        />
-                    </div>
+                    <form onSubmit={handleLogin}>
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-[#555] mb-1">Email</label>
+                            <input
+                                type="email"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                                placeholder="Nhập email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
+                        </div>
 
-                    <div className="mb-6">
-                        <label className="block text-sm font-medium text-[#555] mb-1">Mật khẩu</label>
-                        <input
-                            type="password"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
-                            placeholder="Nhập mật khẩu"
-                        />
-                    </div>
+                        <div className="mb-6">
+                            <label className="block text-sm font-medium text-[#555] mb-1">Mật khẩu</label>
+                            <input
+                                type="password"
+                                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                                placeholder="Nhập mật khẩu"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            />
+                        </div>
 
-                    <button
-                        type="submit"
-                        className="w-full bg-[#FFC107] text-white font-semibold py-2 rounded-xl hover:bg-[#e5a906] transition"
-                    >
-                        Đăng nhập
-                    </button>
-                </form>
+                        {error && (
+                            <p className="mb-4 text-red-600 font-semibold">{error}</p>
+                        )}
 
-                <p className="text-center text-sm text-gray-600 mt-6">
-                    Chưa có tài khoản?{" "}
-                    <a href="/signup" className="text-[#FFC107] hover:underline">
-                        Đăng ký ngay
-                    </a>
-                </p>
-            </div>
+                        <button
+                            type="submit"
+                            className="w-full bg-[#FFC107] text-white font-semibold py-2 rounded-xl hover:bg-[#e5a906] transition"
+                        >
+                            Đăng nhập
+                        </button>
+                    </form>
+
+                    <p className="text-center text-sm text-gray-600 mt-6">
+                        Chưa có tài khoản?{" "}
+                        <a href="/signup" className="text-[#FFC107] hover:underline">
+                            Đăng ký ngay
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     );
