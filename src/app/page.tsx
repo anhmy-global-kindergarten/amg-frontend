@@ -124,7 +124,7 @@ export default function LandingPage() {
                     priority
                 />
                     {/* Logo */}
-                    <div className={`absolute top-4 z-10 ${isMobile ? 'left-1/2' : 'left-4'}`}>
+                    <div className={`absolute top-4 z-10 ${isMobile ? 'left-1/2 -translate-x-1/2' : 'left-4'}`}>
                     <Image src="/banner/logo.png" alt="Logo AMG" width={120} height={80}/>
                 </div>
 
@@ -137,6 +137,74 @@ export default function LandingPage() {
 
 
             {/* Banner Section */}
+            {isMobile ? (
+                // ======= Layout Mobile =======
+                <section className="relative pt-2 pb-20 z-10 flex flex-col items-center text-center overflow-visible">
+                    {/* Kids Image */}
+                    <div className="relative w-[70%] max-w-[450px] h-[470px] mb-6 z-10 -top-30">
+                        <Image
+                            src="/banner/banner_kids_1.png"
+                            alt="Kids"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                    {/* Cloud (ở dưới) */}
+                    {/*<Image
+                        src="/banner/big_cloud.png"
+                        alt="big cloud"
+                        width={2000}
+                        height={100}
+                        className="w-full absolute top-50 z-10"
+                    />*/}
+                    <Image
+                        src="/banner/big_cloud.png"
+                        alt="big cloud"
+                        width={2000}
+                        height={100}
+                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[170px] z-10"
+                    />
+
+                    <Image
+                        src="/banner/big_cloud.png"
+                        alt="big cloud"
+                        width={2000}
+                        height={100}
+                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[250px] z-10 scale-x-[-1]"
+                    />
+
+                    {/* Text */}
+                    <div className="w-full max-w-xl z-20">
+                        <h1 className="text-3xl font-extrabold text-[#FF6A00] leading-tight mb-3">
+                            Đăng ký<br />Tuyển sinh
+                        </h1>
+                        <p className="text-xl font-semibold text-[#FFC600] mb-4">
+                            năm học 2024-2025
+                        </p>
+                        <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
+                            Mầm non AMG<br />
+                            Trường mầm non song ngữ<br />
+                            Giảng dạy theo chương trình Phần Lan và tiếng Anh Grapeseeds
+                        </p>
+
+                        <div className="relative w-fit mx-auto">
+                            <button onClick={openModal} className="relative">
+                                <Image
+                                    src="/banner/button_register.png"
+                                    alt="Register"
+                                    width={200}
+                                    height={60}
+                                    className="hover:opacity-90 transition"
+                                />
+                                <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
+                                    <Image src="/banner/icon_play.png" alt="Play" fill className="object-contain" />
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            ) : (
+                // ======= Layout Desktop =======
             <section
                 className="relative px-4 sm:px-6 pt-10 pb-20 z-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
                 {/* Text Block */}
@@ -186,17 +254,16 @@ export default function LandingPage() {
                         className="object-contain"
                     />
                 </div>
+                {/* Cloud Divider */}
+                <Image
+                    src="/banner/big_cloud.png"
+                    alt=""
+                    width={1920}
+                    height={80}
+                    className="w-full absolute top-[970px] lg:top-[400px] z-10"
+                />
             </section>
-
-            {/* Cloud Divider */}
-            <Image
-                src="/banner/big_cloud.png"
-                alt=""
-                width={1920}
-                height={80}
-                className="w-full absolute top-[970px] lg:top-[700px] z-10"
-            />
-
+    )}
 
             <section className="relative w-full mt-40 mb-20 z-70 px-4">
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
