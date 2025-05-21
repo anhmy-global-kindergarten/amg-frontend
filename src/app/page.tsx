@@ -6,6 +6,7 @@ import HeaderMenu from "@/components/HeaderMenu";
 import RegisterClassModal from "@/modals/RegisterClassModal";
 import {useEffect, useState} from 'react';
 import { FaArrowUp } from "react-icons/fa";
+import {signOut, useSession} from "next-auth/react";
 
 export default function LandingPage() {
     const [isMobile, setIsMobile] = useState(false);
@@ -37,6 +38,12 @@ export default function LandingPage() {
     const scrollToTop = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
+    const { data: session } = useSession();
+
+    const role = session?.user?.role;
+    const isAuthenticated = !!session;
+
     return (
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
             {/* Top Navbar */}
@@ -79,12 +86,31 @@ export default function LandingPage() {
                     </div>
 
                     {/* Login Button */}
-                    <a
-                        href="/login"
-                        className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
-                    >
-                        Đăng nhập
-                    </a>
+                    {isAuthenticated ? (
+                        <div className="flex gap-2">
+                            {(role === "admin" || role === "teacher") && (
+                                <a
+                                    href="/post/create"
+                                    className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                                >
+                                    Tạo bài viết
+                                </a>
+                            )}
+                            <button
+                                onClick={() => signOut({ callbackUrl: "/" })}
+                                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
+                            >
+                                Đăng xuất
+                            </button>
+                        </div>
+                    ) : (
+                        <a
+                            href="/login"
+                            className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                        >
+                            Đăng nhập
+                        </a>
+                    )}
                 </div>
             </div>
             )}
