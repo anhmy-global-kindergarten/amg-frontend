@@ -115,7 +115,7 @@ export default function LandingPage() {
             </div>
             )}
             {/* Header */}
-            <header className="relative w-full h-[330px]">
+            <header className={`relative w-full ${isMobile ? 'h-[170px]' : 'h-[330px]'}`}>
                 <Image
                     src="/banner/cloud_banner.png"
                     alt="Header Cloud"
@@ -141,7 +141,7 @@ export default function LandingPage() {
                 // ======= Layout Mobile =======
                 <section className="relative pt-2 pb-20 z-10 flex flex-col items-center text-center overflow-visible">
                     {/* Kids Image */}
-                    <div className="relative w-[70%] max-w-[450px] h-[470px] mb-6 z-10 -top-30">
+                    <div className="absolute right-1/2 translate-x-1/2 w-[70%] max-w-[450px] h-[470px] mb-6 z-10 -top-35">
                         <Image
                             src="/banner/banner_kids_1.png"
                             alt="Kids"
@@ -149,32 +149,42 @@ export default function LandingPage() {
                             className="object-contain"
                         />
                     </div>
+                    {/* Background Triangle */}
+                    <div
+                        className="absolute right-1/2 translate-x-1/2 top-2 w-[250px] h-[300px] z-9">
+                        <Image
+                            src="/banner/triangle_shade.png"
+                            alt="Triangle"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
                     {/* Cloud (ở dưới) */}
-                    {/*<Image
-                        src="/banner/big_cloud.png"
-                        alt="big cloud"
-                        width={2000}
-                        height={100}
-                        className="w-full absolute top-50 z-10"
-                    />*/}
-                    <Image
-                        src="/banner/big_cloud.png"
-                        alt="big cloud"
-                        width={2000}
-                        height={100}
-                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[170px] z-10"
-                    />
 
                     <Image
                         src="/banner/big_cloud.png"
                         alt="big cloud"
                         width={2000}
                         height={100}
-                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[250px] z-10 scale-x-[-1]"
+                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[175px] z-10"
+                    />
+                    <Image
+                        src="/banner/panel_white.png"
+                        alt="panel white"
+                        width={1000}
+                        height={50}
+                        className="w-full absolute top-[255px] z-10"
+                    />
+                    <Image
+                        src="/banner/big_cloud.png"
+                        alt="big cloud"
+                        width={2000}
+                        height={100}
+                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[355px] z-10 scale-x-[-1]"
                     />
 
                     {/* Text */}
-                    <div className="w-full max-w-xl z-20">
+                    <div className="relative w-full max-w-xl z-20 top-60 pb-10">
                         <h1 className="text-3xl font-extrabold text-[#FF6A00] leading-tight mb-3">
                             Đăng ký<br />Tuyển sinh
                         </h1>
