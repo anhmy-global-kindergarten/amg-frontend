@@ -42,10 +42,10 @@ export default function ClassGallery() {
             <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">HỆ THỐNG LỚP HỌC</h2>
 
             {/* Static Section */}
-            <div className="w-full bg-[#fff7cc] py-6 flex flex-wrap gap-4 items-center justify-center">
-                <Image src="/info/amg_box1.png" alt="Tab 1" width={isMobile ? 150 : 300} height={isMobile ? 50: 100} className="mb-4" />
-                <Image src="/info/amg_box2.png" alt="Tab 2" width={isMobile ? 150 : 300} height={isMobile ? 50: 100} className="mb-4" />
-                <Image src="/info/amg_box3.png" alt="Tab 3" width={isMobile ? 150 : 300} height={isMobile ? 50: 100} className="mb-4" />
+            <div className="w-full bg-[#fff7cc] py-2 flex flex-wrap gap-3 items-center justify-center">
+                <Image src="/info/amg_box1.png" alt="Tab 1" width={isMobile ? 120 : 300} height={isMobile ? 70: 100} style={{ height: isMobile ? '45px' : '' }} className="mb-4" />
+                <Image src="/info/amg_box2.png" alt="Tab 2" width={isMobile ? 120 : 300} height={isMobile ? 70: 100} style={{ height: isMobile ? '45px' : '' }} className="mb-4" />
+                <Image src="/info/amg_box3.png" alt="Tab 3" width={isMobile ? 120 : 300} height={isMobile ? 70: 100} style={{ height: isMobile ? '45px' : '' }} className="mb-4" />
             </div>
 
             {/* Carousel Section */}

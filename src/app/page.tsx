@@ -48,71 +48,72 @@ export default function LandingPage() {
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
             {/* Top Navbar */}
             {!isMobile && (
-            <div
-                className="w-full bg-[#FFF6C7] text-[#FFC107] text-sm py-4 px-4 lg:px-8 flex flex-col lg:flex-row justify-between items-center gap-4 ">
-                {/* Left side: Phone and Email */}
-                <div className="flex flex-col sm:flex-row items-center sm:space-x-6 gap-2 sm:gap-0">
-                    <div className="flex items-center space-x-2">
-                        <Image src="/icons/icon_phone.png" alt="icon phone" height={15} width={15}/>
-                        <a href="tel:0972556001" className="hover:underline">0972556001</a>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                        <Image src="/icons/icon_email.png" alt="icon email" height={20} width={20}/>
-                        <a href="mailto:anhmykindergarten@gmail.com"
-                           className="hover:underline">anhmykindergarten@gmail.com</a>
-                    </div>
-                </div>
-
-                {/* Right side: Language and Social Icons */}
-                <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
-                    {/* Flags */}
-                    <div className="flex space-x-2">
-                        <Image src="/icons/icon_flag_vn.png" alt="VN" height={20} width={40} className="object-cover"/>
-                        <Image src="/icons/icon_flag_eng.png" alt="ENG" height={20} width={40}
-                               className="object-cover"/>
-                    </div>
-
-                    {/* Social icons */}
-                    <div className="flex space-x-2">
-                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
-                            <Image src="/icons/icon_fb.png" alt="Facebook" width={20} height={20}/>
-                        </a>
-                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
-                            <Image src="/icons/icon_ig.png" alt="Instagram" width={20} height={20}/>
-                        </a>
-                        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
-                            <Image src="/icons/icon_ytb.png" alt="YouTube" width={20} height={20}/>
-                        </a>
-                    </div>
-
-                    {/* Login Button */}
-                    {isAuthenticated ? (
-                        <div className="flex gap-2">
-                            {(role === "admin" || role === "teacher") && (
-                                <a
-                                    href="/post/create"
-                                    className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
-                                >
-                                    Tạo bài viết
-                                </a>
-                            )}
-                            <button
-                                onClick={() => signOut({ callbackUrl: "/" })}
-                                className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
-                            >
-                                Đăng xuất
-                            </button>
+                <div
+                    className="w-full bg-[#FFF6C7] text-[#FFC107] text-sm py-4 px-4 lg:px-8 flex flex-col lg:flex-row justify-between items-center gap-4 ">
+                    {/* Left side: Phone and Email */}
+                    <div className="flex flex-col sm:flex-row items-center sm:space-x-6 gap-2 sm:gap-0">
+                        <div className="flex items-center space-x-2">
+                            <Image src="/icons/icon_phone.png" alt="icon phone" height={15} width={15}/>
+                            <a href="tel:0972556001" className="hover:underline">0972556001</a>
                         </div>
-                    ) : (
-                        <a
-                            href="/login"
-                            className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
-                        >
-                            Đăng nhập
-                        </a>
-                    )}
+                        <div className="flex items-center space-x-2">
+                            <Image src="/icons/icon_email.png" alt="icon email" height={20} width={20}/>
+                            <a href="mailto:anhmykindergarten@gmail.com"
+                               className="hover:underline">anhmykindergarten@gmail.com</a>
+                        </div>
+                    </div>
+
+                    {/* Right side: Language and Social Icons */}
+                    <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
+                        {/* Flags */}
+                        <div className="flex space-x-2">
+                            <Image src="/icons/icon_flag_vn.png" alt="VN" height={20} width={40}
+                                   className="object-cover"/>
+                            <Image src="/icons/icon_flag_eng.png" alt="ENG" height={20} width={40}
+                                   className="object-cover"/>
+                        </div>
+
+                        {/* Social icons */}
+                        <div className="flex space-x-2">
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+                                <Image src="/icons/icon_fb.png" alt="Facebook" width={20} height={20}/>
+                            </a>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+                                <Image src="/icons/icon_ig.png" alt="Instagram" width={20} height={20}/>
+                            </a>
+                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer">
+                                <Image src="/icons/icon_ytb.png" alt="YouTube" width={20} height={20}/>
+                            </a>
+                        </div>
+
+                        {/* Login Button */}
+                        {isAuthenticated ? (
+                            <div className="flex gap-2">
+                                {(role === "admin" || role === "teacher") && (
+                                    <a
+                                        href="/post/create"
+                                        className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                                    >
+                                        Tạo bài viết
+                                    </a>
+                                )}
+                                <button
+                                    onClick={() => signOut({callbackUrl: "/"})}
+                                    className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
+                                >
+                                    Đăng xuất
+                                </button>
+                            </div>
+                        ) : (
+                            <a
+                                href="/login"
+                                className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                            >
+                                Đăng nhập
+                            </a>
+                        )}
+                    </div>
                 </div>
-            </div>
             )}
             {/* Header */}
             <header className={`relative w-full ${isMobile ? 'h-[170px]' : 'h-[330px]'}`}>
@@ -123,8 +124,8 @@ export default function LandingPage() {
                     className="object-cover z-0"
                     priority
                 />
-                    {/* Logo */}
-                    <div className={`absolute top-4 z-10 ${isMobile ? 'left-1/2 -translate-x-1/2' : 'left-4'}`}>
+                {/* Logo */}
+                <div className={`absolute top-4 z-10 ${isMobile ? 'left-1/2 -translate-x-1/2' : 'left-4'}`}>
                     <Image src="/banner/logo.png" alt="Logo AMG" width={120} height={80}/>
                 </div>
 
@@ -141,7 +142,8 @@ export default function LandingPage() {
                 // ======= Layout Mobile =======
                 <section className="relative pt-2 pb-20 z-10 flex flex-col items-center text-center overflow-visible">
                     {/* Kids Image */}
-                    <div className="absolute right-1/2 translate-x-1/2 w-[70%] max-w-[450px] h-[470px] mb-6 z-10 -top-35">
+                    <div
+                        className="absolute right-1/2 translate-x-1/2 w-[70%] max-w-[450px] h-[470px] mb-6 z-10 -top-35">
                         <Image
                             src="/banner/banner_kids_1.png"
                             alt="Kids"
@@ -186,14 +188,14 @@ export default function LandingPage() {
                     {/* Text */}
                     <div className="relative w-full max-w-xl z-20 top-60 pb-10">
                         <h1 className="text-3xl font-extrabold text-[#FF6A00] leading-tight mb-3">
-                            Đăng ký<br />Tuyển sinh
+                            Đăng ký<br/>Tuyển sinh
                         </h1>
                         <p className="text-xl font-semibold text-[#FFC600] mb-4">
                             năm học 2024-2025
                         </p>
                         <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
-                            Mầm non AMG<br />
-                            Trường mầm non song ngữ<br />
+                            Mầm non AMG<br/>
+                            Trường mầm non song ngữ<br/>
                             Giảng dạy theo chương trình Phần Lan và tiếng Anh Grapeseeds
                         </p>
 
@@ -207,7 +209,7 @@ export default function LandingPage() {
                                     className="hover:opacity-90 transition"
                                 />
                                 <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                                    <Image src="/banner/icon_play.png" alt="Play" fill className="object-contain" />
+                                    <Image src="/banner/icon_play.png" alt="Play" fill className="object-contain"/>
                                 </div>
                             </button>
                         </div>
@@ -215,65 +217,65 @@ export default function LandingPage() {
                 </section>
             ) : (
                 // ======= Layout Desktop =======
-            <section
-                className="relative px-4 sm:px-6 pt-10 pb-20 z-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
-                {/* Text Block */}
-                <div className="w-full lg:w-auto max-w-xl z-20 lg:pr-10 text-center lg:text-left">
-                    <h1 className="text-4xl sm:text-5xl font-extrabold text-[#FF6A00] leading-tight mb-3">
-                        Đăng ký<br/>Tuyển sinh
-                    </h1>
-                    <p className="text-2xl sm:text-3xl font-semibold text-[#FFC600] mb-4">năm học 2024-2025</p>
-                    <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
-                        Anh Mỹ Global - Môi trường giáo dục hoàn hảo <br className="hidden sm:block"/>
-                        cho trẻ từ 15 tháng tới 6 tuổi
-                    </p>
-                    <div className="relative w-fit mx-auto lg:mx-0">
-                        <button onClick={openModal} className="relative">
-                            <Image
-                                src="/banner/button_register.png"
-                                alt="Register"
-                                width={200}
-                                height={60}
-                                className="hover:opacity-90 transition"
-                            />
-                            <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                                <Image src="/banner/icon_play.png" alt="Play" fill className="object-contain"/>
-                            </div>
-                        </button>
+                <section
+                    className="relative px-4 sm:px-6 pt-10 pb-20 z-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
+                    {/* Text Block */}
+                    <div className="w-full lg:w-auto max-w-xl z-20 lg:pr-10 text-center lg:text-left">
+                        <h1 className="text-4xl sm:text-5xl font-extrabold text-[#FF6A00] leading-tight mb-3">
+                            Đăng ký<br/>Tuyển sinh
+                        </h1>
+                        <p className="text-2xl sm:text-3xl font-semibold text-[#FFC600] mb-4">năm học 2024-2025</p>
+                        <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
+                            Anh Mỹ Global - Môi trường giáo dục hoàn hảo <br className="hidden sm:block"/>
+                            cho trẻ từ 15 tháng tới 6 tuổi
+                        </p>
+                        <div className="relative w-fit mx-auto lg:mx-0">
+                            <button onClick={openModal} className="relative">
+                                <Image
+                                    src="/banner/button_register.png"
+                                    alt="Register"
+                                    width={200}
+                                    height={60}
+                                    className="hover:opacity-90 transition"
+                                />
+                                <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
+                                    <Image src="/banner/icon_play.png" alt="Play" fill className="object-contain"/>
+                                </div>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                {/* Banner Kids Image */}
-                <div className={`absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0
+                    {/* Banner Kids Image */}
+                    <div className={`absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0
                         ${isMobile ? 'top-50' : ''}`}>
-                    <Image
-                        src="/banner/banner_kids_1.png"
-                        alt="Kids"
-                        fill
-                        className="object-contain"
-                    />
-                </div>
+                        <Image
+                            src="/banner/banner_kids_1.png"
+                            alt="Kids"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
 
-                {/* Background Triangle */}
-                <div
-                    className="absolute sm:block absolute right-20 sm:right-10 top-70 lg:top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-9">
+                    {/* Background Triangle */}
+                    <div
+                        className="absolute sm:block absolute right-20 sm:right-10 top-70 lg:top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-9">
+                        <Image
+                            src="/banner/triangle_shade.png"
+                            alt="Triangle"
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                    {/* Cloud Divider */}
                     <Image
-                        src="/banner/triangle_shade.png"
-                        alt="Triangle"
-                        fill
-                        className="object-contain"
+                        src="/banner/big_cloud.png"
+                        alt=""
+                        width={1920}
+                        height={80}
+                        className="w-full absolute top-[970px] lg:top-[400px] z-10"
                     />
-                </div>
-                {/* Cloud Divider */}
-                <Image
-                    src="/banner/big_cloud.png"
-                    alt=""
-                    width={1920}
-                    height={80}
-                    className="w-full absolute top-[970px] lg:top-[400px] z-10"
-                />
-            </section>
-    )}
+                </section>
+            )}
 
             <section className="relative w-full mt-40 mb-20 z-70 px-4">
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
@@ -334,7 +336,7 @@ export default function LandingPage() {
             </section>
 
             <section className="w-full bg-[#FFF6C7] py-10 relative z-10">
-                <div className="w-[90%] mx-auto flex flex-col items-center gap-12">
+                <div className={`${isMobile ? 'w-[100%]' : 'w-[90%]'} mx-auto flex flex-col items-center gap-6`}>
 
                     {/* Về AMG */}
                     <div className="w-full px-4 py-8">
@@ -404,11 +406,14 @@ export default function LandingPage() {
             {/* Section Bữa ăn của con */}
             <section className="relative w-full mt-20 mb-20 z-50 px-4  text-center">
                 <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">BỮA ĂN CỦA CON</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+                <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                         {["meal1", "meal2", "meal3"].map((img, i) => (
-                            <div key={i} className="w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden">
+                            <div
+                                key={i}
+                                className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"
+                            >
                                 <Image
                                     src={`/meal/${img}.png`}
                                     alt=""
@@ -421,9 +426,12 @@ export default function LandingPage() {
                     </div>
 
                     {/* Column 2 */}
-                    <div className="flex flex-col gap-6 justify-center">
+                    <div className="flex flex-col gap-2 justify-center">
                         {["meal4", "meal5"].map((img, i) => (
-                            <div key={i} className="w-full h-[400px] md:h-[525px] rounded-2xl overflow-hidden">
+                            <div
+                                key={i}
+                                className="w-full h-[225px] sm:h-[300px] md:h-[400px] lg:h-[525px] rounded-2xl overflow-hidden"
+                            >
                                 <Image
                                     src={`/meal/${img}.png`}
                                     alt=""
@@ -436,9 +444,12 @@ export default function LandingPage() {
                     </div>
 
                     {/* Column 3 */}
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-2">
                         {["meal6", "meal7", "meal8"].map((img, i) => (
-                            <div key={i} className="w-full h-[300px] md:h-[350px] rounded-2xl overflow-hidden">
+                            <div
+                                key={i}
+                                className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"
+                            >
                                 <Image
                                     src={`/meal/${img}.png`}
                                     alt=""
@@ -509,7 +520,7 @@ export default function LandingPage() {
                         </div>
 
                         {/* Right Column - Feature Boxes */}
-                        <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="md:col-span-2 grid grid-cols-2 gap-6 transform scale-[0.95] md:scale-100">
                             {[
                                 {
                                     title: "Môi trường học tập lý tưởng",
