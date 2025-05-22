@@ -402,7 +402,7 @@ export default function LandingPage() {
             </section>
 
             {/* Section Bữa ăn của con */}
-            <section className="relative w-full mt-40 mb-20 z-50 px-4  text-center">
+            <section className="relative w-full mt-20 mb-20 z-50 px-4  text-center">
                 <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">BỮA ĂN CỦA CON</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
                     {/* Column 1 */}
