@@ -106,7 +106,7 @@ export default function HeaderMenu() {
                         className="p-2 text-black lg:hidden"
                         onClick={handleToggleMenu}
                     >
-                        <Bars3Icon className="absolute h-6 w-6 top-15 right-4" />
+                        <Bars3Icon className="absolute h-6 w-6 top-15 left-4 text-[#FFA500]" />
                     </button>
 
                     <AnimatePresence>
@@ -117,11 +117,11 @@ export default function HeaderMenu() {
                                     onClick={handleToggleMenu}
                                 />
                                 <motion.div
-                                    initial={{ x: '100%' }}
-                                    animate={{ x: 0 }}
-                                    exit={{ x: '100%' }}
-                                    transition={{ duration: 0.3 }}
-                                    className="fixed top-0 right-0 bottom-0 w-72 bg-[#FFF8F5] z-50 shadow-lg overflow-y-auto"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.5 }}
+                                    className="fixed top-0 left-0 bottom-0 w-72 bg-[#FFF8F5] z-50 shadow-lg overflow-y-auto"
                                 >
                                     <div className="flex justify-between items-center px-4 py-4 border-b">
                                         <span className="text-lg font-semibold">Menu</span>
