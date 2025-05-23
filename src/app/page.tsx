@@ -337,7 +337,10 @@ export default function LandingPage() {
 
             <section className="w-full bg-[#FFF6C7] py-10 relative z-10">
                 <div className={`${isMobile ? 'w-[100%]' : 'w-[90%]'} mx-auto flex flex-col items-center gap-6`}>
-
+                    <div>
+                    <Image src="/icons/icon_elephant0.png" alt="" width={isMobile ? 60 : 100} height={isMobile ? 40 : 70}
+                           className="absolute left-[10%] -top-[70px] z-99"/>
+                    </div>
                     {/* Về AMG */}
                     <div className="w-full px-4 py-8">
                         <h2 className="text-3xl md:text-4xl font-bold text-center text-[#FF6A00] mb-6">VỀ AMG</h2>
@@ -383,7 +386,8 @@ export default function LandingPage() {
                                     <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> an toàn, trải nghiệm hữu ích và chu đáo</span>.
                                 </p>
                             </div>
-
+                            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                                   className="absolute right-5 top-[140px] lg:right-130 lg:top-[140px]  z-99"/>
                             {/* Right - Icons grid */}
                             <div className="grid grid-cols-2 gap-4 place-items-center">
                                 <Image src="/icons/icon_about1.png" alt="Phương pháp giáo dục Phần Lan" width={300}
@@ -404,7 +408,9 @@ export default function LandingPage() {
             </section>
 
             {/* Section Bữa ăn của con */}
-            <section className="relative w-full mt-20 mb-20 z-50 px-4  text-center">
+            <section className="relative w-full mt-10 mb-5 z-50 px-4  text-center">
+                <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                       className="absolute right-5 -top-[60px] lg:right-50 lg:top-[4700px]  z-99"/>
                 <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">BỮA ĂN CỦA CON</h2>
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
@@ -464,7 +470,9 @@ export default function LandingPage() {
             </section>
 
             {/* Section Lý do phụ huynh tin tưởng */}
-            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-10 relative z-10">
+            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-2 relative z-10">
+                <Image src="/icons/icon_elephant2.png" alt="" width={isMobile ? 75 : 150} height={isMobile ? 50 : 100}
+                       className="left-5 lg:left-30 top-[8800px] lg:top-[4550px] z-99"/>
                 <div className="w-full max-w-7xl mx-auto">
                     {/* Heading */}
                     <h2 className="text-center text-2xl md:text-3xl font-bold text-[#FF6A00] mb-2">
@@ -479,8 +487,20 @@ export default function LandingPage() {
                         {/* Left Column - Text + Fork */}
                         <div className="space-y-6">
                             <div>
-                                <h3 className="text-[#2F80ED] font-semibold text-lg">CHƯƠNG TRÌNH HỌC</h3>
-                                <h3 className="text-[#2F80ED] font-semibold text-lg mb-3">CHUẨN QUỐC TẾ</h3>
+                                <div className="flex items-center gap-2">
+                                    <div className="flex flex-col">
+                                        <h3 className="text-[#2F80ED] font-semibold text-lg">CHƯƠNG TRÌNH HỌC</h3>
+                                        <h3 className="text-[#2F80ED] font-semibold text-lg mb-3">CHUẨN QUỐC TẾ</h3>
+                                    </div>
+
+                                    <Image
+                                        src="/banner/icon_cloud.png"
+                                        alt=""
+                                        width={100}
+                                        height={50}
+                                        className="right-2 z-10"
+                                    />
+                                </div>
                                 <p className="text-[#4D4D4D] leading-relaxed text-sm">
                                     AMG Kindergarten với hệ thống lớp học cho <span className="text-[#EF924D]">trẻ từ 6 tháng đến 6 tuổi</span>,
                                     hệ thống phòng học đầy đủ <span className="text-[#EF924D]">ánh sáng tự nhiên</span>,
@@ -575,11 +595,16 @@ export default function LandingPage() {
 
 
             {/* Section Cảm nhận phụ huynh & Footer */}
-            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-10 relative z-10 text-[#4D4D4D]">
+            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-2 relative z-10 text-[#4D4D4D]">
+                <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                       className="right-10 top-[6350px] lg:right-75 lg:top-[6100px]  z-99"/>
                 <div className="w-full max-w-7xl mx-auto flex flex-col items-center gap-12">
+                    <Image src="/icons/icon_elephant3.png" alt="" width={100} height={70}
+                           className="absolute right-10 -top-[20px] lg:right-150 lg:-top-[35px] z-99"/>
                     {/* Cảm nhận phụ huynh */}
                     <TestimonialCarousel/>
-
+                    <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
+                           className="absolute left-5 top-[450px]  z-99"/>
                     {/* Footer thông tin hệ thống AMG */}
                     <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-10 text-sm">
                         {/* Cột Hệ thống AMG */}
@@ -659,6 +684,9 @@ export default function LandingPage() {
                                 <li>Thư viện AMG</li>
                                 <li>Tuyển sinh</li>
                                 <li>Liên hệ</li>
+                                <Image src="/icons/icon_elephant_footer.png" alt="" width={isMobile ? 150 : 300}
+                                       height={isMobile ? 75 : 150}
+                                       className="right-10 top-[1300px]  lg:right-100 lg:top-[300px] z-99"/>
                             </ul>
                         </div>
                     </div>
@@ -689,8 +717,6 @@ export default function LandingPage() {
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute left-80 top-[2000px] z-99"/>
 
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute right-5 top-[2250px] lg:right-10 lg:top-[2100px]  z-99"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute right-55 top-[2150px]  z-99"/>
 
@@ -700,32 +726,20 @@ export default function LandingPage() {
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute left-80 top-[2710px] lg:top-[2750px] z-99"/>
 
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute lg:left-30 right-10 top-[3750px] lg:top-[3600px]  z-99"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute right-100 top-[3600px] z-99"/>
 
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute left-100 top-[4700px] z-99"/>
 
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute right-5 top-[4530px] lg:right-50 lg:top-[4700px]  z-99"/>
-
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute right-210 top-[4800px] z-99"/>
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute left-200 top-[4800px]  z-99"/>
 
             <Image src="/banner/icon_star_empty.png" alt="" width={80} height={80}
                    className="absolute right-50 top-[5300px] z-99 hidden lg:block"/>
 
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute top-[5300px]  z-99"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={40} height={40}
                    className="absolute left-20 top-[5400px] z-99"/>
-
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute left-10 top-[5900px]  z-99"/>
 
             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                    className="absolute right-10 top-[6000px]  z-99 hidden lg:block"/>
@@ -733,26 +747,12 @@ export default function LandingPage() {
             <Image src="/banner/icon_star_empty.png" alt="" width={50} height={50}
                    className="absolute left-200 top-[6050px] z-99"/>
 
-            <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                   className="absolute right-10 top-[6350px] lg:right-75 lg:top-[6100px]  z-99"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={50} height={50}
                    className="absolute right-25 top-[6350px] lg:top-[6200px] z-99"/>
 
             <Image src="/banner/icon_star_empty.png" alt="" width={50} height={50}
                    className="absolute left-50 top-[6300px] z-99 hidden lg:block"/>
 
-            <Image src="/icons/icon_elephant0.png" alt="" width={isMobile ? 70 : 100} height={isMobile ? 45 : 70}
-                   className="absolute left-[10%] top-[410vh] lg:top-[2000px] z-99"/>
-            <Image src="/icons/icon_elephant1.png" alt="" width={isMobile ? 60 : 100} height={isMobile ? 30 : 50}
-                   className="absolute right-10 top-[5300px] lg:right-100 lg:translate-x-[80px] lg:top-[2900px] z-99"/>
-            <Image src="/icons/icon_elephant2.png" alt="" width={isMobile ? 75 : 150} height={isMobile ? 50 : 100}
-                   className="absolute left-5 lg:left-30 top-[8800px] lg:top-[4550px] z-99"/>
-            <Image src="/icons/icon_elephant3.png" alt="" width={100} height={70}
-                   className="absolute right-100 top-[5600px] z-99"/>
-
-            <Image src="/icons/icon_elephant_footer.png" alt="" width={isMobile ? 150 : 300}
-                   height={isMobile ? 75 : 150}
-                   className="absolute right-10 top-[1300vh]  lg:right-100 lg:top-[6650px] z-99"/>
             {/* Add more as needed */}
             {showModal && <RegisterClassModal onClose={closeModal}/>}
             {showScrollToTop && (

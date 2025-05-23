@@ -43,7 +43,7 @@ export default function TestimonialCarousel() {
 
     return (
         <div className="flex flex-col items-center space-y-6 mt-10 px-4">
-            <div className="relative flex items-center justify-center w-full max-w-4xl">
+            <div className="relative flex items-center justify-center w-full max-w-6xl">
                 <button
                     onClick={goBack}
                     disabled={currentIndex === 0}
@@ -52,7 +52,7 @@ export default function TestimonialCarousel() {
                     ‹
                 </button>
 
-                <div className="bg-[#E9F7FE] border-dashed border-2 border-[#FFA552] px-6 md:px-10 lg:px-16 py-8 lg:py-10 w-[360px] h-[320px] md:max-w-[1000px] lg:w-[900px] lg:h-[400px] text-center rounded-[120px] flex flex-col justify-center items-center">
+                <div className="bg-[#E9F7FE] border-dashed border-2 border-[#FFA552] px-6 md:px-10 lg:px-16 py-8 lg:py-10 w-[360px] h-[320px] md:max-w-[1000px] lg:w-[2000px] lg:h-[400px] text-center rounded-[120px] flex flex-col justify-center items-center">
                     <p className="text-[#4D4D4D] text-base md:text-lg lg:text-xl leading-7 md:leading-8 font-medium mb-4 md:mb-6 px-2 md:px-6">
                         {testimonials[currentIndex].content}
                     </p>
