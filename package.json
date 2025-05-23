@@ -9,9 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.2",
+    "@headlessui/react": "^2.2.4",
     "@heroicons/react": "^2.2.0",
+    "@mantine/rte": "^5.10.5",
     "@shadcn/ui": "^0.0.4",
+    "@tiptap/extension-floating-menu": "^2.12.0",
+    "@tiptap/extension-image": "^2.12.0",
+    "@tiptap/extension-link": "^2.12.0",
+    "@tiptap/extension-text-align": "^2.12.0",
+    "@tiptap/react": "^2.12.0",
+    "@tiptap/starter-kit": "^2.12.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.9.1",
@@ -20,8 +27,8 @@
     "next": "15.2.4",
     "next-auth": "^4.24.11",
     "next-i18next": "^15.4.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-i18next": "^15.5.1",
     "react-icons": "^5.5.0",
     "recharts": "^2.15.3"

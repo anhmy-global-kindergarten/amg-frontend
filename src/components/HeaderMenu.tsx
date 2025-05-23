@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
+import {signOut} from "next-auth/react";
 
 const menuItems = [
     {
@@ -64,10 +65,14 @@ const menuItems = [
     {
         title: 'Liên hệ',
         href: '/contact',
-    },
+    }
 ];
 
-export default function HeaderMenu() {
+type HeaderMenuProps = {
+    isAuthenticated: boolean;
+};
+
+export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -167,9 +172,9 @@ export default function HeaderMenu() {
                                                                             <li key={subIdx}>
                                                                                 {'submenu' in sub ? (
                                                                                     <>
-                                            <span className="block px-2 py-1 text-sm font-normal text-gray-700">
-                                              {sub.title}
-                                            </span>
+                                                                                        <span className="block px-2 py-1 text-sm font-normal text-gray-700">
+                                                                                          {sub.title}
+                                                                                        </span>
                                                                                         <ul className="pl-4 space-y-1">
                                                                                             {sub.submenu?.map((deep, deepIdx) => (
                                                                                                 <li key={deepIdx}>
@@ -195,6 +200,29 @@ export default function HeaderMenu() {
                                                                                 )}
                                                                             </li>
                                                                         ))}
+                                                                        {!isAuthenticated ? (
+                                                                            <li>
+                                                                                <Link
+                                                                                    href="/login"
+                                                                                    className="block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
+                                                                                    onClick={handleToggleMenu}
+                                                                                >
+                                                                                    Đăng nhập
+                                                                                </Link>
+                                                                            </li>
+                                                                        ) : (
+                                                                            <li>
+                                                                                <button
+                                                                                    onClick={() => {
+                                                                                        signOut({ callbackUrl: "/" });
+                                                                                        handleToggleMenu();
+                                                                                    }}
+                                                                                    className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
+                                                                                >
+                                                                                    Đăng xuất
+                                                                                </button>
+                                                                            </li>
+                                                                        )}
                                                                     </motion.ul>
                                                                 )}
                                                             </AnimatePresence>
@@ -203,6 +231,34 @@ export default function HeaderMenu() {
                                                 </div>
                                             );
                                         })}
+                                        {!isAuthenticated ? (
+                                            <Link
+                                                href="/login"
+                                                className="block px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold mt-4 text-center"
+                                                onClick={handleToggleMenu}
+                                            >
+                                                Đăng nhập
+                                            </Link>
+                                        ) : (
+                                            <div>
+                                                <Link
+                                                    href="/admin-dashboard"
+                                                    className="block px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold mt-4 text-center"
+                                                    onClick={handleToggleMenu}
+                                                >
+                                                    Admin Dashboard
+                                                </Link>
+                                                <button
+                                                    onClick={() => {
+                                                        signOut({callbackUrl: "/"});
+                                                        handleToggleMenu();
+                                                    }}
+                                                    className="block w-full px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold mt-4"
+                                                >
+                                                    Đăng xuất
+                                                </button>
+                                            </div>
+                                        )}
                                     </nav>
                                 </motion.div>
                             </>
@@ -210,7 +266,8 @@ export default function HeaderMenu() {
                     </AnimatePresence>
                 </>
             ) : (
-                <nav className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-4 px-4 py-2 text-sm font-semibold whitespace-nowrap">
+                <nav
+                    className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-4 px-4 py-2 text-sm font-semibold whitespace-nowrap">
                     {menuItems.map((item, index) => {
                         const hasSubmenu = Array.isArray(item.submenu);
                         return (

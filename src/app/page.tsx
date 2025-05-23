@@ -90,12 +90,20 @@ export default function LandingPage() {
                         {isAuthenticated ? (
                             <div className="flex gap-2">
                                 {(role === "admin" || role === "teacher") && (
-                                    <a
-                                        href="/post/create"
-                                        className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
-                                    >
-                                        Tạo bài viết
-                                    </a>
+                                    <div className="flex gap-x-2">
+                                        <a
+                                            href="/admin-dashboard"
+                                            className="bg-[#4CAF50] text-white px-4 py-1 rounded hover:bg-[#449d48] transition"
+                                        >
+                                            Dashboard
+                                        </a>
+                                        <a
+                                            href="/post/create"
+                                            className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                                        >
+                                            Tạo bài viết
+                                        </a>
+                                    </div>
                                 )}
                                 <button
                                     onClick={() => signOut({callbackUrl: "/"})}
@@ -130,7 +138,7 @@ export default function LandingPage() {
                 </div>
 
                 {/* Nav Desktop */}
-                <HeaderMenu/>
+                <HeaderMenu isAuthenticated={isAuthenticated}/>
 
                 {/* Nav Mobile (hamburger optional) */}
 
