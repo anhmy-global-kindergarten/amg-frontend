@@ -1,3 +1,4 @@
+/* eslint-disable */
 "use client";
 
 import React, { useState } from "react";
@@ -9,7 +10,8 @@ import ImageExtension from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import { FloatingMenu } from "@tiptap/extension-floating-menu";
-import { FloatingMenu as TiptapFloatingMenu } from '@tiptap/react';
+import {ImageResize} from "tiptap-extension-resize-image";
+import {CropImageModal} from "@/modals/CropImageModal";
 
 const CreatePostPage = () => {
     const [title, setTitle] = useState("");
@@ -20,6 +22,7 @@ const CreatePostPage = () => {
     const editor = useEditor({
         extensions: [
             StarterKit,
+            ImageResize,
             ImageExtension,
             Link,
             TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -52,22 +55,43 @@ const CreatePostPage = () => {
         alert("Bài viết đã được tạo!");
     };
 
+    const [showCropModal, setShowCropModal] = useState(false);
+    const [imageToCrop, setImageToCrop] = useState<string | null>(null);
+
     return (
-        <section className="w-full bg-[#FFF6C7] min-h-screen px-4 md:px-8 py-10 text-[#4D4D4D]">
-            <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-6">
-                <h1 className="text-3xl font-bold text-center text-[#F86161]">Tạo bài viết mới</h1>
+        <div>
+            <header className="w-full py-4 px-4 lg:px-10 flex justify-between items-center bg-[#FFF6C7]">
+                <div className="flex items-center space-x-3">
+                    <a href="/" className="flex items-center space-x-2">
+                        <Image
+                            src="/banner/logo.png"
+                            alt="Logo"
+                            width={120}
+                            height={120}
+                            className="object-contain"
+                        />
+                        <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">
+                            Trang chủ
+                        </span>
+                    </a>
+                </div>
+            </header>
 
-                <input
-                    type="text"
-                    placeholder="Nhập tiêu đề..."
-                    className="w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
-                />
+    <section className="w-full bg-[#FFF6C7] min-h-screen px-4 md:px-8 py-10 text-[#4D4D4D]">
+        <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-6">
+            <h1 className="text-3xl font-bold text-center text-[#F86161]">Tạo bài viết mới</h1>
 
-                <div>
-                    <label className="block font-semibold mb-1">Ảnh minh họa:</label>
-                    <input type="file" accept="image/*" onChange={handleImageChange}/>
+            <input
+                type="text"
+                placeholder="Nhập tiêu đề..."
+                className="w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+            />
+
+            <div>
+                <label className="block font-semibold mb-1">Ảnh minh họa:</label>
+                    <input className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]" type="file" accept="image/*" onChange={handleImageChange}/>
                     {imagePreview && (
                         <div className="mt-4">
                             <Image
@@ -80,36 +104,38 @@ const CreatePostPage = () => {
                         </div>
                     )}
                 </div>
-                <div className="flex items-center gap-4 mt-4">
-                    <button
-                        onClick={() => document.getElementById("editor-image-input")?.click()}
-                        className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]"
-                    >
-                        🖼️ Thêm ảnh vào nội dung
-                    </button>
+            <div className="items-center gap-4 mt-4">
+                <label className="block font-semibold mb-1">Thêm ảnh vào bài viết:</label>
+                <input
+                    className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]"
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                setImageToCrop(reader.result as string);
+                                setShowCropModal(true);
+                            };
+                            reader.readAsDataURL(file);
+                        }
+                    }}
+                />
 
-                    <input
-                        type="file"
-                        id="editor-image-input"
-                        accept="image/*"
-                        className="hidden"
-                        onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                                const reader = new FileReader();
-                                reader.onload = () => {
-                                    const url = reader.result?.toString();
-                                    if (url) {
-                                        editor?.chain().focus().setImage({src: url}).run();
-                                    }
-                                };
-                                reader.readAsDataURL(file);
-                            }
+                {showCropModal && imageToCrop && (
+                    <CropImageModal
+                        image={imageToCrop}
+                        onCancel={() => setShowCropModal(false)}
+                        onConfirm={(croppedUrl: any) => {
+                            editor?.chain().focus().setImage({src: croppedUrl}).run();
+                            setShowCropModal(false);
                         }}
                     />
-                </div>
-                <div className="mt-4">
-                    <label className="block font-semibold mb-2">Nội dung bài viết:</label>
+                )}
+            </div>
+            <div className="mt-4">
+                <label className="block font-semibold mb-2">Nội dung bài viết:</label>
                     {editor && (
                         <div className="border border-[#FFA552] rounded-lg">
                             {/* TOOLBAR CỐ ĐỊNH */}
@@ -184,6 +210,7 @@ const CreatePostPage = () => {
                 </div>
             </Modal>
         </section>
+        </div>
     );
 };
 
