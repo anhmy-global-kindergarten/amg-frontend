@@ -1,20 +1,27 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useCallback } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import ImageExtension from "@tiptap/extension-image";
+import {ImageResize} from "tiptap-extension-resize-image";
 
 const TiptapEditor = () => {
   const editor = useEditor({
     extensions: [
       StarterKit,
+        ImageResize,
       ImageExtension.configure({
         inline: false,  // Ảnh hiển thị block (dễ căn chỉnh)
         allowBase64: true,  // Cho phép dán ảnh dạng base64 (nhanh, test)
       }),
     ],
     content: "<p>Viết nội dung ở đây...</p>",
+      editorProps: {
+          attributes: {
+              class: "min-h-[200px] rounded-lg border border-[#FFA552] p-4 focus:outline-none",
+          },
+      },
   });
 
   // Thêm ảnh từ file input
