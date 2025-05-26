@@ -267,7 +267,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                 </>
             ) : (
                 <nav
-                    className="absolute top-10 left-1/2 -translate-x-1/2 flex gap-4 px-4 py-2 text-sm font-semibold whitespace-nowrap">
+                    className="absolute top-10 left-1/2 -translate-x-100 flex justify-between w-[60%] gap-2 px-4 py-2 text-sm font-semibold whitespace-nowrap">
                     {menuItems.map((item, index) => {
                         const hasSubmenu = Array.isArray(item.submenu);
                         return (

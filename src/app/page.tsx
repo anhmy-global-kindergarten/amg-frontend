@@ -151,7 +151,7 @@ export default function LandingPage() {
                 <section className="relative pt-2 pb-20 z-10 flex flex-col items-center text-center overflow-visible">
                     {/* Kids Image */}
                     <div
-                        className="absolute right-1/2 translate-x-1/2 w-[70%] max-w-[450px] h-[470px] mb-6 z-10 -top-35">
+                        className="absolute right-1/2 translate-x-[40%] w-[70%] max-w-[550px] h-[570px] mb-6 z-10 -top-48">
                         <Image
                             src="/banner/banner_kids_1.png"
                             alt="Kids"
@@ -169,39 +169,39 @@ export default function LandingPage() {
                             className="object-contain"
                         />
                     </div>
-                    {/* Cloud (ở dưới) */}
 
+                    {/* Cloud*/}
                     <Image
                         src="/banner/big_cloud.png"
                         alt="big cloud"
-                        width={2000}
-                        height={100}
-                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[175px] z-10"
+                        width={3000}
+                        height={200}
+                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-125 top-[165px] z-10"
                     />
                     <Image
                         src="/banner/panel_white.png"
                         alt="panel white"
                         width={1000}
-                        height={50}
-                        className="w-full absolute top-[255px] z-10"
+                        height={100}
+                        className="w-full h-[250px] absolute top-[255px] z-10"
                     />
                     <Image
                         src="/banner/big_cloud.png"
                         alt="big cloud"
-                        width={2000}
-                        height={100}
-                        className="w-[200vw] max-w-none absolute left-1/2 -translate-x-1/2 top-[355px] z-10 scale-x-[-1]"
+                        width={3000}
+                        height={200}
+                        className="w-[250vw] h-[250px] max-w-none absolute left-1/2 -translate-x-100 top-[380px] z-10 scale-x-[-1]"
                     />
 
                     {/* Text */}
-                    <div className="relative w-full max-w-xl z-20 top-60 pb-10">
-                        <h1 className="text-3xl font-extrabold text-[#FF6A00] leading-tight mb-3">
+                    <div className="relative w-full max-w-xl z-20 top-60 pb-2">
+                        <h1 className="text-3xl font-extrabold text-[#EA570A] leading-tight mb-3">
                             Đăng ký<br/>Tuyển sinh
                         </h1>
-                        <p className="text-xl font-semibold text-[#FFC600] mb-4">
+                        <p className="text-xl font-semibold text-[#FFD105] mb-4">
                             năm học 2024-2025
                         </p>
-                        <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
+                        <p className="mb-4 text-[#EA570A] text-base leading-relaxed">
                             Mầm non AMG<br/>
                             Trường mầm non song ngữ<br/>
                             Giảng dạy theo chương trình Phần Lan và tiếng Anh Grapeseeds
@@ -229,11 +229,13 @@ export default function LandingPage() {
                     className="relative px-4 sm:px-6 pt-10 pb-20 z-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
                     {/* Text Block */}
                     <div className="w-full lg:w-auto max-w-xl z-20 lg:pr-10 text-center lg:text-left">
-                        <h1 className="text-4xl sm:text-5xl font-extrabold text-[#FF6A00] leading-tight mb-3">
+                        <h1
+                            style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white' }}
+                            className="text-4xl sm:text-5xl text-[#EA570A] leading-tight mb-3">
                             Đăng ký<br/>Tuyển sinh
                         </h1>
-                        <p className="text-2xl sm:text-3xl font-semibold text-[#FFC600] mb-4">năm học 2024-2025</p>
-                        <p className="mb-4 text-[#D93B00] text-base leading-relaxed">
+                        <p className="text-3xl sm:text-3xl text-[#FFD105] mb-4">năm học 2024-2025</p>
+                        <p className="mb-2 text-[#EA570A]">
                             Anh Mỹ Global - Môi trường giáo dục hoàn hảo <br className="hidden sm:block"/>
                             cho trẻ từ 15 tháng tới 6 tuổi
                         </p>
@@ -285,7 +287,7 @@ export default function LandingPage() {
                 </section>
             )}
 
-            <section className="relative w-full mt-40 mb-20 z-70 px-4">
+            <section className="relative w-full mt-40 mb-20 z-20 px-4">
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
                     <div className="flex flex-col gap-2">
@@ -351,47 +353,40 @@ export default function LandingPage() {
                     </div>
                     {/* Về AMG */}
                     <div className="w-full px-4 py-8">
-                        <h2 className="text-3xl md:text-4xl font-bold text-center text-[#FF6A00] mb-6">VỀ AMG</h2>
-                        <h3 className="text-lg md:text-xl font-semibold text-[#00ADEF] mb-4">GIỚI THIỆU CHUNG</h3>
+                        <h2 style={{
+                            textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'
+                        }}
+                            className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6">VỀ AMG</h2>
 
+                        <h3 className="text-lg md:text-xl font-semibold text-[#7ED3F7]">GIỚI THIỆU CHUNG</h3>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                             {/* Left - Text block */}
-                            <div className="rounded-xl text-left text-base leading-7 text-[#4D4D4D] space-y-4">
-                                <p className="p-4 rounded-xl">
-                                    <span className="bg-[#FACBCC]">mầm non <strong>AMG Kindergarten</strong> là ngôi trường được hình thành từ </span>
+                            <div className="rounded-xl text-left text-base leading-7 text-black space-y-4">
+                                <p className="rounded-xl">
+                                    <span className="bg-[#FACBCC]">mầm non AMG Kindergarten là ngôi trường được hình thành từ </span>
                                     <span
-                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold">tình yêu của người mẹ dành cho con</span>
-                                    <span className="bg-[#FACBCC]">Chúng tôi mong muốn lan toả</span>
-                                    <span className=" bg-[#FACBCC] text-[#EF924D] font-semibold"> tình yêu thương và năng lượng tích cực </span>
-                                    <span className="bg-[#FACBCC]">đến con trẻ dựa trên tình yêu thương của người làm mẹ.</span>
-                                    <span className="bg-[#FACBCC]">Chúng tôi lựa chọn các chương trình</span>
-                                    <span
-                                        className=" bg-[#FACBCC] text-[#EF924D] font-semibold"> tiên tiến từ Tây Âu </span>
-                                    <span className="bg-[#FACBCC]">kết hợp
-                                    cùng</span>
-                                    <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> chuyên gia giáo dục có chuyên môn cao</span>,
-                                    <span className="bg-[#FACBCC]">xây dựng nên</span>
-                                    <span
-                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> giáo án giáo dục mầm non độc quyền</span>.
-                                    <span className="bg-[#FACBCC]">Mục tiêu:</span>
-                                    <span
-                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> Lấy trẻ làm trung tâm</span>,
-                                    <span className="bg-[#FACBCC]">thúc đẩy</span>
-                                    <span
-                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> năng lượng tích cực và tính sáng tạo</span>.
-                                    <span className="bg-[#FACBCC]">Chúng tôi chọn</span>
-                                    <span
-                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> Phương pháp Phần Lan </span>
-                                    <span className="bg-[#FACBCC]">làm nền tảng triển khai giảng dạy với cấu trúc bài học trải nghiệm hấp dẫn và</span>
-                                    <span
-                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> lịch trình linh hoạt</span>
-                                    <span className="bg-[#FACBCC]">AMG có</span>
-                                    <span
-                                        className="bg-[#FACBCC] text-[#EF924D] font-semibold"> đội ngũ chuyên gia tư vấn toàn diện</span>
-                                    <span className="bg-[#FACBCC]">về
-                                    học thuật, chăm sóc và dinh dưỡng,
-                                    nhằm tạo ra môi trường</span>
-                                    <span className="bg-[#FACBCC] text-[#EF924D] font-semibold"> an toàn, trải nghiệm hữu ích và chu đáo</span>.
+                                        className="bg-[#FACBCC] text-[#EF924D]">tình yêu của người mẹ dành cho con</span>
+                                    <span className="bg-[#FACBCC]">. Chúng tôi mong muốn lan toả tình </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">yêu thương</span>
+                                    <span className="bg-[#FACBCC]">và </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">năng lượng tích cực</span>
+                                    <span className="bg-[#FACBCC]">đến con trẻ trên cơ sở tình yêu thương của người làm mẹ. Bằng việc lựa chọn, chắt lọc các chương trình, </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">giáo án tiên tiến từ Tây Âu và kết hợp cùng nhiều chuyên gia giáo dục có chuyên môn cao</span>
+                                    <span className="bg-[#FACBCC]">, chúng tôi xây dựng nên </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">giáo án giáo dục mầm non độc quyền của AMG Kindergaten</span>
+                                    <span className="bg-[#FACBCC]">. Với mục tiêu: </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">Lấy trẻ làm trung tâm</span>
+                                    <span className="bg-[#FACBCC]">, quan tâm phát triển tới từng cá thể, thúc đẩy </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">năng lượng tích cực và tính sáng tạo</span>
+                                    <span className="bg-[#FACBCC]">. Chúng tôi lựa chọn </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">Phương pháp Phần Lan </span>
+                                    <span className="bg-[#FACBCC]">.là nền tảng để triển khai giảng dạy tại nhà trường. Với cấu tạo bài học trải nghiệm đầy cuốn hút, thú vị cùng lịch trình di chuyển linh hoạt giúp thay đổi không gian học, AMG chắc chắn rằng mỗi ngày đến trường sẽ là </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">một hành trình đầy thú vị và ấn tượng với con trẻ</span>
+                                    <span className="bg-[#FACBCC]">. AMG có </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">đội ngũ chuyên gia tư vấn toàn diện </span>
+                                    <span className="bg-[#FACBCC]">không chỉ về học thuật mà còn cả phương diện chăm sóc và dinh dưỡng dành cho trẻ. AMG Kindergarten luôn nỗ lực mang lại một môi trường </span>
+                                    <span className="bg-[#FACBCC] text-[#EF924D]">giáo dục an toàn, trải nghiệm thú vị, hữu ích và sự chăm sóc chu đáo, toàn diện.</span>
+
                                 </p>
                             </div>
                             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
@@ -419,7 +414,9 @@ export default function LandingPage() {
             <section className="relative w-full mt-10 mb-5 z-50 px-4  text-center">
                 <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                        className="absolute right-5 -top-[60px] lg:right-50 lg:top-[4700px]  z-99"/>
-                <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">BỮA ĂN CỦA CON</h2>
+                <h2 style={{
+                    textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white' }}
+                    className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6">BỮA ĂN CỦA CON</h2>
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
                     <div className="flex flex-col gap-2">
@@ -483,10 +480,16 @@ export default function LandingPage() {
                        className="left-5 lg:left-30 top-[8800px] lg:top-[4550px] z-99"/>
                 <div className="w-full max-w-7xl mx-auto">
                     {/* Heading */}
-                    <h2 className="text-center text-2xl md:text-3xl font-bold text-[#FF6A00] mb-2">
+                    <h2 style={{
+                        textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'
+                    }}
+                        className="text-4xl md:text-4xl text-center text-[#F7B052] mb-2">
                         ĐIỀU GÌ KHIẾN PHỤ HUYNH TIN TƯỞNG
                     </h2>
-                    <h2 className="text-center text-2xl md:text-3xl font-bold text-[#FF6A00] mb-10">
+                    <h2 style={{
+                        textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'
+                    }}
+                        className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6">
                         AMG?
                     </h2>
 
@@ -495,21 +498,21 @@ export default function LandingPage() {
                         {/* Left Column - Text + Fork */}
                         <div className="space-y-6">
                             <div>
-                                <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2">
                                     <div className="flex flex-col">
-                                        <h3 className="text-[#2F80ED] font-semibold text-lg">CHƯƠNG TRÌNH HỌC</h3>
-                                        <h3 className="text-[#2F80ED] font-semibold text-lg mb-3">CHUẨN QUỐC TẾ</h3>
+                                        <h3 className="text-[#7ED3F7] font-semibold text-lg">CHƯƠNG TRÌNH HỌC</h3>
+                                        <h3 className="text-[#7ED3F7] font-semibold text-lg mb-3">CHUẨN QUỐC TẾ</h3>
                                     </div>
 
                                     <Image
                                         src="/banner/icon_cloud.png"
-                                        alt=""
+                                        alt="cloud"
                                         width={100}
                                         height={50}
-                                        className="right-2 z-10"
+                                        className="right-2 z-10 ml-10"
                                     />
                                 </div>
-                                <p className="text-[#4D4D4D] leading-relaxed text-sm">
+                                <p className="text-black leading-relaxed text-sm">
                                     AMG Kindergarten với hệ thống lớp học cho <span className="text-[#EF924D]">trẻ từ 6 tháng đến 6 tuổi</span>,
                                     hệ thống phòng học đầy đủ <span className="text-[#EF924D]">ánh sáng tự nhiên</span>,
                                     trang bị đầy đủ
@@ -530,7 +533,7 @@ export default function LandingPage() {
                                     height={100}
                                     className="object-contain"
                                 />
-                                <div className="space-y-6 text-sm text-[#4D4D4D]">
+                                <div className="space-y-12 text-sm text-black">
                                     <p>
                                         Lấy trẻ làm trung tâm,<br/>
                                         tôn trọng tính riêng biệt của trẻ.
@@ -548,40 +551,40 @@ export default function LandingPage() {
                         </div>
 
                         {/* Right Column - Feature Boxes */}
-                        <div className="md:col-span-2 grid grid-cols-2 gap-6 transform scale-[0.95] md:scale-100">
+                        <div className="md:col-span-2 grid grid-cols-2 gap-2 transform scale-[0.95] md:scale-100">
                             {[
                                 {
                                     title: "Môi trường học tập lý tưởng",
                                     ttColor: "#7ED3F7",
-                                    desc: "Hệ thống phòng học đầy đủ ánh sáng tự nhiên, trang bị đầy đủ cơ sở vật chất hiện đại. Thực phẩm an toàn trong mọi bữa ăn, tạo nên môi trường học tập thân thiện, hạnh phúc.",
+                                    desc: "Hệ thống phòng học đầy đủ ánh sáng tự nhiên, trang bị đầy đủ cơ sở vật chất hạ tầng hiện đại, an toàn. Nguồn thực phẩm an toàn được phục vụ trong tất cả các bữa ăn của cả cô và trò, mang lại một môi trường hạnh phúc, thân thiện, an toàn.",
                                     bg: "bg-[#A4D9F3]",
                                     icon: "/icons/icon_environment.png",
                                 },
                                 {
                                     title: "Chương trình giáo dục thể chất quốc tế",
                                     ttColor: "#BFD730",
-                                    desc: "Phòng Gym chuyên dụng, bể bơi, bể float, bể cát động lực, sân chơi riêng biệt — hỗ trợ toàn diện thể chất cho trẻ.",
+                                    desc: "AMG Kindergarten có hệ thống phòng Gym chuyên dụng, an toàn dành cho trẻ cùng giáo viên chuyên môn cao trong lĩnh vực giáo dục thể chất cho trẻ em. Bể bơi, bể float, bể cát động lực, sân chơi riêng biệt mang đến cho các con một môi trường hoạt động thể chất trọn vẹn nhất.",
                                     bg: "bg-[#FBE27D]",
                                     icon: "/icons/icon_sport.png",
                                 },
                                 {
                                     title: "Chương trình ngoại khóa phong phú",
                                     ttColor: "#FFD668",
-                                    desc: "Hoạt động ngoại khóa hàng tuần/tháng giúp trẻ trải nghiệm thực tế, phát triển kỹ năng sống và giá trị cốt lõi.",
+                                    desc: "Tại AMG Kindergarten trẻ được tham gia nhiều hoạt động ngoại khóa đa dạng hàng tuần, hàng tháng, giúp trẻ có những trải nghiệm thực tế thú vị, phong phú, hỗ trợ hiệu quả phát triển các kỹ năng sống cũng như bồi đắp những giá trị cốt lõi.",
                                     bg: "bg-[#B0E59E]",
                                     icon: "/icons/icon_culture.png",
                                 },
                                 {
                                     title: "Chương trình tiếng Anh chuẩn quốc tế",
                                     ttColor: "#F6ADCD",
-                                    desc: "Trẻ tiếp cận tiếng Anh tự nhiên qua vui chơi & học tập. Giáo viên bản ngữ giúp trẻ yêu thích ngôn ngữ này từ sớm.",
+                                    desc: "Ở AMG Kindergarten, trẻ được học và tiếp cận tiếng Anh một cách tự nhiên qua các hoạt động vui chơi, học tập hàng ngày. Giáo viên người bản ngữ luôn tạo một không khí vui vẻ, thoải mái giúp trẻ yêu Tiếng Anh ngay từ nhỏ.",
                                     bg: "bg-[#F2B5F9]",
                                     icon: "/icons/icon_english.png",
                                 },
                             ].map((item, idx) => (
                                 <div
                                     key={idx}
-                                    className={`rounded-2xl p-5 flex flex-col gap-4`}
+                                    className={`rounded-2xl p-2 flex flex-col gap-2`}
                                 >
                                     <Image
                                         src={item.icon}
@@ -590,10 +593,10 @@ export default function LandingPage() {
                                         height={150}
                                         className="mx-auto"
                                     />
-                                    <p style={{color: item.ttColor}} className="font-bold text-sm">
+                                    <p style={{color: item.ttColor}} className="font-bold text-xl">
                                         {item.title}
                                     </p>
-                                    <p className="text-xs text-[#4D4D4D] text-justify">{item.desc}</p>
+                                    <p className="text-xs text-black">{item.desc}</p>
                                 </div>
                             ))}
                         </div>
@@ -614,6 +617,105 @@ export default function LandingPage() {
                     <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                            className="absolute left-5 top-[450px]  z-99"/>
                     {/* Footer thông tin hệ thống AMG */}
+                    {isMobile ? (
+                        // ======= Layout Mobile =======
+                        <div className="flex flex-col gap-10">
+                            {/* HỆ THỐNG AMG */}
+                            <div className="space-y-1">
+                                <h3 className="font-bold text-base">HỆ THỐNG AMG</h3>
+                                <p className="font-semibold">ANHMY GLOBAL KINDERGARTEN</p>
+                                <p>Cơ sở 1: No B18-06, Vinhomes Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.</p>
+                                <p>Cơ sở 2: No B18-05A, Vinhomes Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.</p>
+                                <p>Cơ sở 3: Tầng 2, Tòa nhà Dreamland Bonanza, 23 Duy Tân, Cầu Giấy, Hà Nội</p>
+                                <p>Cơ sở 4: S301, Sky 3, Aquabay, Khu đô thị Ecopark, Hưng Yên</p>
+                                <p>Hotline: 0972999201</p>
+                                <p>Email: anhmykindergarten@gmail.com</p>
+                                <p>Youtube: AMG - AnhMy Global Kindergarten</p>
+                            </div>
+
+                            {/* LIÊN KẾT & HỖ TRỢ */}
+                            <div className="flex flex-row flex-wrap gap-x-10 gap-y-4">
+                                {/* Liên kết */}
+                                <div>
+                                    <h3 className="font-bold text-sm mb-2">LIÊN KẾT</h3>
+                                    <ul className="space-y-1 text-sm">
+                                        <li>Trang chủ</li>
+                                        <li>Giới thiệu</li>
+                                        <li>Hệ thống lớp học</li>
+                                        <li>Tin tức sự kiện</li>
+                                        <li>Thư viện AMG</li>
+                                        <li>Tuyển sinh</li>
+                                        <li>Liên hệ</li>
+                                    </ul>
+                                </div>
+
+                                {/* Hỗ trợ */}
+                                <div>
+                                    <h3 className="font-bold text-sm mb-2">HỖ TRỢ</h3>
+                                    <ul className="space-y-1 text-sm">
+                                        <li>Trang chủ</li>
+                                        <li>Giới thiệu</li>
+                                        <li>Hệ thống lớp học</li>
+                                        <li>Tin tức sự kiện</li>
+                                        <li>Thư viện AMG</li>
+                                        <li>Tuyển sinh</li>
+                                        <li>Liên hệ</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            {/* Fanpage & YouTube thumbnails + Elephant */}
+                            <div className="flex flex-wrap gap-6 mt-4 items-start">
+                                {/* FANPAGE */}
+                                <div className="flex flex-col items-start">
+                                    <h3 className="font-bold">FANPAGE</h3>
+                                    <a
+                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            alt="YouTube Thumbnail"
+                                            width={180}
+                                            height={100}
+                                            className="rounded-lg mt-2"
+                                        />
+                                    </a>
+                                </div>
+
+                                {/* YOUTUBE */}
+                                <div className="flex flex-col items-start">
+                                    <h3 className="font-bold">YOUTUBE</h3>
+                                    <a
+                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                    >
+                                        <img
+                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            alt="YouTube Thumbnail"
+                                            width={180}
+                                            height={100}
+                                            className="rounded-lg mt-2"
+                                        />
+                                    </a>
+                                </div>
+
+                                {/* Elephant Icon */}
+                                <div className="flex items-start absolute right-0 top-300">
+                                    <Image
+                                        src="/icons/icon_elephant_footer.png"
+                                        alt=""
+                                        width={isMobile ? 200 : 300}
+                                        height={isMobile ? 75 : 150}
+                                        className="mt-4"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        // ======= Layout Desktop =======
                     <div className="w-full flex flex-col lg:flex-row justify-between items-start gap-10 text-sm">
                         {/* Cột Hệ thống AMG */}
                         <div className="space-y-1">
@@ -698,6 +800,7 @@ export default function LandingPage() {
                             </ul>
                         </div>
                     </div>
+                    )}
                 </div>
             </section>
 

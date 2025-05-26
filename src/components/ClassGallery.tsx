@@ -39,7 +39,9 @@ export default function ClassGallery() {
 
     return (
         <div className="w-full max-w-9xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-[#FF6A00] mb-6">HỆ THỐNG LỚP HỌC</h2>
+            <h2 style={{
+                textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white' }}
+                className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6">HỆ THỐNG LỚP HỌC</h2>
 
             {/* Static Section */}
             <div className="w-full bg-[#fff7cc] py-2 flex flex-wrap gap-3 items-center justify-center">
