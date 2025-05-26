@@ -178,7 +178,7 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                         </div>
 
                         {/* Main content */}
-                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line mt-20">
+                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
                             <span className="bg-[#FDCED0]">{parseContent(admission.content)}</span>
                         </div>
 

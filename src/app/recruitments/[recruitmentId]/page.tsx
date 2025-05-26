@@ -115,7 +115,7 @@ export default function RecruitmentDetail({ params }: { params: Promise<{ recrui
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
                         <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {recruitment.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{recruitment.title}</h1>
+                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase mb-2">{recruitment.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -150,7 +150,7 @@ export default function RecruitmentDetail({ params }: { params: Promise<{ recrui
                         </div>
 
                         {/* Main content */}
-                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line mt-20">
+                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
                             <span className="bg-[#FDCED0]">{parseContent(recruitment.content)}</span>
                         </div>
 

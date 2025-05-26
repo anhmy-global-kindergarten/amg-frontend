@@ -195,16 +195,17 @@ export default function LandingPage() {
 
                     {/* Text */}
                     <div className="relative w-full max-w-xl z-20 top-60 pb-2">
-                        <h1 className="text-3xl font-extrabold text-[#EA570A] leading-tight mb-3">
+                        <h1 style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white' }}
+                           className="text-4xl sm:text-5xl text-[#EA570A] leading-tight">
                             Đăng ký<br/>Tuyển sinh
                         </h1>
-                        <p className="text-xl font-semibold text-[#FFD105] mb-4">
+                        <p className="text-3xl text-[#FFD105] mb-1">
                             năm học 2024-2025
                         </p>
-                        <p className="mb-4 text-[#EA570A] text-base leading-relaxed">
+                        <p className="mb-4 text-[#EA570A] text-xs leading-relaxed">
                             Mầm non AMG<br/>
                             Trường mầm non song ngữ<br/>
-                            Giảng dạy theo chương trình Phần Lan và tiếng Anh Grapeseeds
+                            Giảng dạy theo chương trình Phần Lan và tiếng anh Grapeseeds
                         </p>
 
                         <div className="relative w-fit mx-auto">
@@ -670,14 +671,14 @@ export default function LandingPage() {
                                 <div className="flex flex-col items-start">
                                     <h3 className="font-bold">FANPAGE</h3>
                                     <a
-                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        href="https://www.youtube.com/watch?v=wR0SAVlV8xM"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         <img
-                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            src="https://img.youtube.com/vi/wR0SAVlV8xM/hqdefault.jpg"
                                             alt="YouTube Thumbnail"
-                                            width={180}
+                                            width={200}
                                             height={100}
                                             className="rounded-lg mt-2"
                                         />
@@ -688,14 +689,14 @@ export default function LandingPage() {
                                 <div className="flex flex-col items-start">
                                     <h3 className="font-bold">YOUTUBE</h3>
                                     <a
-                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        href="https://www.youtube.com/watch?v=LKDxvXi21GI"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         <img
-                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            src="https://img.youtube.com/vi/LKDxvXi21GI/hqdefault.jpg"
                                             alt="YouTube Thumbnail"
-                                            width={180}
+                                            width={200}
                                             height={100}
                                             className="rounded-lg mt-2"
                                         />
@@ -707,7 +708,7 @@ export default function LandingPage() {
                                     <Image
                                         src="/icons/icon_elephant_footer.png"
                                         alt=""
-                                        width={isMobile ? 200 : 300}
+                                        width={isMobile ? 190 : 300}
                                         height={isMobile ? 75 : 150}
                                         className="mt-4"
                                     />
@@ -735,12 +736,12 @@ export default function LandingPage() {
                                 <div className="flex flex-col items-start">
                                     <h3 className="font-bold">FANPAGE</h3>
                                     <a
-                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        href="https://www.youtube.com/watch?v=wR0SAVlV8xM"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         <img
-                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            src="https://img.youtube.com/vi/wR0SAVlV8xM/hqdefault.jpg"
                                             alt="YouTube Thumbnail"
                                             width={180}
                                             height={100}
@@ -753,12 +754,12 @@ export default function LandingPage() {
                                 <div className="flex flex-col items-start">
                                     <h3 className="font-bold">YOUTUBE</h3>
                                     <a
-                                        href="https://www.youtube.com/watch?v=4eTCzGxEZ1M&list=RDw8jNJd0SXXE&index=2"
+                                        href="https://www.youtube.com/watch?v=LKDxvXi21GI"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >
                                         <img
-                                            src="https://img.youtube.com/vi/4eTCzGxEZ1M/hqdefault.jpg"
+                                            src="https://img.youtube.com/vi/LKDxvXi21GI/hqdefault.jpg"
                                             alt="YouTube Thumbnail"
                                             width={180}
                                             height={100}

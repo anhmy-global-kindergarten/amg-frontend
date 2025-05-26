@@ -169,7 +169,7 @@ export default function HandbookDetail({ params }: { params: Promise<{ handbookI
                         </div>
 
                         {/* Main content */}
-                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line mt-20">
+                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
                             <span className="bg-[#FDCED0]">{parseContent(handbook.content)}</span>
                         </div>
 

@@ -173,7 +173,7 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
                         </div>
 
                         {/* Main content */}
-                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line mt-20">
+                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
                             <span className="bg-[#FDCED0]">{parseContent(lesson.content)}</span>
                         </div>
 

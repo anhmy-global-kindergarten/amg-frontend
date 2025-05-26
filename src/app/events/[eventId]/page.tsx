@@ -169,7 +169,7 @@ export default function EventDetail({ params }: { params: Promise<{ eventId: str
                         </div>
 
                         {/* Main content */}
-                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line mt-20">
+                        <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
                             <span className="bg-[#FDCED0]">{parseContent(event.content)}</span>
                         </div>
 
