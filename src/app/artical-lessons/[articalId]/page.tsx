@@ -2,8 +2,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { use } from "react";
+import React, { use } from "react";
 import { useState } from "react";
+import {useSession} from "next-auth/react";
+import {Menu} from "@headlessui/react";
+import {MoreVertical} from "lucide-react";
+
 
 function formatDateDisplay(dateStr: string) {
     const [day, month] = dateStr.split('/').map(Number);
@@ -42,6 +46,9 @@ function parseContent(content: string): React.ReactNode[] {
 }
 
 export default function LessonDetail({ params }: { params: Promise<{ articalId: string }> }) {
+    const { data: session } = useSession();
+
+    const role = session?.user?.role;
     const [comments, setComments] = useState([
         {
             name: "Nguyễn Văn A",
@@ -132,6 +139,30 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
                     <div className="max-w-4xl mx-auto">
                         <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {lesson.author}</p>
                         <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{lesson.title}</h1>
+                        {(role === "admin" || role === "teacher") && (
+                            <div className="absolute top-4 right-4">
+                                <Menu>
+                                    <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
+                                        <MoreVertical className="w-5 h-5 text-[#FFC107]" />
+                                    </Menu.Button>
+                                    <Menu.Items
+                                        className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
+                                        <Menu.Item>
+                                            {({active}) => (
+                                                <Link
+                                                    href={`/post/edit/${lesson.id}`}
+                                                    className={`block px-4 py-2 text-sm ${
+                                                        active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
+                                                    }`}
+                                                >
+                                                    Chỉnh sửa
+                                                </Link>
+                                            )}
+                                        </Menu.Item>
+                                    </Menu.Items>
+                                </Menu>
+                            </div>
+                        )}
                         <div
                             className="w-[70px] h-[70px] bg-[#FFD668] absolute top-5 left-7 rounded-xl flex items-center justify-center shadow-md">
                             <div
