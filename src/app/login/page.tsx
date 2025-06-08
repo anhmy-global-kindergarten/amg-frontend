@@ -6,24 +6,39 @@ import { useState } from "react";
 import {signIn} from "next-auth/react";
 
 export default function LoginPage() {
-    const [email, setEmail] = useState('');
+    const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: userName,
+                    password: password,
+                }),
+            });
 
-        const res = await signIn('credentials', {
-            redirect: false,
-            email,
-            password,
-        });
+            if (!res.ok) {
+                const errorData = await res.json();
+                setError(errorData.error || 'Đăng nhập thất bại');
+                return;
+            }
 
-        if (res?.ok) {
+            const user = await res.json();
+
+            localStorage.setItem('user', JSON.stringify(user));
+
             router.push('/');
-        } else {
-            setError('Tài khoản hoặc mật khẩu không đúng');
+        } catch (err) {
+            console.error(err);
+            setError('Có lỗi xảy ra. Vui lòng thử lại.');
         }
     };
 
@@ -56,13 +71,13 @@ export default function LoginPage() {
 
                     <form onSubmit={handleLogin}>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-[#555] mb-1">Email</label>
+                            <label className="block text-sm font-medium text-[#555] mb-1">Username</label>
                             <input
-                                type="email"
+                                type="text"
                                 className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
-                                placeholder="Nhập email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Nhập username"
+                                value={userName}
+                                onChange={(e) => setUserName(e.target.value)}
                             />
                         </div>
 

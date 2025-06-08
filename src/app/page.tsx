@@ -6,7 +6,6 @@ import HeaderMenu from "@/components/HeaderMenu";
 import RegisterClassModal from "@/modals/RegisterClassModal";
 import {useEffect, useState} from 'react';
 import { FaArrowUp } from "react-icons/fa";
-import {signOut, useSession} from "next-auth/react";
 
 export default function LandingPage() {
     const [isMobile, setIsMobile] = useState(false);
@@ -39,10 +38,28 @@ export default function LandingPage() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const { data: session } = useSession();
+    // const [user, setUser] = useState(null);
+    const [role, setRole] = useState<string | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const role = session?.user?.role;
-    const isAuthenticated = !!session;
+    useEffect(() => {
+        try {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                const parsed = JSON.parse(storedUser);
+                // setUser(parsed);
+                setRole(parsed?.user?.role || parsed?.role || null);
+                setIsAuthenticated(true);
+            }
+        } catch (error) {
+            console.error("Lỗi đọc user từ sessionStorage:", error);
+        }
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        window.location.href = "/";
+    };
 
     return (
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
@@ -106,7 +123,7 @@ export default function LandingPage() {
                                     </div>
                                 )}
                                 <button
-                                    onClick={() => signOut({callbackUrl: "/"})}
+                                    onClick={() => handleLogout()}
                                     className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
                                 >
                                     Đăng xuất
