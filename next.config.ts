@@ -5,6 +5,16 @@ const nextConfig: NextConfig = {
     reactStrictMode: false,
   /* config options here */
     i18n: i18nConfig.i18n,
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+                port: '3030',
+                pathname: '/uploads/**',
+            },
+        ],
+    },
 };
 
 export default nextConfig;

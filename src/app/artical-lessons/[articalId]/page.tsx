@@ -1,5 +1,5 @@
-/* eslint-disable */
 'use client';
+/* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
 import {notFound, useParams} from "next/navigation";
@@ -8,11 +8,30 @@ import { useState } from "react";
 import {Menu} from "@headlessui/react";
 import {MoreVertical} from "lucide-react";
 import {Post, usePostById} from "@/app/hooks/usePostById";
+import RenderHTMLContent from "@/app/utils/getContent";
 
 
 function formatDateDisplay(dateStr: string) {
-    const [day, month] = dateStr.split('/').map(Number);
-    return { day, month };
+    if (!dateStr) {
+        return { day: '??', month: '??' };
+    }
+
+    try {
+        const date = new Date(dateStr);
+
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+
+        if (isNaN(day) || isNaN(month)) {
+            console.error("Invalid date string provided:", dateStr);
+            return { day: '??', month: '??' };
+        }
+
+        return { day, month };
+    } catch (error) {
+        console.error("Error parsing date string:", dateStr, error);
+        return { day: '??', month: '??' };
+    }
 }
 
 function parseContent(content: string): React.ReactNode[] {
@@ -48,33 +67,10 @@ function parseContent(content: string): React.ReactNode[] {
 
 export default function LessonDetail() {
     const params = useParams();
-    console.log('params:', params);
-    const articalId = params?.articalId;
+    const articalId = params?.articalId as string;
 
-    const [post, setPost] = useState<Post | undefined>(undefined);
-    const [loading, setLoading] = useState<boolean>(false);
-    const [error, setError] = useState<string | null>(null);
+    const {post, loading, error} = usePostById(articalId);
 
-    useEffect(() => {
-        console.log("Fetching post with ID:", articalId);
-        if (!articalId) {
-            return;
-        }
-        const fetchPost = async () => {
-            setLoading(true);
-            try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/get-post/${articalId}`);
-                if (!res.ok) throw new Error("Failed to fetch posts");
-                const data = await res.json();
-                setPost(data);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchPost();
-    }, [articalId]);
     const [role, setRole] = useState<string | null>(null);
 
     useEffect(() => {
@@ -82,12 +78,11 @@ export default function LessonDetail() {
             const storedUser = localStorage.getItem("user");
             if (storedUser) {
                 const parsed = JSON.parse(storedUser);
-                // setUser(parsed);
                 setRole(parsed?.user?.role || parsed?.role || null);
                 console.log("Role from localStorage:", parsed?.user?.role || parsed?.role || null);
             }
         } catch (error) {
-            console.error("Lỗi đọc user từ sessionStorage:", error);
+            console.error("Lỗi đọc user từ localStorage:", error);
         }
     }, []);
 
@@ -128,9 +123,14 @@ export default function LessonDetail() {
 //             image5: "",
 //         },
 //     ];
-    console.log({ post, loading, error });
     if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
-    if (!post) return notFound();
+    if (error && !post) {
+        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải bài học.</p>;
+    }
+
+    if (!post) {
+        return notFound();
+    }
     const { day, month } = formatDateDisplay(post.create_at);
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
@@ -172,7 +172,7 @@ export default function LessonDetail() {
                     Tiết học của con
                 </h3>
                 <Image
-                    src={post.header_image}
+                    src={`${process.env.NEXT_PUBLIC_BASE_URL}${post.header_image.replace('./', '/')}`}
                     alt={post.title}
                     width={600}
                     height={300}
@@ -217,7 +217,9 @@ export default function LessonDetail() {
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">{parseContent(post.content)}</span>
+                            <span className="bg-[#FDCED0]">
+                                <RenderHTMLContent content={post.content} />
+                            </span>
                         </div>
 
                         {/* Optional images */}

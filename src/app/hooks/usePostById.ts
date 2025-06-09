@@ -16,10 +16,13 @@ export interface Post {
 
 export function usePostById(articalId: string) {
     const [post, setPost] = useState<Post | undefined>(undefined);
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
-        if (!articalId) return;
+        if (!articalId) {
+            setLoading(false);
+            return;
+        }
 
         const fetchPost = async () => {
             setLoading(true);
@@ -27,17 +30,20 @@ export function usePostById(articalId: string) {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/get-post/${articalId}`);
                 if (!res.ok) {
-                    throw new Error("Failed to fetch posts");
+                    if (res.status === 404) {
+                        setPost(undefined);
+                    }
+                    throw new Error("Failed to fetch post");
                 }
                 const data = await res.json();
-                console.log("Fetched data:", data);
                 setPost(data);
             } catch (err: any) {
-                setError(err.message || "Unknown error");
+                setError(err.message);
+                console.error("Fetch error:", err);
             } finally {
                 setLoading(false);
             }
-        }
+        };
 
         fetchPost();
     }, [articalId]);
