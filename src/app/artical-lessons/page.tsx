@@ -1,9 +1,12 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import {useState} from "react";
 import { useRouter } from "next/navigation";
-
+import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
+import LineClampContent from "@/app/utils/lineClamp";
+import {format} from "date-fns";
+/*
 const lessons = [
     {
         id: 1,
@@ -70,16 +73,21 @@ const lessons = [
         image: "/lessons/lesson2.png",
     },
 ];
+*/
 
 export default function ArticalLessons() {
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(lessons.length / itemsPerPage);
+    const { posts, loading, error } = usePostsByCategory("artical-lessons");
     const [page, setPage] = useState(0);
     const router = useRouter();
-    const pagedLessons = lessons.slice(
-        page * itemsPerPage,
-        (page + 1) * itemsPerPage
-    );
+
+    if (loading) return <div>Đang tải dữ liệu...</div>;
+    if (error) return <div>Lỗi: {error}</div>;
+
+    const itemsPerPage = 6;
+    const totalPages = posts ? Math.ceil(posts.length / itemsPerPage) : 0;
+    const pagedLessons = posts
+        ? posts.slice(page * itemsPerPage, (page + 1) * itemsPerPage)
+        : [];
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
             {/* Background */}
@@ -124,7 +132,7 @@ export default function ArticalLessons() {
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        src={lesson.image}
+                                        src={`${process.env.NEXT_PUBLIC_BASE_URL}${lesson.header_image.replace('./', '/')}`}
                                         alt={lesson.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -136,7 +144,7 @@ export default function ArticalLessons() {
                                                 backgroundSize: "100% 100%",
                                             }}
                                         >
-                                            {lesson.date}
+                                            {format(new Date(lesson.create_at), "dd/MM/yyyy")}
                                         </div>
                                     </div>
                                 </div>
@@ -147,11 +155,7 @@ export default function ArticalLessons() {
                                         {lesson.title}
                                     </h4>
                                     <p className="text-xs text-black line-clamp-3">Đăng bởi: {lesson.author}</p>
-                                    <p className="text-sm text-black line-clamp-3">
-                                        {lesson.content.length > 101
-                                            ? `${lesson.content.slice(0, 100)}...`
-                                            : lesson.content}
-                                    </p>
+                                    <LineClampContent content={lesson.content} />
                                 </div>
                             </div>
                         ))}

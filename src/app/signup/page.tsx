@@ -21,6 +21,19 @@ export default function SignupPage() {
         setError("");
         setSuccess("");
 
+        const vietnameseCharRegex = /[^a-z0-9]/gi;
+        const normalizedUsername = username.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+        if (vietnameseCharRegex.test(normalizedUsername)) {
+            setError("Username phải viết liền không dấu và không chứa ký tự đặc biệt.");
+            return;
+        }
+
+        if (password.length < 6) {
+            setError("Mật khẩu phải dài hơn 6 ký tự.");
+            return;
+        }
+
         if (password !== confirmPassword) {
             setError("Mật khẩu không khớp");
             return;

@@ -1,12 +1,13 @@
+/* eslint-disable */
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import React, { use } from "react";
+import {notFound, useParams} from "next/navigation";
+import React, {use, useEffect} from "react";
 import { useState } from "react";
-import {useSession} from "next-auth/react";
 import {Menu} from "@headlessui/react";
 import {MoreVertical} from "lucide-react";
+import {Post, usePostById} from "@/app/hooks/usePostById";
 
 
 function formatDateDisplay(dateStr: string) {
@@ -45,10 +46,51 @@ function parseContent(content: string): React.ReactNode[] {
     return parts;
 }
 
-export default function LessonDetail({ params }: { params: Promise<{ articalId: string }> }) {
-    const { data: session } = useSession();
+export default function LessonDetail() {
+    const params = useParams();
+    console.log('params:', params);
+    const articalId = params?.articalId;
 
-    const role = session?.user?.role;
+    const [post, setPost] = useState<Post | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        console.log("Fetching post with ID:", articalId);
+        if (!articalId) {
+            return;
+        }
+        const fetchPost = async () => {
+            setLoading(true);
+            try {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/get-post/${articalId}`);
+                if (!res.ok) throw new Error("Failed to fetch posts");
+                const data = await res.json();
+                setPost(data);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPost();
+    }, [articalId]);
+    const [role, setRole] = useState<string | null>(null);
+
+    useEffect(() => {
+        try {
+            const storedUser = localStorage.getItem("user");
+            if (storedUser) {
+                const parsed = JSON.parse(storedUser);
+                // setUser(parsed);
+                setRole(parsed?.user?.role || parsed?.role || null);
+                console.log("Role from localStorage:", parsed?.user?.role || parsed?.role || null);
+            }
+        } catch (error) {
+            console.error("Lỗi đọc user từ sessionStorage:", error);
+        }
+    }, []);
+
     const [comments, setComments] = useState([
         {
             name: "Nguyễn Văn A",
@@ -67,28 +109,29 @@ export default function LessonDetail({ params }: { params: Promise<{ articalId: 
         email: "",
         content: "",
     });
-    const { articalId } = use(params);
-    const lessons = [
-        {
-            id: "1",
-            title: "Chiếc bể bơi chứa đầy nước và niềm vui",
-            date: "27/06/2022",
-            author: "admin",
-            content: `Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những ngày hè oi ả chính là bơi lội. Vì vậy,[highlight] những bể bơi di động đã được các cô chuẩn bị ngay ở sân sau của cơ sở 1[/highlight] để các con thỏa sức chơi đùa với nước 
-AMG hiểu rằng vận động thể chất trong đó có các hoạt động với nước là những hoạt động cực kỳ quan trọng và tạo hứng thú lớn với con trẻ, vậy nên thầy giáo thể chất chuyên biệt của AMG luôn sẵn sàng tạo ra[highlight] những tiết học thú vị, an toàn, đúng quy cách và thật tự nhiên cho con trẻ[/highlight], với mong muốn con trẻ sẽ có những trải nghiệm vui và bổ ích nhất tại AMG 
-Có những bạn nhỏ rất thích nước nhưng cũng có những bạn lại hơi rụt rè. Các hoạt động dưới nước như tập nín thở, sải cánh tay hay đạp nước… dần dần giúp các con làm quen với nước, khắc phục sự nhút nhát ban đầu để trở nên dạn dĩ và tận hưởng thêm nhiều niềm vui 
-Tại AMG mỗi tiết học với nước của các con được diễn ra đều[highlight] đầy ắp tiếng cười và màu sắc[/highlight]. AMG lựa chọn một chiếc bể bơi không góc cạnh để làm cho tiết bơi của các con được an toàn và êm ái hơn... Những màu sắc sặc sỡ từ những bộ đồ bơi đáng yêu hay những chiếc phao bơi cùng bóng hơi đầy xinh động kèm theo đó là tiếng cười rộn ràng của con trẻ đã tạo nên những tiết bơi rất đặc trưng AMG. `,
-            imageHeader: "/lessons/lesson1.png",
-            image1: "/lessons/lesson1.png",
-            image2: "/lessons/lesson1.png",
-            image3: "/lessons/lesson1.png",
-            image4: "/lessons/lesson1.png",
-            image5: "",
-        },
-    ];
-    const lesson = lessons.find((item) => item.id === articalId);
-    if (!lesson) return notFound();
-    const { day, month } = formatDateDisplay(lesson.date);
+
+//     const lessons = [
+//         {
+//             id: "1",
+//             title: "Chiếc bể bơi chứa đầy nước và niềm vui",
+//             date: "27/06/2022",
+//             author: "admin",
+//             content: `Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những ngày hè oi ả chính là bơi lội. Vì vậy,[highlight] những bể bơi di động đã được các cô chuẩn bị ngay ở sân sau của cơ sở 1[/highlight] để các con thỏa sức chơi đùa với nước
+// AMG hiểu rằng vận động thể chất trong đó có các hoạt động với nước là những hoạt động cực kỳ quan trọng và tạo hứng thú lớn với con trẻ, vậy nên thầy giáo thể chất chuyên biệt của AMG luôn sẵn sàng tạo ra[highlight] những tiết học thú vị, an toàn, đúng quy cách và thật tự nhiên cho con trẻ[/highlight], với mong muốn con trẻ sẽ có những trải nghiệm vui và bổ ích nhất tại AMG
+// Có những bạn nhỏ rất thích nước nhưng cũng có những bạn lại hơi rụt rè. Các hoạt động dưới nước như tập nín thở, sải cánh tay hay đạp nước… dần dần giúp các con làm quen với nước, khắc phục sự nhút nhát ban đầu để trở nên dạn dĩ và tận hưởng thêm nhiều niềm vui
+// Tại AMG mỗi tiết học với nước của các con được diễn ra đều[highlight] đầy ắp tiếng cười và màu sắc[/highlight]. AMG lựa chọn một chiếc bể bơi không góc cạnh để làm cho tiết bơi của các con được an toàn và êm ái hơn... Những màu sắc sặc sỡ từ những bộ đồ bơi đáng yêu hay những chiếc phao bơi cùng bóng hơi đầy xinh động kèm theo đó là tiếng cười rộn ràng của con trẻ đã tạo nên những tiết bơi rất đặc trưng AMG. `,
+//             imageHeader: "/lessons/lesson1.png",
+//             image1: "/lessons/lesson1.png",
+//             image2: "/lessons/lesson1.png",
+//             image3: "/lessons/lesson1.png",
+//             image4: "/lessons/lesson1.png",
+//             image5: "",
+//         },
+//     ];
+    console.log({ post, loading, error });
+    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (!post) return notFound();
+    const { day, month } = formatDateDisplay(post.create_at);
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
             {/* Background */}
@@ -119,7 +162,7 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
                         </Link>
                         <span>/</span>
                         <span className="text-[#FFC107] font-medium">
-                            {lesson.title}
+                            {post.title}
                         </span>
                     </div>
                 </div>
@@ -129,16 +172,16 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
                     Tiết học của con
                 </h3>
                 <Image
-                    src={lesson.imageHeader}
-                    alt={lesson.title}
+                    src={post.header_image}
+                    alt={post.title}
                     width={600}
                     height={300}
                     className="rounded-lg shadow mb-6"
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {lesson.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{lesson.title}</h1>
+                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
+                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{post.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -150,7 +193,7 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
                                         <Menu.Item>
                                             {({active}) => (
                                                 <Link
-                                                    href={`/post/edit/${lesson.id}`}
+                                                    href={`/post/edit/${post.id}`}
                                                     className={`block px-4 py-2 text-sm ${
                                                         active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
                                                     }`}
@@ -174,22 +217,22 @@ Tại AMG mỗi tiết học với nước của các con được diễn ra đ�
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">{parseContent(lesson.content)}</span>
+                            <span className="bg-[#FDCED0]">{parseContent(post.content)}</span>
                         </div>
 
                         {/* Optional images */}
-                        {[lesson.image1, lesson.image2, lesson.image3, lesson.image4, lesson.image5]
-                            .filter(Boolean)
-                            .map((img, i) => (
-                                <Image
-                                    key={i}
-                                    src={img}
-                                    alt={`Lesson image ${i + 1}`}
-                                    width={800}
-                                    height={400}
-                                    className="w-full h-auto rounded-lg shadow mt-6"
-                                />
-                            ))}
+                        {/*{[post.image1, post.image2, post.image3, post.image4, post.image5]*/}
+                        {/*    .filter(Boolean)*/}
+                        {/*    .map((img, i) => (*/}
+                        {/*        <Image*/}
+                        {/*            key={i}*/}
+                        {/*            src={img}*/}
+                        {/*            alt={`Lesson image ${i + 1}`}*/}
+                        {/*            width={800}*/}
+                        {/*            height={400}*/}
+                        {/*            className="w-full h-auto rounded-lg shadow mt-6"*/}
+                        {/*        />*/}
+                        {/*    ))}*/}
 
                         <div className="w-full max-w-4xl mt-12 px-4 md:px-0">
                             <h4 className="text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
