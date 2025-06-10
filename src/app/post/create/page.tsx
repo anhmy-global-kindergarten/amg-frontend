@@ -12,6 +12,50 @@ import TextAlign from "@tiptap/extension-text-align";
 import { FloatingMenu } from "@tiptap/extension-floating-menu";
 import {ImageResize} from "tiptap-extension-resize-image";
 import {CropImageModal} from "@/modals/CropImageModal";
+import {Paragraph} from "@tiptap/extension-paragraph";
+import { Heading } from "@tiptap/extension-heading";
+// import 'tiptap-extension-resize-image/styles.css';
+
+const CustomImage = ImageExtension.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(), // Giữ lại các thuộc tính gốc như src, alt
+            style: {
+                default: null,
+                parseHTML: element => element.getAttribute('style'),
+                renderHTML: attributes => (attributes.style ? { style: attributes.style } : {}),
+            },
+        };
+    },
+});
+
+// 2. Custom Paragraph để lưu text-align
+const CustomParagraph = Paragraph.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(), // Giữ lại thuộc tính gốc
+            style: {
+                default: null,
+                parseHTML: element => element.getAttribute('style'),
+                renderHTML: attributes => (attributes.style ? { style: attributes.style } : {}),
+            },
+        };
+    },
+});
+
+// 3. Custom Heading để lưu text-align
+const CustomHeading = Heading.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(), // Giữ lại thuộc tính gốc
+            style: {
+                default: null,
+                parseHTML: element => element.getAttribute('style'),
+                renderHTML: attributes => (attributes.style ? { style: attributes.style } : {}),
+            },
+        };
+    },
+});
 
 const CreatePostPage = () => {
     const [title, setTitle] = useState("");
@@ -22,9 +66,16 @@ const CreatePostPage = () => {
 
     const editor = useEditor({
         extensions: [
-            StarterKit,
+            StarterKit.configure({
+                paragraph: false, // Tắt paragraph gốc
+                heading: false,   // Tắt heading gốc
+            }),
+
+            // 2. Thêm các phiên bản tùy chỉnh của chúng ta
+            CustomParagraph,
+            CustomHeading.configure({ levels: [1, 2, 3, 4] }), // Cấu hình heading levels nếu muốn
+            CustomImage, // Thay thế cho ImageExtension gốc
             ImageResize,
-            ImageExtension,
             Link,
             TextAlign.configure({ types: ["heading", "paragraph"] }),
             FloatingMenu.configure({
@@ -41,6 +92,21 @@ const CreatePostPage = () => {
         },
     });
 
+    function dataURLtoFile(dataUrl: string, filename: string): File | null {
+        const arr = dataUrl.split(',');
+        if (arr.length < 2) return null;
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        if (!mimeMatch) return null;
+        const mime = mimeMatch[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new File([u8arr], filename, { type: mime });
+    }
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
@@ -48,6 +114,33 @@ const CreatePostPage = () => {
             setImagePreview(URL.createObjectURL(file));
         }
     };
+    const [originalFileName, setOriginalFileName] = useState<string>("");
+    async function uploadContentImage(file: File): Promise<string> {
+        const formData = new FormData();
+        formData.append("image", file);
+
+        try {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/images/upload-image`, {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error("Tải ảnh thất bại.");
+            }
+
+            const result = await response.json();
+            if (!result.url) {
+                throw new Error("Không tìm thấy URL ảnh.");
+            }
+
+            return result.url;
+        } catch (error) {
+            console.error("Image upload error:", error);
+            alert("Lỗi tải ảnh lên, vui lòng thử lại.");
+            throw error;
+        }
+    }
 
     const handleValidateAndConfirm = () => {
         setError(""); // clear previous error
@@ -206,6 +299,7 @@ const CreatePostPage = () => {
                     onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
+                            setOriginalFileName(file.name);
                             const reader = new FileReader();
                             reader.onload = () => {
                                 setImageToCrop(reader.result as string);
@@ -213,6 +307,7 @@ const CreatePostPage = () => {
                             };
                             reader.readAsDataURL(file);
                         }
+                        e.target.value = ''; // Reset input
                     }}
                 />
 
@@ -220,9 +315,23 @@ const CreatePostPage = () => {
                     <CropImageModal
                         image={imageToCrop}
                         onCancel={() => setShowCropModal(false)}
-                        onConfirm={(croppedUrl: any) => {
-                            editor?.chain().focus().setImage({src: croppedUrl}).run();
+                        onConfirm={async (croppedDataUrl: string) => {
                             setShowCropModal(false);
+
+                            const croppedFile = dataURLtoFile(croppedDataUrl, originalFileName);
+                            if (!croppedFile) {
+                                alert("Không thể xử lý ảnh đã crop.");
+                                return;
+                            }
+
+                            try {
+                                const imageUrl = await uploadContentImage(croppedFile);
+                                if (imageUrl && editor) {
+                                    editor.chain().focus().setImage({ src: imageUrl, alt: originalFileName }).run();
+                                }
+                            } catch (error) {
+                                console.log("Không thể chèn ảnh do lỗi upload.");
+                            }
                         }}
                     />
                 )}

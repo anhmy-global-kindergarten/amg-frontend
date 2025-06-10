@@ -1,13 +1,18 @@
 // utils/cropImage.ts
 {/* eslint-disable @typescript-eslint/no-explicit-any */}
-export const getCroppedImg = async (imageSrc: string, crop: any) => {
+export const getCroppedImg = async (imageSrc: string, crop: any): Promise<string> => {
     const image = await createImage(imageSrc);
     const canvas = document.createElement("canvas");
-    canvas.width = crop.width;
-    canvas.height = crop.height;
     const ctx = canvas.getContext("2d");
 
-    ctx?.drawImage(
+    if (!ctx) {
+        throw new Error("Could not get canvas context");
+    }
+
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+
+    ctx.drawImage(
         image,
         crop.x,
         crop.y,
@@ -19,13 +24,8 @@ export const getCroppedImg = async (imageSrc: string, crop: any) => {
         crop.height
     );
 
-    return new Promise<string>((resolve) => {
-        canvas.toBlob((blob) => {
-            if (!blob) return;
-            const fileUrl = URL.createObjectURL(blob);
-            resolve(fileUrl);
-        }, "image/jpeg");
-    });
+    // Trả về một DataURL (base64)
+    return canvas.toDataURL("image/jpeg");
 };
 
 function createImage(url: string) {

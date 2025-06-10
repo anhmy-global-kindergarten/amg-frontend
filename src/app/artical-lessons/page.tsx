@@ -132,7 +132,8 @@ export default function ArticalLessons() {
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        src={`${process.env.NEXT_PUBLIC_BASE_URL}${lesson.header_image.replace('./', '/')}`}
+                                        // src={`${process.env.NEXT_PUBLIC_BASE_URL}${lesson.header_image.replace('./', '/')}`}
+                                        src={lesson.header_image}
                                         alt={lesson.title}
                                         className="w-full h-full object-cover"
                                     />

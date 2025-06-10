@@ -172,7 +172,8 @@ export default function LessonDetail() {
                     Tiết học của con
                 </h3>
                 <Image
-                    src={`${process.env.NEXT_PUBLIC_BASE_URL}${post.header_image.replace('./', '/')}`}
+                    // src={`${process.env.NEXT_PUBLIC_BASE_URL}${post.header_image.replace('./', '/')}`}
+                    src={post.header_image}
                     alt={post.title}
                     width={600}
                     height={300}
