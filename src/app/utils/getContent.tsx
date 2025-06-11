@@ -27,8 +27,8 @@ export default function RenderHTMLContent({ content, images = [] }: RenderHTMLCo
     if (!content) return null;
 
     const imageStyleMap = new Map<string, string>();
-    images.forEach(img => {
-        if (img.url && img.style) {
+    images?.forEach(img => {
+        if (img && img.url && img.style) {
             imageStyleMap.set(img.url, img.style);
         }
     });

@@ -1,7 +1,6 @@
-/* eslint-disable */
 "use client";
-
-import React, {useEffect, useState} from "react";
+/* eslint-disable */
+import React, {useCallback, useEffect, useState} from "react";
 import Image from "next/image";
 import { Modal } from "@mantine/core";
 import { EditorContent, useEditor } from "@tiptap/react";
@@ -16,6 +15,63 @@ import {Paragraph} from "@tiptap/extension-paragraph";
 import { Heading } from "@tiptap/extension-heading";
 import {Underline} from "@tiptap/extension-underline";
 import Highlight from '@tiptap/extension-highlight';
+import Youtube from '@tiptap/extension-youtube';
+import { PasteRule } from '@tiptap/core';
+import {useAuth} from "@/app/hooks/useAuth";
+
+const youtubeRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})(?:\S+)?/g;
+const CustomYoutube = Youtube.extend({
+    addAttributes() {
+        return {
+            ...this.parent?.(),
+            textAlign: {
+                default: 'left',
+            },
+        };
+    },
+    renderHTML({ node, HTMLAttributes }) {
+        const textAlign = node.attrs.textAlign || 'left';
+        return [
+            'div',
+            {
+                'data-youtube-video': '',
+                style: `display: flex; justify-content: center;`,
+            },
+            ['iframe', HTMLAttributes],
+        ];
+    },
+    addPasteRules(): PasteRule[] {
+        return [
+            {
+                find: youtubeRegex,
+                handler: ({ chain, range, match }) => {
+                    const youtubeIdRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})/;
+                    const videoIdMatch = match[0].match(youtubeIdRegex);
+
+                    if (videoIdMatch && videoIdMatch[1]) {
+                        const videoId = videoIdMatch[1];
+
+                        const { controls, modestBranding, rel } = this.options;
+
+                        let embedUrl = `https://www.youtube.com/embed/${videoId}?`;
+                        const params = [];
+                        params.push(`modestbranding=${modestBranding ? 1 : 0}`);
+                        params.push(`rel=${rel ? 1 : 0}`);
+                        params.push(`controls=${controls ? 1 : 0}`);
+                        embedUrl += params.join('&');
+
+                        chain()
+                            .focus()
+                            .deleteRange(range)
+                            .setYoutubeVideo({ src: embedUrl })
+                            .setTextAlign('center')
+                            .run();
+                    }
+                },
+            },
+        ];
+    },
+});
 
 const CustomImage = ImageExtension.extend({
     addAttributes() {
@@ -79,7 +135,7 @@ const CreatePostPage = () => {
             CustomImage,
             ImageResize,
             Link,
-            TextAlign.configure({ types: ["heading", "paragraph"] }),
+            TextAlign.configure({ types: ["heading", "paragraph", "youtube"] }),
             Underline,
             Highlight.configure({
                 multicolor: true,
@@ -89,6 +145,11 @@ const CreatePostPage = () => {
                     return editor.view.hasFocus() && editor.state.selection.content().size > 0;
                 },
             }),
+            CustomYoutube.configure({
+                controls: true,
+                modestBranding: true,
+                rel: 0,
+            }),
         ],
         content: "",
         editorProps: {
@@ -97,6 +158,20 @@ const CreatePostPage = () => {
             },
         },
     });
+
+    const setLink = useCallback(() => {
+        if (!editor) return;
+        const previousUrl = editor.getAttributes('link').href;
+        const url = window.prompt('URL', previousUrl);
+        if (url === null) {
+            return;
+        }
+        if (url === '') {
+            editor.chain().focus().extendMarkRange('link').unsetLink().run();
+            return;
+        }
+        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }, [editor]);
 
     function dataURLtoFile(dataUrl: string, filename: string): File | null {
         const arr = dataUrl.split(',');
@@ -174,19 +249,7 @@ const CreatePostPage = () => {
         // Nếu mọi thứ hợp lệ, mới mở modal
         setIsConfirmOpen(true);
     };
-    const [name, setName] = useState("");
-    useEffect(() => {
-        try {
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
-                const parsed = JSON.parse(storedUser);
-                // setUser(parsed);
-                setName(parsed?.user?.name || parsed?.name || null);
-            }
-        } catch (error) {
-            console.error("Lỗi đọc user từ sessionStorage:", error);
-        }
-    }, []);
+    const { name, role } = useAuth();
 
     const extractImageInfo = (): { url: string; style: string }[] => {
         if (!editor) return [];
@@ -231,7 +294,7 @@ const CreatePostPage = () => {
             postFormData.append("headerImage", selectedImage);
         }
         postFormData.append("category", category);
-        postFormData.append("author", name);
+        postFormData.append("author", name || "");
 
         try {
             // 4. Gửi đồng thời 2 request
