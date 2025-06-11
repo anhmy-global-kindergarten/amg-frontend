@@ -14,8 +14,19 @@ export interface Post {
     status: string;
 }
 
+export interface ImageWithStyle {
+    id: string;
+    url: string;
+    style?: string;
+}
+
+interface PostData {
+    post?: Post;
+    images?: ImageWithStyle[];
+}
+
 export function usePostById(articalId: string) {
-    const [post, setPost] = useState<Post | undefined>(undefined);
+    const [data, setData] = useState<PostData>({});
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
@@ -30,13 +41,13 @@ export function usePostById(articalId: string) {
             try {
                 const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/get-post/${articalId}`);
                 if (!res.ok) {
-                    if (res.status === 404) {
-                        setPost(undefined);
-                    }
                     throw new Error("Failed to fetch post");
                 }
-                const data = await res.json();
-                setPost(data);
+                const result = await res.json();
+                setData({
+                    post: result.post,
+                    images: result.images
+                });
             } catch (err: any) {
                 setError(err.message);
                 console.error("Fetch error:", err);
@@ -48,7 +59,5 @@ export function usePostById(articalId: string) {
         fetchPost();
     }, [articalId]);
 
-    return { post,
-        loading,
-        error};
+    return { post: data.post, images: data.images, loading, error };
 }

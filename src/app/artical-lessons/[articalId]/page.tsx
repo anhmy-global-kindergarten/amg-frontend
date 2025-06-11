@@ -69,7 +69,7 @@ export default function LessonDetail() {
     const params = useParams();
     const articalId = params?.articalId as string;
 
-    const {post, loading, error} = usePostById(articalId);
+    const { post, images, loading, error } = usePostById(articalId);
 
     const [role, setRole] = useState<string | null>(null);
 
@@ -219,7 +219,7 @@ export default function LessonDetail() {
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
                             <span className="bg-[#FDCED0]">
-                                <RenderHTMLContent content={post.content} />
+                                <RenderHTMLContent content={post.content} images={images} />
                             </span>
                         </div>
 

@@ -181,38 +181,89 @@ const CreatePostPage = () => {
             console.error("Lỗi đọc user từ sessionStorage:", error);
         }
     }, []);
+
+    const extractImageInfo = (): { url: string; style: string }[] => {
+        if (!editor) return [];
+
+        const imageInfo: { url: string; style: string }[] = [];
+        const { state } = editor;
+        const { doc } = state;
+
+        doc.descendants((node) => {
+            if (node.type.name === 'image') {
+                const { src, style } = node.attrs;
+                if (src) {
+                    imageInfo.push({
+                        url: src,
+                        style: style || '', // Lấy style, nếu không có thì là chuỗi rỗng
+                    });
+                }
+            }
+        });
+
+        return imageInfo;
+    };
+
     const handlePostSubmit = async () => {
         setIsConfirmOpen(false);
         setError("");
 
-        const content = editor?.getHTML() || "";
-        const formData = new FormData();
-        formData.append("title", title);
-        formData.append("content", content);
+        // 1. Trích xuất thông tin ảnh (URL và Style)
+        const imagesToUpdate = extractImageInfo();
+
+        // 2. Lấy HTML content và làm sạch nó (tùy chọn, nhưng khớp với backend)
+        const rawContent = editor?.getHTML() || "";
+        // Đoạn này xóa style khỏi thẻ img ở frontend trước khi gửi
+        const cleanContent = rawContent.replace(/<img([^>]+)style="[^"]*"([^>]*)>/g, '<img$1$2>');
+
+
+        // 3. Chuẩn bị dữ liệu cho việc tạo bài viết
+        const postFormData = new FormData();
+        postFormData.append("title", title);
+        postFormData.append("content", cleanContent); // Gửi content đã làm sạch
         if (selectedImage) {
-            formData.append("headerImage", selectedImage);
+            postFormData.append("headerImage", selectedImage);
         }
-        formData.append("category", category);
-        formData.append("author", name);
+        postFormData.append("category", category);
+        postFormData.append("author", name);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/create-post`, {
+            // 4. Gửi đồng thời 2 request
+            const updateImagesPromise = fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/images/update-status`, {
                 method: "POST",
-                body: formData,
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(imagesToUpdate),
             });
 
-            if (!response.ok) {
-                const error = await response.json();
-                alert(`Lỗi: ${error.error}`);
+            const createPostPromise = fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/create-post`, {
+                method: "POST",
+                body: postFormData,
+            });
+
+            // Chờ cả hai hoàn thành
+            const [updateResponse, createResponse] = await Promise.all([updateImagesPromise, createPostPromise]);
+
+            // 5. Xử lý kết quả
+            if (!updateResponse.ok) {
+                console.error("Lỗi cập nhật trạng thái ảnh!");
+                // Có thể không cần báo lỗi này cho người dùng
+            }
+
+            if (!createResponse.ok) {
+                const error = await createResponse.json();
+                alert(`Lỗi tạo bài viết: ${error.error}`);
                 return;
             }
 
-            const result = await response.json();
-            console.log("Post created:", result);
-            alert("Bài viết đã được tạo!");
+            const result = await createResponse.json();
+            alert("Bài viết đã được tạo thành công!");
+            // Chuyển hướng hoặc reset form ở đây
+            window.location.href = `/`;
         } catch (error) {
             console.error("Error creating post:", error);
-            alert("Có lỗi xảy ra!");
+            alert("Có lỗi nghiêm trọng xảy ra!");
         }
     };
 
