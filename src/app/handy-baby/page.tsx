@@ -3,64 +3,72 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
+import {format} from "date-fns";
+import LineClampContent from "@/app/utils/lineClamp";
 
-const articals = [
-    {
-        id: 1,
-        date: "27/06/2022",
-        title: "Chuyến tàu hoả số học",
-        author: "admin",
-        content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/handy/handy1.png",
-    },
-    {
-        id: 2,
-        date: "14/06/2022",
-        title: "Chiếc chong chóng từ cốc giấy",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/handy/handy2.png",
-    },
-    {
-        id: 3,
-        date: "27/06/2022",
-        title: "Chiếc bình số học",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
-        image: "/handy/handy3.png",
-    },
-    {
-        id: 4,
-        date: "14/06/2022",
-        title: "Khám phá hệ mặt trời",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/handy/handy4.png",
-    },
-    {
-        id: 5,
-        date: "27/06/2022",
-        title: "Quá trình phát triển của thực vật",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
-        image: "/handy/handy5.png",
-    },
-    {
-        id: 6,
-        date: "14/06/2022",
-        title: "Học làm phương tiện giao thông",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/handy/handy6.png",
-    },
-];
+// const articals = [
+//     {
+//         id: 1,
+//         date: "27/06/2022",
+//         title: "Chuyến tàu hoả số học",
+//         author: "admin",
+//         content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/handy/handy1.png",
+//     },
+//     {
+//         id: 2,
+//         date: "14/06/2022",
+//         title: "Chiếc chong chóng từ cốc giấy",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/handy/handy2.png",
+//     },
+//     {
+//         id: 3,
+//         date: "27/06/2022",
+//         title: "Chiếc bình số học",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
+//         image: "/handy/handy3.png",
+//     },
+//     {
+//         id: 4,
+//         date: "14/06/2022",
+//         title: "Khám phá hệ mặt trời",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/handy/handy4.png",
+//     },
+//     {
+//         id: 5,
+//         date: "27/06/2022",
+//         title: "Quá trình phát triển của thực vật",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
+//         image: "/handy/handy5.png",
+//     },
+//     {
+//         id: 6,
+//         date: "14/06/2022",
+//         title: "Học làm phương tiện giao thông",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/handy/handy6.png",
+//     },
+// ];
 
 export default function HandyBabyPage() {
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(articals.length / itemsPerPage);
+    const { posts, loading, error } = usePostsByCategory("handy-baby");
     const [page, setPage] = useState(0);
     const router = useRouter();
-    const pagedArticals = articals.slice(
+
+    if (loading) return <div>Đang tải dữ liệu...</div>;
+    if (error) return <div>Lỗi: {error}</div>;
+
+    const itemsPerPage = 6;
+    const totalPages = Math.ceil(posts.length / itemsPerPage);
+    const pagedArticals = posts.slice(
         page * itemsPerPage,
         (page + 1) * itemsPerPage
     );
@@ -108,7 +116,7 @@ export default function HandyBabyPage() {
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        src={artical.image}
+                                        src={artical.header_image}
                                         alt={artical.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -120,7 +128,7 @@ export default function HandyBabyPage() {
                                                 backgroundSize: "100% 100%",
                                             }}
                                         >
-                                            {artical.date}
+                                            {format(new Date(artical.create_at), "dd/MM/yyyy")}
                                         </div>
                                     </div>
                                 </div>
@@ -131,11 +139,7 @@ export default function HandyBabyPage() {
                                         {artical.title}
                                     </h4>
                                     <p className="text-xs text-black line-clamp-3">Đăng bởi: {artical.author}</p>
-                                    <p className="text-sm text-black line-clamp-3">
-                                        {artical.content.length > 101
-                                            ? `${artical.content.slice(0, 100)}...`
-                                            : artical.content}
-                                    </p>
+                                    <LineClampContent content={artical.content} />
                                 </div>
                             </div>
                         ))}

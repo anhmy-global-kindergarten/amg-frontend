@@ -9,61 +9,8 @@ import {Menu} from "@headlessui/react";
 import {MoreVertical} from "lucide-react";
 import {Post, usePostById} from "@/app/hooks/usePostById";
 import RenderHTMLContent from "@/app/utils/getContent";
-
-
-function formatDateDisplay(dateStr: string) {
-    if (!dateStr) {
-        return { day: '??', month: '??' };
-    }
-
-    try {
-        const date = new Date(dateStr);
-
-        const day = date.getDate();
-        const month = date.getMonth() + 1;
-
-        if (isNaN(day) || isNaN(month)) {
-            console.error("Invalid date string provided:", dateStr);
-            return { day: '??', month: '??' };
-        }
-
-        return { day, month };
-    } catch (error) {
-        console.error("Error parsing date string:", dateStr, error);
-        return { day: '??', month: '??' };
-    }
-}
-
-function parseContent(content: string): React.ReactNode[] {
-    const regex = /\[highlight\]([\s\S]*?)\[\/highlight\]/g;
-    const parts: React.ReactNode[] = [];
-
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regex.exec(content)) !== null) {
-        const [fullMatch, highlightedText] = match;
-        const index = match.index;
-
-        if (index > lastIndex) {
-            parts.push(content.slice(lastIndex, index));
-        }
-
-        parts.push(
-            <span key={index} className="text-[#FFD668]">
-        {highlightedText}
-      </span>
-        );
-
-        lastIndex = index + fullMatch.length;
-    }
-
-    if (lastIndex < content.length) {
-        parts.push(content.slice(lastIndex));
-    }
-
-    return parts;
-}
+import formatDateDisplay from "@/app/utils/formatDate";
+import {useAuth} from "@/app/hooks/useAuth";
 
 export default function LessonDetail() {
     const params = useParams();
@@ -71,20 +18,8 @@ export default function LessonDetail() {
 
     const { post, images, loading, error } = usePostById(articalId);
 
-    const [role, setRole] = useState<string | null>(null);
+    const { name, role } = useAuth();
 
-    useEffect(() => {
-        try {
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
-                const parsed = JSON.parse(storedUser);
-                setRole(parsed?.user?.role || parsed?.role || null);
-                console.log("Role from localStorage:", parsed?.user?.role || parsed?.role || null);
-            }
-        } catch (error) {
-            console.error("Lỗi đọc user từ localStorage:", error);
-        }
-    }, []);
 
     const [comments, setComments] = useState([
         {

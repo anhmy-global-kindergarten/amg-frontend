@@ -56,5 +56,7 @@ export default function RenderHTMLContent({ content, images = [] }: RenderHTMLCo
         },
     };
 
-    return <div className="prose max-w-none">{parse(content, options)}</div>;
+    return <div className="prose prose-lg max-w-none">
+        {parse(content, options)}
+    </div>
 }

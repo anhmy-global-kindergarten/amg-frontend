@@ -1,54 +1,25 @@
 'use client';
+/* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { use } from "react";
+import {notFound, useParams} from "next/navigation";
+import React, { use } from "react";
 import {Menu} from "@headlessui/react";
 import {MoreVertical} from "lucide-react";
 import {useSession} from "next-auth/react";
+import {usePostById} from "@/app/hooks/usePostById";
+import {useAuth} from "@/app/hooks/useAuth";
+import formatDateDisplay from "@/app/utils/formatDate";
+import RenderHTMLContent from "@/app/utils/getContent";
 
-function formatDateDisplay(dateStr: string) {
-    const [day, month] = dateStr.split('/').map(Number);
-    return { day, month };
-}
+export default function RecruitmentDetail() {
+    const params = useParams();
+    const articalId = params?.recruitmentId as string;
 
-function parseContent(content: string): React.ReactNode[] {
-    const regex = /\[highlight\]([\s\S]*?)\[\/highlight\]/g;
-    const parts: React.ReactNode[] = [];
+    const { post, images, loading, error } = usePostById(articalId);
+    const { name, role } = useAuth();
 
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regex.exec(content)) !== null) {
-        const [fullMatch, highlightedText] = match;
-        const index = match.index;
-
-        if (index > lastIndex) {
-            parts.push(content.slice(lastIndex, index));
-        }
-
-        parts.push(
-            <span key={index} className="text-[#FFD668]">
-        {highlightedText}
-      </span>
-        );
-
-        lastIndex = index + fullMatch.length;
-    }
-
-    if (lastIndex < content.length) {
-        parts.push(content.slice(lastIndex));
-    }
-
-    return parts;
-}
-
-export default function RecruitmentDetail({ params }: { params: Promise<{ recruitmentId: string }> }) {
-    const { data: session } = useSession();
-
-    const role = session?.user?.role;
-    const { recruitmentId } = use(params);
-    const recruitments = [
+    /*const recruitments = [
         {
             id: "1",
             title: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON",
@@ -62,10 +33,16 @@ export default function RecruitmentDetail({ params }: { params: Promise<{ recrui
             image4: "",
             image5: "",
         },
-    ];
-    const recruitment = recruitments.find((item) => item.id === recruitmentId);
-    if (!recruitment) return notFound();
-    const { day, month } = formatDateDisplay(recruitment.date);
+    ];*/
+    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (error && !post) {
+        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sổ tay.</p>;
+    }
+
+    if (!post) {
+        return notFound();
+    }
+    const { day, month } = formatDateDisplay(post.create_at);
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
             {/* Background */}
@@ -96,7 +73,7 @@ export default function RecruitmentDetail({ params }: { params: Promise<{ recrui
                         </Link>
                         <span>/</span>
                         <span className="text-[#FFC107] font-medium">
-                            {recruitment.title}
+                            {post.title}
                         </span>
                     </div>
                 </div>
@@ -106,16 +83,16 @@ export default function RecruitmentDetail({ params }: { params: Promise<{ recrui
                     Tuyển dụng
                 </h3>
                 <Image
-                    src={recruitment.imageHeader}
-                    alt={recruitment.title}
+                    src={post.header_image}
+                    alt={post.title}
                     width={600}
                     height={300}
                     className="rounded-lg shadow mb-6"
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {recruitment.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase mb-2">{recruitment.title}</h1>
+                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
+                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase mb-2">{post.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -127,7 +104,7 @@ export default function RecruitmentDetail({ params }: { params: Promise<{ recrui
                                         <Menu.Item>
                                             {({active}) => (
                                                 <Link
-                                                    href={`/post/edit/${recruitment.id}`}
+                                                    href={`/post/edit/${post.id}`}
                                                     className={`block px-4 py-2 text-sm ${
                                                         active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
                                                     }`}
@@ -151,22 +128,10 @@ export default function RecruitmentDetail({ params }: { params: Promise<{ recrui
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">{parseContent(recruitment.content)}</span>
+                            <span className="bg-[#FDCED0]">
+                                <RenderHTMLContent content={post.content} images={images} />
+                            </span>
                         </div>
-
-                        {/* Optional images */}
-                        {[recruitment.image1, recruitment.image2, recruitment.image3, recruitment.image4, recruitment.image5]
-                            .filter(Boolean)
-                            .map((img, i) => (
-                                <Image
-                                    key={i}
-                                    src={img}
-                                    alt={`Event image ${i + 1}`}
-                                    width={800}
-                                    height={400}
-                                    className="w-full h-auto rounded-lg shadow mt-6"
-                                />
-                            ))}
                     </div>
                 </div>
             </div>

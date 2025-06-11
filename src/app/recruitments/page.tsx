@@ -3,24 +3,32 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
+import {format} from "date-fns";
+import LineClampContent from "@/app/utils/lineClamp";
 
-const recruitments = [
-    {
-        id: 1,
-        date: "22/06/2021",
-        title: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON",
-        author: "admin",
-        content: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON   Với Slogan “SCHOOL IS AMG - AMG IS HOME”, AMG không chỉ là một ngôi trường mà còn là một ngôi nhà thứ hai của các bạn học sinh. Chúng tôi luôn tìm kiếm những giáo viên có tâm huyết, yêu trẻ và mong muốn cống hiến cho sự nghiệp giáo dục. Nếu bạn là một trong số đó, hãy gia nhập đội ngũ của chúng tôi ngay hôm nay!",
-        image: "/recruitments/recruitment1.png",
-    },
-];
+// const recruitments = [
+//     {
+//         id: 1,
+//         date: "22/06/2021",
+//         title: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON",
+//         author: "admin",
+//         content: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON   Với Slogan “SCHOOL IS AMG - AMG IS HOME”, AMG không chỉ là một ngôi trường mà còn là một ngôi nhà thứ hai của các bạn học sinh. Chúng tôi luôn tìm kiếm những giáo viên có tâm huyết, yêu trẻ và mong muốn cống hiến cho sự nghiệp giáo dục. Nếu bạn là một trong số đó, hãy gia nhập đội ngũ của chúng tôi ngay hôm nay!",
+//         image: "/recruitments/recruitment1.png",
+//     },
+// ];
 
 export default function RecruitmentPage() {
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(recruitments.length / itemsPerPage);
+    const { posts, loading, error } = usePostsByCategory("recruitments");
     const [page, setPage] = useState(0);
     const router = useRouter();
-    const pagedRecruitments = recruitments.slice(
+
+    if (loading) return <div>Đang tải dữ liệu...</div>;
+    if (error) return <div>Lỗi: {error}</div>;
+
+    const itemsPerPage = 6;
+    const totalPages = Math.ceil(posts.length / itemsPerPage);
+    const pagedRecruitments = posts.slice(
         page * itemsPerPage,
         (page + 1) * itemsPerPage
     );
@@ -68,7 +76,7 @@ export default function RecruitmentPage() {
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        src={recruitment.image}
+                                        src={recruitment.header_image}
                                         alt={recruitment.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -80,7 +88,7 @@ export default function RecruitmentPage() {
                                                 backgroundSize: "100% 100%",
                                             }}
                                         >
-                                            {recruitment.date}
+                                            {format(new Date(recruitment.create_at), "dd/MM/yyyy")}
                                         </div>
                                     </div>
                                 </div>
@@ -91,11 +99,7 @@ export default function RecruitmentPage() {
                                         {recruitment.title}
                                     </h4>
                                     <p className="text-xs text-black line-clamp-3">Đăng bởi: {recruitment.author}</p>
-                                    <p className="text-sm text-black line-clamp-3">
-                                        {recruitment.content.length > 101
-                                            ? `${recruitment.content.slice(0, 100)}...`
-                                            : recruitment.content}
-                                    </p>
+                                    <LineClampContent content={recruitment.content} />
                                 </div>
                             </div>
                         ))}

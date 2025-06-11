@@ -3,144 +3,152 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
+import {format} from "date-fns";
+import LineClampContent from "@/app/utils/lineClamp";
 
-const event = [
-    {
-        id: 1,
-        date: "27/06/2022",
-        title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
-        author: "admin",
-        content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event1.png",
-    },
-    {
-        id: 2,
-        date: "14/06/2022",
-        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event2.png",
-    },
-    {
-        id: 3,
-        date: "27/06/2022",
-        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
-        image: "/events/event3.png",
-    },
-    {
-        id: 4,
-        date: "14/06/2022",
-        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event4.png",
-    },
-    {
-        id: 5,
-        date: "27/06/2022",
-        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
-        image: "/events/event3.png",
-    },
-    {
-        id: 6,
-        date: "14/06/2022",
-        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event4.png",
-    },
-    {
-        id: 7,
-        date: "27/06/2022",
-        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event2.png",
-    },
-    {
-        id: 8,
-        date: "14/06/2022",
-        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event1.png",
-    },
-    {
-        id: 1,
-        date: "27/06/2022",
-        title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
-        author: "admin",
-        content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event1.png",
-    },
-    {
-        id: 2,
-        date: "14/06/2022",
-        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event2.png",
-    },
-    {
-        id: 3,
-        date: "27/06/2022",
-        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
-        image: "/events/event3.png",
-    },
-    {
-        id: 4,
-        date: "14/06/2022",
-        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event4.png",
-    },
-    {
-        id: 5,
-        date: "27/06/2022",
-        title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
-        image: "/events/event3.png",
-    },
-    {
-        id: 6,
-        date: "14/06/2022",
-        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event4.png",
-    },
-    {
-        id: 7,
-        date: "27/06/2022",
-        title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
-        author: "admin",
-        content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event2.png",
-    },
-    {
-        id: 8,
-        date: "14/06/2022",
-        title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
-        author: "admin",
-        content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-        image: "/events/event1.png",
-    },
-];
+// const event = [
+//     {
+//         id: 1,
+//         date: "27/06/2022",
+//         title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
+//         author: "admin",
+//         content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event1.png",
+//     },
+//     {
+//         id: 2,
+//         date: "14/06/2022",
+//         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event2.png",
+//     },
+//     {
+//         id: 3,
+//         date: "27/06/2022",
+//         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
+//         image: "/events/event3.png",
+//     },
+//     {
+//         id: 4,
+//         date: "14/06/2022",
+//         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event4.png",
+//     },
+//     {
+//         id: 5,
+//         date: "27/06/2022",
+//         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
+//         image: "/events/event3.png",
+//     },
+//     {
+//         id: 6,
+//         date: "14/06/2022",
+//         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event4.png",
+//     },
+//     {
+//         id: 7,
+//         date: "27/06/2022",
+//         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event2.png",
+//     },
+//     {
+//         id: 8,
+//         date: "14/06/2022",
+//         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event1.png",
+//     },
+//     {
+//         id: 1,
+//         date: "27/06/2022",
+//         title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
+//         author: "admin",
+//         content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event1.png",
+//     },
+//     {
+//         id: 2,
+//         date: "14/06/2022",
+//         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event2.png",
+//     },
+//     {
+//         id: 3,
+//         date: "27/06/2022",
+//         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
+//         image: "/events/event3.png",
+//     },
+//     {
+//         id: 4,
+//         date: "14/06/2022",
+//         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event4.png",
+//     },
+//     {
+//         id: 5,
+//         date: "27/06/2022",
+//         title: "HÌNH ẢNH ĐÁNG YÊU TRONG TRẢI NGHIỆM LÀM BÁNH TRÔI NGÀY TẾT HÀN THỰC",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những nghèo nhèo nghéo ngheo nghèo nghe",
+//         image: "/events/event3.png",
+//     },
+//     {
+//         id: 6,
+//         date: "14/06/2022",
+//         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event4.png",
+//     },
+//     {
+//         id: 7,
+//         date: "27/06/2022",
+//         title: "AMG TRẢI NGHIỆM VĂN HOÁ XEM PHIM ĐỘC ĐÁO TẠI MỸ",
+//         author: "admin",
+//         content: "Mùa hè lại đến rồi và chắc hẳn AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event2.png",
+//     },
+//     {
+//         id: 8,
+//         date: "14/06/2022",
+//         title: "TRIỂN LÃM DỰ ÁN KHỦNG LONG – THE DINOSAURS",
+//         author: "admin",
+//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
+//         image: "/events/event1.png",
+//     },
+// ];
 
 export default function EventPage() {
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(event.length / itemsPerPage);
+    const { posts, loading, error } = usePostsByCategory("events");
     const [page, setPage] = useState(0);
     const router = useRouter();
-    const pagedEvents = event.slice(
+
+    if (loading) return <div>Đang tải dữ liệu...</div>;
+    if (error) return <div>Lỗi: {error}</div>;
+
+    const itemsPerPage = 6;
+    const totalPages = Math.ceil(posts.length / itemsPerPage);
+    const pagedEvents = posts.slice(
         page * itemsPerPage,
         (page + 1) * itemsPerPage
     );
@@ -188,7 +196,7 @@ export default function EventPage() {
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        src={event.image}
+                                        src={event.header_image}
                                         alt={event.title}
                                         className="w-full h-full object-cover"
                                     />
@@ -200,7 +208,7 @@ export default function EventPage() {
                                                 backgroundSize: "100% 100%",
                                             }}
                                         >
-                                            {event.date}
+                                            {format(new Date(event.create_at), "dd/MM/yyyy")}
                                         </div>
                                     </div>
                                 </div>
@@ -211,11 +219,7 @@ export default function EventPage() {
                                         {event.title}
                                     </h4>
                                     <p className="text-xs text-black line-clamp-3">Đăng bởi: {event.author}</p>
-                                    <p className="text-sm text-black line-clamp-3">
-                                        {event.content.length > 101
-                                            ? `${event.content.slice(0, 100)}...`
-                                            : event.content}
-                                    </p>
+                                    <LineClampContent content={event.content} />
                                 </div>
                             </div>
                         ))}

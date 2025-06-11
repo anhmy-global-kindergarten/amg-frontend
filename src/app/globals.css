@@ -5,6 +5,13 @@
   --foreground: #171717;
 }
 
+.is-active {
+  background-color: #f86161;
+  color: white;
+  border-radius: 4px;
+  padding: 2px 4px;
+}
+
 @font-face {
   font-family: 'Mali Regular';
   src: url('/fonts/Mali-Regular.ttf') format('truetype');

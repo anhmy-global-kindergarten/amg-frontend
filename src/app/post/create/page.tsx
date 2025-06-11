@@ -14,7 +14,8 @@ import {ImageResize} from "tiptap-extension-resize-image";
 import {CropImageModal} from "@/modals/CropImageModal";
 import {Paragraph} from "@tiptap/extension-paragraph";
 import { Heading } from "@tiptap/extension-heading";
-// import 'tiptap-extension-resize-image/styles.css';
+import {Underline} from "@tiptap/extension-underline";
+import Highlight from '@tiptap/extension-highlight';
 
 const CustomImage = ImageExtension.extend({
     addAttributes() {
@@ -67,17 +68,22 @@ const CreatePostPage = () => {
     const editor = useEditor({
         extensions: [
             StarterKit.configure({
-                paragraph: false, // Tắt paragraph gốc
-                heading: false,   // Tắt heading gốc
+                paragraph: false,
+                heading: false,
+                codeBlock: false,
+                code: false,
             }),
 
-            // 2. Thêm các phiên bản tùy chỉnh của chúng ta
             CustomParagraph,
-            CustomHeading.configure({ levels: [1, 2, 3, 4] }), // Cấu hình heading levels nếu muốn
-            CustomImage, // Thay thế cho ImageExtension gốc
+            CustomHeading.configure({ levels: [1, 2, 3, 4] }),
+            CustomImage,
             ImageResize,
             Link,
             TextAlign.configure({ types: ["heading", "paragraph"] }),
+            Underline,
+            Highlight.configure({
+                multicolor: true,
+            }),
             FloatingMenu.configure({
                 shouldShow: ({ editor }) => {
                     return editor.view.hasFocus() && editor.state.selection.content().size > 0;
@@ -274,12 +280,12 @@ const CreatePostPage = () => {
     const categories = [
         { value: "", label: "Chọn danh mục" },
         { value: "artical-lessons", label: "Tiết học của con" },
-        { value: "event", label: "Sự kiện AMG" },
-        { value: "recruitment", label: "Tuyển dụng" },
+        { value: "events", label: "Sự kiện AMG" },
+        { value: "recruitments", label: "Tuyển dụng" },
         { value: "handy-baby", label: "Bé khéo tay" },
-        { value: "handbook", label: "Cẩm nang chăm trẻ" },
-        { value: "online", label: "Học online cùng AMG" },
-        { value: "admission", label: "Thông tin tuyển sinh" },
+        { value: "handbooks", label: "Cẩm nang chăm trẻ" },
+        { value: "learn-online", label: "Học online cùng AMG" },
+        { value: "admissions", label: "Thông tin tuyển sinh" },
     ];
     return (
         <div>
@@ -393,29 +399,40 @@ const CreatePostPage = () => {
                     <div className="border border-[#FFA552] rounded-lg">
                         {/* TOOLBAR CỐ ĐỊNH */}
                         <div className="flex gap-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
+
                             <button
                                 onClick={() => editor.chain().focus().toggleBold().run()}
-                                className={editor.isActive("bold") ? "font-bold text-[#F86161]" : ""}
+                                disabled={!editor.can().chain().focus().toggleBold().run()}
+                                className={editor.isActive('bold') ? 'is-active' : ''}
+                                title="Bold"
                             >
-                                B
+                                <span className="font-bold">B</span>
                             </button>
+
                             <button
                                 onClick={() => editor.chain().focus().toggleItalic().run()}
-                                className={editor.isActive("italic") ? "italic text-[#F86161]" : ""}
+                                disabled={!editor.can().chain().focus().toggleItalic().run()}
+                                className={editor.isActive('italic') ? 'is-active' : ''}
+                                title="Italic"
                             >
-                                I
+                                <span className="italic">I</span>
                             </button>
+
                             <button
-                                onClick={() => editor.chain().focus().toggleHeading({level: 2}).run()}
-                                className={editor.isActive("heading", {level: 2}) ? "text-[#F86161]" : ""}
+                                onClick={() => editor.chain().focus().toggleUnderline().run()}
+                                disabled={!editor.can().chain().focus().toggleUnderline().run()}
+                                className={editor.isActive('underline') ? 'is-active' : ''}
+                                title="Underline"
                             >
-                                H2
+                                <span className="underline">U</span>
                             </button>
+
                             <button
-                                onClick={() => editor.chain().focus().toggleBulletList().run()}
-                                className={editor.isActive("bulletList") ? "text-[#F86161]" : ""}
+                                onClick={() => editor.chain().focus().toggleHighlight({ color: '#FACBCC' }).run()}
+                                className={editor.isActive('highlight', { color: '#FACBCC' }) ? 'is-active' : ''}
+                                title="Highlight"
                             >
-                                • List
+                                Highlight
                             </button>
                         </div>
 

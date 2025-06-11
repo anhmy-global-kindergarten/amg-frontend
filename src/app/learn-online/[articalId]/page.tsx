@@ -1,60 +1,25 @@
 'use client';
+/* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { use } from "react";
+import {notFound, useParams} from "next/navigation";
+import React, { use } from "react";
 import { useState } from "react";
 import {MoreVertical} from "lucide-react";
 import {Menu} from "@headlessui/react";
 import {useSession} from "next-auth/react";
+import {usePostById} from "@/app/hooks/usePostById";
+import {useAuth} from "@/app/hooks/useAuth";
+import formatDateDisplay from "@/app/utils/formatDate";
+import RenderHTMLContent from "@/app/utils/getContent";
 
-function formatDateDisplay(dateStr: string) {
-    const [day, month] = dateStr.split('/').map(Number);
-    return { day, month };
-}
+export default function LearningOnlineDetail() {
+    const params = useParams();
+    const articalId = params?.articalId as string;
 
-function parseContent(content: string): React.ReactNode[] {
-    const regex = /\[highlight\]([\s\S]*?)\[\/highlight\]/g;
-    const parts: React.ReactNode[] = [];
+    const { post, images, loading, error } = usePostById(articalId);
+    const { name, role } = useAuth();
 
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regex.exec(content)) !== null) {
-        const [fullMatch, highlightedText] = match;
-        const index = match.index;
-
-        if (index > lastIndex) {
-            parts.push(content.slice(lastIndex, index));
-        }
-
-        parts.push(
-            <span key={index} className="text-[#FFD668]">
-        {highlightedText}
-      </span>
-        );
-
-        lastIndex = index + fullMatch.length;
-    }
-
-    if (lastIndex < content.length) {
-        parts.push(content.slice(lastIndex));
-    }
-
-    return parts;
-}
-
-const extractYouTubeId = (url: string) => {
-    const match = url.match(
-        /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/
-    );
-    return match ? match[1] : null;
-};
-
-export default function LearningOnlineDetail({ params }: { params: Promise<{ articalId: string }> }) {
-    const { data: session } = useSession();
-
-    const role = session?.user?.role;
     const [comments, setComments] = useState([
         {
             name: "Nguyễn Văn A",
@@ -73,96 +38,101 @@ export default function LearningOnlineDetail({ params }: { params: Promise<{ art
         email: "",
         content: "",
     });
-    const { articalId } = use(params);
-    const articals = [
-        {
-            id: "1",
-            title: "Chuyến tàu hoả số học",
-            date: "27/06/2022",
-            author: "admin",
-            content: `“Chơi mà học” về các con số và nhận biết phương tiện tàu hoả cùng AMG Crafts Chúc ba mẹ và các con có những phút giây vui vẻ bên nhau nhé!`,
-            imageHeader: "/events/event1.png",
-            image1: "/events/event1.png",
-            image2: "/events/event2.png",
-            image3: "/events/event3.png",
-            image4: "/events/event4.png",
-            image5: "",
-            youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
-        },
-        {
-            id: "2",
-            title: "Chiếc chong chóng từ cốc giấy",
-            date: "27/06/2022",
-            author: "admin",
-            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
-            imageHeader: "/events/event1.png",
-            image1: "/events/event1.png",
-            image2: "/events/event2.png",
-            image3: "/events/event3.png",
-            image4: "/events/event4.png",
-            image5: "",
-            youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
-        },
-        {
-            id: "3",
-            title: "Chiếc bình số học",
-            date: "27/06/2022",
-            author: "admin",
-            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
-            imageHeader: "/events/event1.png",
-            image1: "/events/event1.png",
-            image2: "/events/event2.png",
-            image3: "/events/event3.png",
-            image4: "/events/event4.png",
-            image5: "",
-            youtubeURL: "",
-        },
-        {
-            id: "4",
-            title: "Khám phá hệ mặt trời",
-            date: "27/06/2022",
-            author: "admin",
-            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
-            imageHeader: "/events/event1.png",
-            image1: "/events/event1.png",
-            image2: "/events/event2.png",
-            image3: "/events/event3.png",
-            image4: "/events/event4.png",
-            image5: "",
-            youtubeURL: "",
-        },
-        {
-            id: "5",
-            title: "Quá trình phát triển của thực vật",
-            date: "27/06/2022",
-            author: "admin",
-            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
-            imageHeader: "/events/event1.png",
-            image1: "/events/event1.png",
-            image2: "/events/event2.png",
-            image3: "/events/event3.png",
-            image4: "/events/event4.png",
-            image5: "",
-            youtubeURL: "",
-        },
-        {
-            id: "6",
-            title: "Học làm phương tiện giao thông",
-            date: "27/06/2022",
-            author: "admin",
-            content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
-            imageHeader: "/events/event1.png",
-            image1: "/events/event1.png",
-            image2: "/events/event2.png",
-            image3: "/events/event3.png",
-            image4: "/events/event4.png",
-            image5: "",
-            youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
-        },
-    ];
-    const artical = articals.find((item) => item.id === articalId);
-    if (!artical) return notFound();
-    const { day, month } = formatDateDisplay(artical.date);
+    // const articals = [
+    //     {
+    //         id: "1",
+    //         title: "Chuyến tàu hoả số học",
+    //         date: "27/06/2022",
+    //         author: "admin",
+    //         content: `“Chơi mà học” về các con số và nhận biết phương tiện tàu hoả cùng AMG Crafts Chúc ba mẹ và các con có những phút giây vui vẻ bên nhau nhé!`,
+    //         imageHeader: "/events/event1.png",
+    //         image1: "/events/event1.png",
+    //         image2: "/events/event2.png",
+    //         image3: "/events/event3.png",
+    //         image4: "/events/event4.png",
+    //         image5: "",
+    //         youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
+    //     },
+    //     {
+    //         id: "2",
+    //         title: "Chiếc chong chóng từ cốc giấy",
+    //         date: "27/06/2022",
+    //         author: "admin",
+    //         content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+    //         imageHeader: "/events/event1.png",
+    //         image1: "/events/event1.png",
+    //         image2: "/events/event2.png",
+    //         image3: "/events/event3.png",
+    //         image4: "/events/event4.png",
+    //         image5: "",
+    //         youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
+    //     },
+    //     {
+    //         id: "3",
+    //         title: "Chiếc bình số học",
+    //         date: "27/06/2022",
+    //         author: "admin",
+    //         content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+    //         imageHeader: "/events/event1.png",
+    //         image1: "/events/event1.png",
+    //         image2: "/events/event2.png",
+    //         image3: "/events/event3.png",
+    //         image4: "/events/event4.png",
+    //         image5: "",
+    //         youtubeURL: "",
+    //     },
+    //     {
+    //         id: "4",
+    //         title: "Khám phá hệ mặt trời",
+    //         date: "27/06/2022",
+    //         author: "admin",
+    //         content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+    //         imageHeader: "/events/event1.png",
+    //         image1: "/events/event1.png",
+    //         image2: "/events/event2.png",
+    //         image3: "/events/event3.png",
+    //         image4: "/events/event4.png",
+    //         image5: "",
+    //         youtubeURL: "",
+    //     },
+    //     {
+    //         id: "5",
+    //         title: "Quá trình phát triển của thực vật",
+    //         date: "27/06/2022",
+    //         author: "admin",
+    //         content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+    //         imageHeader: "/events/event1.png",
+    //         image1: "/events/event1.png",
+    //         image2: "/events/event2.png",
+    //         image3: "/events/event3.png",
+    //         image4: "/events/event4.png",
+    //         image5: "",
+    //         youtubeURL: "",
+    //     },
+    //     {
+    //         id: "6",
+    //         title: "Học làm phương tiện giao thông",
+    //         date: "27/06/2022",
+    //         author: "admin",
+    //         content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
+    //         imageHeader: "/events/event1.png",
+    //         image1: "/events/event1.png",
+    //         image2: "/events/event2.png",
+    //         image3: "/events/event3.png",
+    //         image4: "/events/event4.png",
+    //         image5: "",
+    //         youtubeURL: "https://www.youtube.com/watch?v=5mQTXgcU4C4&ab_channel=TinhHoaNh%E1%BA%A1cVi%E1%BB%87t",
+    //     },
+    // ];
+    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (error && !post) {
+        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sổ tay.</p>;
+    }
+
+    if (!post) {
+        return notFound();
+    }
+    const { day, month } = formatDateDisplay(post.create_at);
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
             {/* Background */}
@@ -193,7 +163,7 @@ export default function LearningOnlineDetail({ params }: { params: Promise<{ art
                         </Link>
                         <span>/</span>
                         <span className="text-[#FFC107] font-medium">
-                            {artical.title}
+                            {post.title}
                         </span>
                     </div>
                 </div>
@@ -203,16 +173,16 @@ export default function LearningOnlineDetail({ params }: { params: Promise<{ art
                     Học online cùng AMG
                 </h3>
                 <Image
-                    src={artical.imageHeader}
-                    alt={artical.title}
+                    src={post.header_image}
+                    alt={post.title}
                     width={600}
                     height={300}
                     className="rounded-lg shadow mb-6"
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {artical.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{artical.title}</h1>
+                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
+                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{post.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -224,7 +194,7 @@ export default function LearningOnlineDetail({ params }: { params: Promise<{ art
                                         <Menu.Item>
                                             {({active}) => (
                                                 <Link
-                                                    href={`/post/edit/${artical.id}`}
+                                                    href={`/post/edit/${post.id}`}
                                                     className={`block px-4 py-2 text-sm ${
                                                         active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
                                                     }`}
@@ -248,35 +218,10 @@ export default function LearningOnlineDetail({ params }: { params: Promise<{ art
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">{parseContent(artical.content)}</span>
+                            <span className="bg-[#FDCED0]">
+                                <RenderHTMLContent content={post.content} images={images} />
+                            </span>
                         </div>
-
-                        {/* Optional images */}
-                        {[artical.image1, artical.image2, artical.image3, artical.image4, artical.image5]
-                            .filter(Boolean)
-                            .map((img, i) => (
-                                <Image
-                                    key={i}
-                                    src={img}
-                                    alt={`Event image ${i + 1}`}
-                                    width={800}
-                                    height={400}
-                                    className="w-full h-auto rounded-lg shadow mt-6"
-                                />
-                            ))}
-
-                        {artical.youtubeURL && (
-                            <div className="mt-6 w-full aspect-video rounded-xl overflow-hidden shadow-lg">
-                                <iframe
-                                    className="w-full h-full"
-                                    src={`https://www.youtube.com/embed/${extractYouTubeId(artical.youtubeURL)}`}
-                                    title="YouTube video"
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    allowFullScreen
-                                ></iframe>
-                            </div>
-                        )}
 
                         <div className="w-full max-w-4xl mt-12 px-4 md:px-0">
                             <h4 className="text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
