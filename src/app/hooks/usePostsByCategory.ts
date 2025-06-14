@@ -28,7 +28,7 @@ export function usePostsByCategory(category: string) {
             setLoading(true);
             setError(null);
             try {
-                const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/get-posts-by-category/${category}`);
+                const res = await fetch(`/api-v1/posts/get-posts-by-category/${category}?status=active`);
                 if (!res.ok) {
                     throw new Error("Failed to fetch posts");
                 }

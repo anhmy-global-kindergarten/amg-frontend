@@ -201,7 +201,7 @@ const CreatePostPage = () => {
         formData.append("image", file);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/images/upload-image`, {
+            const response = await fetch(`/api-v1/images/upload-image`, {
                 method: "POST",
                 body: formData,
             });
@@ -282,23 +282,21 @@ const CreatePostPage = () => {
 
         // 2. Lấy HTML content và làm sạch nó (tùy chọn, nhưng khớp với backend)
         const rawContent = editor?.getHTML() || "";
-        // Đoạn này xóa style khỏi thẻ img ở frontend trước khi gửi
-        const cleanContent = rawContent.replace(/<img([^>]+)style="[^"]*"([^>]*)>/g, '<img$1$2>');
 
 
         // 3. Chuẩn bị dữ liệu cho việc tạo bài viết
         const postFormData = new FormData();
         postFormData.append("title", title);
-        postFormData.append("content", cleanContent); // Gửi content đã làm sạch
+        postFormData.append("content", rawContent); // Gửi content đã làm sạch
         if (selectedImage) {
-            postFormData.append("headerImage", selectedImage);
+            postFormData.append("header_image", selectedImage);
         }
         postFormData.append("category", category);
         postFormData.append("author", name || "");
 
         try {
             // 4. Gửi đồng thời 2 request
-            const updateImagesPromise = fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/images/update-status`, {
+            const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -306,7 +304,7 @@ const CreatePostPage = () => {
                 body: JSON.stringify(imagesToUpdate),
             });
 
-            const createPostPromise = fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/create-post`, {
+            const createPostPromise = fetch(`/api-v1/posts/create-post`, {
                 method: "POST",
                 body: postFormData,
             });
@@ -396,40 +394,75 @@ const CreatePostPage = () => {
             </div>
             <div>
                 <label className="block font-semibold mb-1">Ảnh minh họa:</label>
-                <input className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]" type="file"
-                       accept="image/*" onChange={handleImageChange}/>
-                {imagePreview && (
-                    <div className="mt-4">
-                        <Image
-                            src={imagePreview}
-                            alt="Preview"
-                            width={400}
-                            height={250}
-                            className="rounded-lg shadow border border-gray-200"
-                        />
-                    </div>
-                )}
+                {/*<input className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]" type="file"*/}
+                {/*       accept="image/*" onChange={handleImageChange}/>*/}
+                {/*{imagePreview && (*/}
+                {/*    <div className="mt-4">*/}
+                {/*        <Image*/}
+                {/*            src={imagePreview}*/}
+                {/*            alt="Preview"*/}
+                {/*            width={400}*/}
+                {/*            height={250}*/}
+                {/*            className="rounded-lg shadow border border-gray-200"*/}
+                {/*        />*/}
+                {/*    </div>*/}
+                {/*)}*/}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+                    <label
+                        htmlFor="header-image-upload"
+                        className="cursor-pointer bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors whitespace-nowrap inline-block text-center"
+                    >
+                        Chọn tệp
+                    </label>
+                    <input
+                        id="header-image-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        className="hidden" // Ẩn input gốc đi
+                    />
+                    {imagePreview && (
+                        <div className="mt-4">
+                            <Image
+                                src={imagePreview}
+                                alt="Preview"
+                                width={400}
+                                height={250}
+                                className="rounded-lg shadow border border-gray-200"
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
-            <div className="items-center gap-4 mt-4">
-                <label className="block font-semibold mb-1">Thêm ảnh vào bài viết:</label>
-                <input
-                    className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]"
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                            setOriginalFileName(file.name);
-                            const reader = new FileReader();
-                            reader.onload = () => {
-                                setImageToCrop(reader.result as string);
-                                setShowCropModal(true);
-                            };
-                            reader.readAsDataURL(file);
-                        }
-                        e.target.value = ''; // Reset input
-                    }}
-                />
+            <div className="mt-4">
+                <label className="block font-semibold mb-2">Thêm ảnh vào bài viết:</label>
+                <div>
+                    <label
+                        htmlFor="content-image-upload"
+                        className="cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
+                    >
+                        Tải ảnh lên
+                    </label>
+                    <input
+                        id="content-image-upload"
+                        type="file"
+                        accept="image/*"
+                        className="hidden" // Ẩn input gốc đi
+                        onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                                setOriginalFileName(file.name);
+                                const reader = new FileReader();
+                                reader.onload = () => {
+                                    setImageToCrop(reader.result as string);
+                                    setShowCropModal(true);
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                            e.target.value = ''; // Reset input để có thể chọn lại cùng 1 file
+                        }}
+                    />
+                </div>
 
                 {showCropModal && imageToCrop && (
                     <CropImageModal
@@ -447,7 +480,7 @@ const CreatePostPage = () => {
                             try {
                                 const imageUrl = await uploadContentImage(croppedFile);
                                 if (imageUrl && editor) {
-                                    editor.chain().focus().setImage({ src: imageUrl, alt: originalFileName }).run();
+                                    editor.chain().focus().setImage({src: imageUrl, alt: originalFileName}).run();
                                 }
                             } catch (error) {
                                 console.log("Không thể chèn ảnh do lỗi upload.");
@@ -491,8 +524,8 @@ const CreatePostPage = () => {
                             </button>
 
                             <button
-                                onClick={() => editor.chain().focus().toggleHighlight({ color: '#FACBCC' }).run()}
-                                className={editor.isActive('highlight', { color: '#FACBCC' }) ? 'is-active' : ''}
+                                onClick={() => editor.chain().focus().toggleHighlight({color: '#FACBCC'}).run()}
+                                className={editor.isActive('highlight', {color: '#FACBCC'}) ? 'is-active' : ''}
                                 title="Highlight"
                             >
                                 Highlight
@@ -530,23 +563,23 @@ const CreatePostPage = () => {
         >
             <p className="text-center text-sm text-[#666]">
                 Bạn có chắc chắn muốn đăng bài viết này không?
-                </p>
-                <div className="flex justify-center gap-4 mt-6">
-                    <button
-                        className="bg-gray-300 px-4 py-2 rounded-full"
-                        onClick={() => setIsConfirmOpen(false)}
-                    >
-                        Hủy
-                    </button>
-                    <button
-                        className="bg-[#FFA552] text-white px-4 py-2 rounded-full"
-                        onClick={handlePostSubmit}
-                    >
-                        Đồng ý
-                    </button>
-                </div>
-            </Modal>
-        </section>
+            </p>
+            <div className="flex justify-center gap-4 mt-6">
+                <button
+                    className="bg-gray-300 px-4 py-2 rounded-full"
+                    onClick={() => setIsConfirmOpen(false)}
+                >
+                    Hủy
+                </button>
+                <button
+                    className="bg-[#FFA552] text-white px-4 py-2 rounded-full"
+                    onClick={handlePostSubmit}
+                >
+                    Đồng ý
+                </button>
+            </div>
+        </Modal>
+    </section>
         </div>
     );
 };

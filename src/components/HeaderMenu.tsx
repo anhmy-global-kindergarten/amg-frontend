@@ -1,11 +1,12 @@
 'use client';
-
+/* eslint-disable */
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
 import {signOut} from "next-auth/react";
+import {useAuth} from "@/app/hooks/useAuth";
 
 const menuItems = [
     {
@@ -103,6 +104,41 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
         setOpenIndex(openIndex === index ? null : index);
     };
 
+    const { name: userName, role: userRole } = useAuth();
+
+    const AuthButtons = ({ isMobile = false }) => (
+        <div className={isMobile ? "flex flex-col gap-2" : "flex items-center gap-4"}>
+            {/* Các nút chỉ hiển thị cho admin hoặc teacher */}
+            {(userRole === 'admin' || userRole === 'teacher') && (
+                <>
+                    <Link href="/post/create" className="px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
+                        Tạo bài viết
+                    </Link>
+                    <Link href="/admin-dashboard" className="px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
+                        Dashboard
+                    </Link>
+                </>
+            )}
+            <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-semibold"
+            >
+                Đăng xuất
+            </button>
+        </div>
+    );
+
+    // Component nút cho khách
+    const GuestButtons = ({ isMobile = false }) => (
+        <Link
+            href="/login"
+            className="block px-3 py-2 bg-[#FFC107] text-white rounded hover:bg-[#e5a906] font-semibold text-center"
+            onClick={isMobile ? handleToggleMenu : undefined}
+        >
+            Đăng nhập
+        </Link>
+    );
+
     return (
         <div className="relative z-50">
             {isMobile ? (
@@ -163,16 +199,17 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                             <AnimatePresence>
                                                                 {openIndex === index && (
                                                                     <motion.ul
-                                                                        initial={{ height: 0, opacity: 0 }}
-                                                                        animate={{ height: 'auto', opacity: 1 }}
-                                                                        exit={{ height: 0, opacity: 0 }}
+                                                                        initial={{height: 0, opacity: 0}}
+                                                                        animate={{height: 'auto', opacity: 1}}
+                                                                        exit={{height: 0, opacity: 0}}
                                                                         className="pl-4 mt-2 space-y-1"
                                                                     >
                                                                         {item.submenu?.map((sub, subIdx) => (
                                                                             <li key={subIdx}>
                                                                                 {'submenu' in sub ? (
                                                                                     <>
-                                                                                        <span className="block px-2 py-1 text-sm font-normal text-gray-700">
+                                                                                        <span
+                                                                                            className="block px-2 py-1 text-sm font-normal text-gray-700">
                                                                                           {sub.title}
                                                                                         </span>
                                                                                         <ul className="pl-4 space-y-1">
@@ -200,29 +237,6 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                                 )}
                                                                             </li>
                                                                         ))}
-                                                                        {!isAuthenticated ? (
-                                                                            <li>
-                                                                                <Link
-                                                                                    href="/login"
-                                                                                    className="block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
-                                                                                    onClick={handleToggleMenu}
-                                                                                >
-                                                                                    Đăng nhập
-                                                                                </Link>
-                                                                            </li>
-                                                                        ) : (
-                                                                            <li>
-                                                                                <button
-                                                                                    onClick={() => {
-                                                                                        signOut({ callbackUrl: "/" });
-                                                                                        handleToggleMenu();
-                                                                                    }}
-                                                                                    className="block w-full text-left px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
-                                                                                >
-                                                                                    Đăng xuất
-                                                                                </button>
-                                                                            </li>
-                                                                        )}
                                                                     </motion.ul>
                                                                 )}
                                                             </AnimatePresence>
@@ -231,34 +245,15 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                 </div>
                                             );
                                         })}
-                                        {!isAuthenticated ? (
-                                            <Link
-                                                href="/login"
-                                                className="block px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold mt-4 text-center"
-                                                onClick={handleToggleMenu}
-                                            >
-                                                Đăng nhập
-                                            </Link>
-                                        ) : (
-                                            <div>
-                                                <Link
-                                                    href="/admin-dashboard"
-                                                    className="block px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold mt-4 text-center"
-                                                    onClick={handleToggleMenu}
-                                                >
-                                                    Admin Dashboard
-                                                </Link>
-                                                <button
-                                                    onClick={() => {
-                                                        signOut({callbackUrl: "/"});
-                                                        handleToggleMenu();
-                                                    }}
-                                                    className="block w-full px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold mt-4"
-                                                >
-                                                    Đăng xuất
-                                                </button>
-                                            </div>
-                                        )}
+                                        <div className="mt-4 pt-4 border-t border-gray-300 flex flex-col gap-2">
+                                            {status === 'loading' ? (
+                                                <div className="text-center text-sm text-gray-500">Đang tải...</div>
+                                            ) : isAuthenticated ? (
+                                                <AuthButtons isMobile={true}/>
+                                            ) : (
+                                                <GuestButtons isMobile={true}/>
+                                            )}
+                                        </div>
                                     </nav>
                                 </motion.div>
                             </>

@@ -12,6 +12,7 @@ import {usePostById} from "@/app/hooks/usePostById";
 import {useAuth} from "@/app/hooks/useAuth";
 import formatDateDisplay from "@/app/utils/formatDate";
 import RenderHTMLContent from "@/app/utils/getContent";
+import {deletePost} from "@/app/utils/deletePost";
 
 export default function LearningOnlineDetail() {
     const params = useParams();
@@ -192,15 +193,28 @@ export default function LearningOnlineDetail() {
                                     <Menu.Items
                                         className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
                                         <Menu.Item>
-                                            {({active}) => (
+                                            {({ active }) => (
                                                 <Link
                                                     href={`/post/edit/${post.id}`}
-                                                    className={`block px-4 py-2 text-sm ${
+                                                    className={`block w-full px-4 py-2 text-sm text-left ${
                                                         active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
                                                     }`}
                                                 >
                                                     Chỉnh sửa
                                                 </Link>
+                                            )}
+                                        </Menu.Item>
+
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    onClick={() => deletePost(post.id, "/learn-online")}
+                                                    className={`block w-full px-4 py-2 text-sm text-left ${
+                                                        active ? 'bg-[#FFE5E5] text-[#FF0000]' : 'text-gray-700'
+                                                    }`}
+                                                >
+                                                    Xóa
+                                                </button>
                                             )}
                                         </Menu.Item>
                                     </Menu.Items>

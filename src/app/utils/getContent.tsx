@@ -4,20 +4,6 @@ import React from 'react';
 import parse, {HTMLReactParserOptions, Element, attributesToProps} from 'html-react-parser';
 import { ImageWithStyle } from '@/app/hooks/usePostById';
 
-const parseStyleString = (styleStr: string): React.CSSProperties => {
-    const style: { [key: string]: string } = {};
-
-    styleStr.split(';').forEach(declaration => {
-        const [property, value] = declaration.split(':');
-        if (property && value) {
-            const camelCaseProperty = property.trim().replace(/-(\w)/g, (_, letter) => letter.toUpperCase());
-            style[camelCaseProperty] = value.trim();
-        }
-    });
-
-    return style as React.CSSProperties;
-};
-
 interface RenderHTMLContentProps {
     content: string;
     images?: ImageWithStyle[];
@@ -41,8 +27,7 @@ export default function RenderHTMLContent({ content, images = [] }: RenderHTMLCo
                 const src = props.src as string | undefined;
                 if (!src) return <></>;
 
-                const styleString = imageStyleMap.get(src);
-                const inlineStyle = parseStyleString(styleString || "");
+                const inlineStyle = props.style as React.CSSProperties | undefined;
                 const altText = String(props.alt || "content image");
                 return (
                     <img

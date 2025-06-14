@@ -41,7 +41,7 @@ export default function SignupPage() {
 
         try {
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/auth/register`,
+                `/api-v1/auth-self/register`,
                 {
                     method: "POST",
                     headers: {

@@ -7,6 +7,7 @@ import { useState } from "react";
 import {Menu} from "@headlessui/react";
 import {MoreVertical} from "lucide-react";
 import {useSession} from "next-auth/react";
+import {deletePost} from "@/app/utils/deletePost";
 
 function formatDateDisplay(dateStr: string) {
     const [day, month] = dateStr.split('/').map(Number);
@@ -153,15 +154,28 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                                     <Menu.Items
                                         className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
                                         <Menu.Item>
-                                            {({active}) => (
+                                            {({ active }) => (
                                                 <Link
                                                     href={`/post/edit/${admission.id}`}
-                                                    className={`block px-4 py-2 text-sm ${
+                                                    className={`block w-full px-4 py-2 text-sm text-left ${
                                                         active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
                                                     }`}
                                                 >
                                                     Chỉnh sửa
                                                 </Link>
+                                            )}
+                                        </Menu.Item>
+
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button
+                                                    onClick={() => deletePost(admission.id, "/admissions")}
+                                                    className={`block w-full px-4 py-2 text-sm text-left ${
+                                                        active ? 'bg-[#FFE5E5] text-[#FF0000]' : 'text-gray-700'
+                                                    }`}
+                                                >
+                                                    Xóa
+                                                </button>
                                             )}
                                         </Menu.Item>
                                     </Menu.Items>

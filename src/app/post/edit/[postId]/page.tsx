@@ -150,7 +150,7 @@ const EditPostPage = () => {
         formData.append("image", file);
 
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/images/upload-image`, {
+            const response = await fetch(`/api-v1/images/upload-image`, {
                 method: "POST",
                 body: formData,
             });
@@ -205,7 +205,6 @@ const EditPostPage = () => {
         setIsConfirmOpen(true);
     };
 
-    // ✅ 6. Hàm cập nhật bài viết
     const handleUpdatePost = async () => {
         setIsConfirmOpen(false);
         setError("");
@@ -214,46 +213,60 @@ const EditPostPage = () => {
 
         const postFormData = new FormData();
         postFormData.append("title", title);
-        postFormData.append("content", editor?.getHTML() || ""); // Gửi content có style, để backend clean
+        postFormData.append("content", editor?.getHTML() || "");
         postFormData.append("category", category);
         postFormData.append("author", name || "");
 
-        // RẤT QUAN TRỌNG: Chỉ thêm ảnh mới nếu người dùng đã chọn một file
         if (selectedImage) {
-            postFormData.append("headerImage", selectedImage);
+            postFormData.append("header_image", selectedImage);
         }
 
         try {
-            console.log("imagesToUpdate:", imagesToUpdate);
-            const updateImagesPromise = fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/images/update-status`, {
+            // BƯỚC 1: Khởi tạo TẤT CẢ các promise MÀ KHÔNG AWAIT
+            const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
                 method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(imagesToUpdate),
             });
 
-            // Gửi request cập nhật, giờ đây là multipart/form-data
-            const createPostPromise = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/posts/update-post/${postId}`, {
-                method: "POST", // Method POST giống API
-                body: postFormData, // Gửi FormData, trình duyệt sẽ tự đặt Content-Type
+            const updatePostPromise = fetch(`/api-v1/posts/update-post/${postId}`, {
+                method: "POST", // Hoặc "PUT" nếu bạn dùng PUT
+                body: postFormData,
             });
 
-            const [updateResponse, createResponse] = await Promise.all([updateImagesPromise, createPostPromise]);
+            // BƯỚC 2: Chạy song song và đợi TẤT CẢ hoàn thành
+            const [updateImagesResponse, updatePostResponse] = await Promise.all([
+                updateImagesPromise,
+                updatePostPromise
+            ]);
 
-            if (!updateResponse.ok) {
+            // BƯỚC 3: Xử lý kết quả của từng response
+            if (!updateImagesResponse.ok) {
+                // Log lỗi nhưng không cần chặn người dùng
                 console.error("Lỗi cập nhật trạng thái ảnh!");
-                // Có thể không cần báo lỗi này cho người dùng
             }
 
-            if (!createResponse.ok) {
-                const error = await createResponse.json();
-                alert(`Lỗi cập nhật bài viết: ${error.error}`);
-                return;
+            if (!updatePostResponse.ok) {
+                let errorMessage = 'Lỗi không xác định khi cập nhật bài viết.';
+                const contentType = updatePostResponse.headers.get('content-type');
+
+                // Chỉ parse JSON nếu response thực sự là JSON
+                if (contentType && contentType.includes('application/json')) {
+                    const errorData = await updatePostResponse.json();
+                    errorMessage = errorData.error || JSON.stringify(errorData);
+                } else {
+                    // Nếu không phải JSON, đọc nó dưới dạng text
+                    errorMessage = await updatePostResponse.text();
+                }
+
+                alert(`Lỗi cập nhật bài viết: ${errorMessage}`);
+                console.error("Update Post Error:", errorMessage);
+                return; // Dừng lại ở đây
             }
 
+            // Nếu cả hai đều ổn (hoặc ít nhất là updatePost ổn)
             alert("Cập nhật bài viết thành công!");
-            router.push(`/`);
+            router.push(`/`); // Hoặc router.push(`/posts/${postId}`) để xem lại bài viết
 
         } catch (err: any) {
             console.error("Lỗi khi cập nhật bài viết:", err);
@@ -301,7 +314,16 @@ const EditPostPage = () => {
 
                     <div>
                         <label className="block font-semibold mb-1">Ảnh minh họa (thay đổi nếu cần):</label>
-                        <input className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]" type="file" accept="image/*" onChange={(e) => {
+                        <label
+                            htmlFor="edit-header-image-upload"
+                            className="cursor-pointer bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors whitespace-nowrap inline-block text-center"
+                        >
+                            Chọn tệp mới
+                        </label>
+                        <input
+                            id="edit-header-image-upload"
+                            className="hidden w-full max-w-full text-sm text-white px-3 py-2 rounded-full hover:bg-[#FFA552] file:cursor-pointer file:border-0 file:bg-[#FFA552] file:text-white file:px-4 file:py-2"
+                            type="file" accept="image/*" onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
                                 setSelectedImage(file);
@@ -311,15 +333,23 @@ const EditPostPage = () => {
                         {imagePreview && (
                             <div className="mt-4">
                                 <p className="text-sm mb-2">Ảnh hiện tại:</p>
-                                <Image src={imagePreview} alt="Preview" width={400} height={250} className="rounded-lg shadow border border-gray-200" />
+                                <Image src={imagePreview} alt="Preview" width={400} height={250}
+                                       className="rounded-lg shadow border border-gray-200"/>
                             </div>
                         )}
                     </div>
 
                     <div className="items-center gap-4 mt-4">
                         <label className="block font-semibold mb-1">Thêm ảnh vào bài viết:</label>
+                        <label
+                            htmlFor="edit-content-image-upload"
+                            className="cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
+                        >
+                            Tải ảnh lên
+                        </label>
                         <input
-                            className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]"
+                            id="edit-content-image-upload"
+                            className="hidden w-full max-w-full text-sm text-white px-3 py-2 rounded-full hover:bg-[#FFA552] file:cursor-pointer file:border-0 file:bg-[#FFA552] file:text-white file:px-4 file:py-2"
                             type="file"
                             accept="image/*"
                             onChange={(e) => {
@@ -353,7 +383,10 @@ const EditPostPage = () => {
                                     try {
                                         const imageUrl = await uploadContentImage(croppedFile);
                                         if (imageUrl && editor) {
-                                            editor.chain().focus().setImage({ src: imageUrl, alt: originalFileName }).run();
+                                            editor.chain().focus().setImage({
+                                                src: imageUrl,
+                                                alt: originalFileName
+                                            }).run();
                                         }
                                     } catch (error) {
                                         console.log("Không thể chèn ảnh do lỗi upload.");
@@ -367,7 +400,8 @@ const EditPostPage = () => {
                         <label className="block font-semibold mb-2">Nội dung bài viết:</label>
                         {editor && (
                             <div className="border border-[#FFA552] rounded-lg">
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
+                                <div
+                                    className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
                                     {/* Toolbar giống hệt */}
                                     <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active font-bold' : ''} title="Bold"><span className="font-bold text-xl">B</span></button>
                                     <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active font-bold' : ''} title="Italic"><span className="italic text-xl">I</span></button>
