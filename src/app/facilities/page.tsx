@@ -1,7 +1,15 @@
+'use client';
+/* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
+import {useAuth} from "@/app/hooks/useAuth";
+import { useSinglePostByCategory } from "@/app/hooks/useSinglePostByCategory";
+import RenderStaticHTMLContent from "@/app/utils/getStaticPageContent";
 
 export default function Facilities() {
+    const { name, role } = useAuth();
+
+    const { post, loading, error } = useSinglePostByCategory('facilities');
     return (
         <div className="relative min-h-screen bg-[#FFFFFF] p-8 flex flex-col items-center overflow-hidden">
             {/* Background decor */}
@@ -35,139 +43,23 @@ export default function Facilities() {
                         className="object-contain"
                     />
                 </div>
-                {/* Title */}
                 <div className="max-w-4xl w-full ">
-                    <p className="text-xl mb-8 text-black z-20">
-                        AMG được xây dựng với hệ thống cơ sở vật chất hiện đại chuẩn Châu Âu mang đến không gian học tập
-                        vui chơi thoải mái, tiện nghi và an toàn nhất đến cho các con.
-                    </p>
+                    {loading && (
+                        <p className="text-center text-gray-600 py-10">Đang tải nội dung...</p>
+                    )}
 
-                    <h2 className="text-[#F7C948] text-lg mb-6">
-                        1. Hệ thống phòng học thoáng rộng với ánh sáng tự nhiên ngập tràn
-                    </h2>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities1.png"
-                            alt="Phòng học rộng rãi ánh sáng tự nhiên"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
+                    {error && (
+                        <p className="text-center text-red-500 py-10">Lỗi: {error}</p>
+                    )}
 
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities2.png"
-                            alt="Phòng học vui nhộn cho trẻ"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities3.png"
-                            alt="Facilities 3"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities4.png"
-                            alt="Facilities 4"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
-                    <br/>
-                    <h2 className="text-[#F7C948] text-lg mb-6">
-                        2. Hệ thống phòng chức năng, phòng gym, bể float và sân chơi riêng cho các con
-                    </h2>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities5.png"
-                            alt="Facilities 5"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities6.png"
-                            alt="Facilities 6"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities7.png"
-                            alt="Facilities 7"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities8.png"
-                            alt="Facilities 8"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities9.png"
-                            alt="Facilities 9"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
-                    <br/>
-                    <h2 className="text-[#F7C948] text-lg mb-6">
-                        3. Khuôn viên sinh hoạt các tiết học dã ngoại ngoài trời
-                    </h2>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities10.png"
-                            alt="Facilities 10"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities11.png"
-                            alt="Facilities 11"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-                    <div className="w-full flex justify-center mb-12">
-                        <Image
-                            src="/facilities/facilities12.png"
-                            alt="Facilities 12"
-                            width={800}
-                            height={600}
-                            className="rounded-xl shadow-md object-cover"
-                        />
-                    </div>
-
-                    <br/>
+                    {post && (
+                        <div className="prose prose-lg max-w-none text-black">
+                            <h1 className="text-2xl font-bold text-center mb-8 text-[#FFD668]">
+                                {post.title}
+                            </h1>
+                            <RenderStaticHTMLContent content={post.content}/>
+                        </div>
+                    )}
                 </div>
             </div>
 

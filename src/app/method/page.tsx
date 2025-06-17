@@ -6,6 +6,11 @@ import Link from "next/link";
 import {useAuth} from "@/app/hooks/useAuth";
 import {useSinglePostByCategory} from "@/app/hooks/useSinglePostByCategory";
 import RenderHTMLContent from "@/app/utils/getContent";
+import RenderStaticHTMLContent from "@/app/utils/getStaticPageContent";
+import {Menu} from "@headlessui/react";
+import {MoreVertical} from "lucide-react";
+import React from "react";
+import {deletePost} from "@/app/utils/deletePost";
 
 export default function Method() {
     const { name, role } = useAuth();
@@ -54,14 +59,36 @@ export default function Method() {
 
                     {post && (
                         <>
-                            {/* Tiêu đề có thể lấy từ post.title nếu muốn */}
-                            <h1 className="text-2xl font-bold text-center mb-8 text-[#FFD668]">
+                            <h1 className="text-2xl font-bold mb-8 text-[#FFD668]">
                                 {post.title}
                             </h1>
-                            <p>Đã vào đây. Nội dung có độ dài: {post.content.length}</p>
-                            {/* Render nội dung HTML từ CSDL */}
-                            {/* Component này sẽ xử lý các thẻ <img>, <span>, <h2>, v.v. */}
-                            <RenderHTMLContent content={post.content}/>
+                            {(role === "admin" || role === "teacher") && (
+                                <div className="absolute top-4 right-4">
+                                    <Menu>
+                                        <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
+                                            <MoreVertical className="w-5 h-5 text-[#FFC107]" />
+                                        </Menu.Button>
+                                        <Menu.Items
+                                            className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <Link
+                                                        href={`/static-post/edit/${post.id}`}
+                                                        className={`block w-full px-4 py-2 text-sm text-left ${
+                                                            active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
+                                                        }`}
+                                                    >
+                                                        Chỉnh sửa
+                                                    </Link>
+                                                )}
+                                            </Menu.Item>
+                                        </Menu.Items>
+                                    </Menu>
+                                </div>
+                            )}
+                            <div className="text-black">
+                                <RenderStaticHTMLContent content={post.content}/>
+                            </div>
                         </>
                     )}
                 </div>

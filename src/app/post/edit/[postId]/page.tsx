@@ -230,19 +230,16 @@ const EditPostPage = () => {
             });
 
             const updatePostPromise = fetch(`/api-v1/posts/update-post/${postId}`, {
-                method: "POST", // Hoặc "PUT" nếu bạn dùng PUT
+                method: "POST",
                 body: postFormData,
             });
 
-            // BƯỚC 2: Chạy song song và đợi TẤT CẢ hoàn thành
             const [updateImagesResponse, updatePostResponse] = await Promise.all([
                 updateImagesPromise,
                 updatePostPromise
             ]);
 
-            // BƯỚC 3: Xử lý kết quả của từng response
             if (!updateImagesResponse.ok) {
-                // Log lỗi nhưng không cần chặn người dùng
                 console.error("Lỗi cập nhật trạng thái ảnh!");
             }
 
@@ -250,23 +247,20 @@ const EditPostPage = () => {
                 let errorMessage = 'Lỗi không xác định khi cập nhật bài viết.';
                 const contentType = updatePostResponse.headers.get('content-type');
 
-                // Chỉ parse JSON nếu response thực sự là JSON
                 if (contentType && contentType.includes('application/json')) {
                     const errorData = await updatePostResponse.json();
                     errorMessage = errorData.error || JSON.stringify(errorData);
                 } else {
-                    // Nếu không phải JSON, đọc nó dưới dạng text
                     errorMessage = await updatePostResponse.text();
                 }
 
                 alert(`Lỗi cập nhật bài viết: ${errorMessage}`);
                 console.error("Update Post Error:", errorMessage);
-                return; // Dừng lại ở đây
+                return;
             }
 
-            // Nếu cả hai đều ổn (hoặc ít nhất là updatePost ổn)
             alert("Cập nhật bài viết thành công!");
-            router.push(`/`); // Hoặc router.push(`/posts/${postId}`) để xem lại bài viết
+            router.push(`/`);
 
         } catch (err: any) {
             console.error("Lỗi khi cập nhật bài viết:", err);
@@ -275,7 +269,6 @@ const EditPostPage = () => {
         }
     };
 
-    // Danh sách danh mục
     const categories = [
         { value: "", label: "Chọn danh mục" },
         { value: "artical-lessons", label: "Tiết học của con" },
@@ -363,7 +356,7 @@ const EditPostPage = () => {
                                     };
                                     reader.readAsDataURL(file);
                                 }
-                                e.target.value = ''; // Reset input
+                                e.target.value = '';
                             }}
                         />
 
@@ -402,7 +395,6 @@ const EditPostPage = () => {
                             <div className="border border-[#FFA552] rounded-lg">
                                 <div
                                     className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
-                                    {/* Toolbar giống hệt */}
                                     <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active font-bold' : ''} title="Bold"><span className="font-bold text-xl">B</span></button>
                                     <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active font-bold' : ''} title="Italic"><span className="italic text-xl">I</span></button>
                                     <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={editor.isActive('underline') ? 'is-active font-bold' : ''} title="Underline"><span className="underline text-xl">U</span></button>

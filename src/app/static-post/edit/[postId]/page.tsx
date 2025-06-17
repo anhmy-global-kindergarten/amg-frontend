@@ -20,11 +20,9 @@ import { Underline } from "@tiptap/extension-underline";
 import Highlight from '@tiptap/extension-highlight';
 import Youtube from '@tiptap/extension-youtube';
 import { usePostById } from "@/app/hooks/usePostById";
-import {useAuth} from "@/app/hooks/useAuth"; // Giữ lại hook của bạn
-
-// ===================================================================
-// BỘ EXTENSIONS GIỐNG HỆT TRANG CREATE
-// ===================================================================
+import {useAuth} from "@/app/hooks/useAuth";
+import {TextStyle} from "@tiptap/extension-text-style";
+import {Color} from "@tiptap/extension-color";
 
 const youtubeRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})(?:\S+)?/g;
 
@@ -75,22 +73,18 @@ const EditPostPage = () => {
     const router = useRouter();
     const postId = params?.postId as string;
 
-    // ✅ 1. Lấy dữ liệu bài viết hiện tại
     const { post, loading, error: fetchError } = usePostById(postId);
 
-    // ✅ 2. State giống hệt trang Create
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
     const [selectedImage, setSelectedImage] = useState<File | null>(null); // Ảnh minh họa MỚI
     const [imagePreview, setImagePreview] = useState<string | null>(null); // Preview ảnh minh họa
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [error, setError] = useState("");
-    // State cho việc thêm ảnh vào content
     const [originalFileName, setOriginalFileName] = useState<string>("");
     const [showCropModal, setShowCropModal] = useState(false);
     const [imageToCrop, setImageToCrop] = useState<string | null>(null);
 
-    // ✅ 3. Editor với bộ extensions đầy đủ
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ paragraph: false, heading: false, codeBlock: false, code: false }),
@@ -102,10 +96,13 @@ const EditPostPage = () => {
             TextAlign.configure({ types: ["heading", "paragraph", "youtube"] }),
             Underline,
             Highlight.configure({ multicolor: true }),
+            TextStyle,
+            Color.configure({
+            }),
             FloatingMenu.configure({ shouldShow: ({ editor }) => editor.view.hasFocus() && editor.state.selection.content().size > 0 }),
             CustomYoutube.configure({ controls: true, modestBranding: true, rel: 0 }),
         ],
-        content: "", // Sẽ được fill bằng useEffect
+        content: "",
         editorProps: {
             attributes: {
                 class: "min-h-[200px] rounded-lg border border-[#FFA552] p-4 focus:outline-none",
@@ -113,12 +110,22 @@ const EditPostPage = () => {
         },
     });
 
-    // ✅ 4. useEffect để điền dữ liệu vào form và editor khi có
+    const TEXT_COLORS = [
+        { name: 'Mặc định', color: '' },
+        { name: 'Đỏ', color: '#E03131' },
+        { name: 'Hồng', color: '#C2255C' },
+        { name: 'Tím', color: '#9C36B5' },
+        { name: 'Xanh đậm', color: '#1971C2' },
+        { name: 'Xanh dương', color: '#228BE6' },
+        { name: 'Xanh lá', color: '#37B24D' },
+        { name: 'Vàng', color: '#FFD668' },
+        { name: 'Cam', color: '#F76707' },
+    ];
+
     useEffect(() => {
         if (post && editor && !editor.isDestroyed) {
             setTitle(post.title);
             setCategory(post.category);
-            // Hiển thị ảnh minh họa cũ
             if (post.header_image) {
                 setImagePreview(post.header_image);
             }
@@ -130,7 +137,6 @@ const EditPostPage = () => {
 
     const { name, role } = useAuth();
 
-    // ✅ 5. Các hàm helper giống hệt trang Create
     function dataURLtoFile(dataUrl: string, filename: string): File | null {
         const arr = dataUrl.split(',');
         if (arr.length < 2) return null;
@@ -184,7 +190,7 @@ const EditPostPage = () => {
                 if (src) {
                     imageInfo.push({
                         url: src,
-                        style: style || '', // Lấy style, nếu không có thì là chuỗi rỗng
+                        style: style || '',
                     });
                 }
             }
@@ -195,13 +201,10 @@ const EditPostPage = () => {
 
     const handleValidateAndConfirm = () => {
         setError("");
-        if (!category) { setError("Vui lòng chọn danh mục."); return; }
-        if (!title.trim()) { setError("Vui lòng nhập tiêu đề."); return; }
         if (!editor?.getText().trim() && !editor?.getHTML().includes('<img') && !editor?.getHTML().includes('<iframe')) {
             setError("Vui lòng nhập nội dung.");
             return;
         }
-        // Ảnh minh họa không bắt buộc phải thay đổi khi edit
         setIsConfirmOpen(true);
     };
 
@@ -222,7 +225,6 @@ const EditPostPage = () => {
         }
 
         try {
-            // BƯỚC 1: Khởi tạo TẤT CẢ các promise MÀ KHÔNG AWAIT
             const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
@@ -230,19 +232,16 @@ const EditPostPage = () => {
             });
 
             const updatePostPromise = fetch(`/api-v1/posts/update-post/${postId}`, {
-                method: "POST", // Hoặc "PUT" nếu bạn dùng PUT
+                method: "POST",
                 body: postFormData,
             });
 
-            // BƯỚC 2: Chạy song song và đợi TẤT CẢ hoàn thành
             const [updateImagesResponse, updatePostResponse] = await Promise.all([
                 updateImagesPromise,
                 updatePostPromise
             ]);
 
-            // BƯỚC 3: Xử lý kết quả của từng response
             if (!updateImagesResponse.ok) {
-                // Log lỗi nhưng không cần chặn người dùng
                 console.error("Lỗi cập nhật trạng thái ảnh!");
             }
 
@@ -250,23 +249,20 @@ const EditPostPage = () => {
                 let errorMessage = 'Lỗi không xác định khi cập nhật bài viết.';
                 const contentType = updatePostResponse.headers.get('content-type');
 
-                // Chỉ parse JSON nếu response thực sự là JSON
                 if (contentType && contentType.includes('application/json')) {
                     const errorData = await updatePostResponse.json();
                     errorMessage = errorData.error || JSON.stringify(errorData);
                 } else {
-                    // Nếu không phải JSON, đọc nó dưới dạng text
                     errorMessage = await updatePostResponse.text();
                 }
 
                 alert(`Lỗi cập nhật bài viết: ${errorMessage}`);
                 console.error("Update Post Error:", errorMessage);
-                return; // Dừng lại ở đây
+                return;
             }
 
-            // Nếu cả hai đều ổn (hoặc ít nhất là updatePost ổn)
             alert("Cập nhật bài viết thành công!");
-            router.push(`/`); // Hoặc router.push(`/posts/${postId}`) để xem lại bài viết
+            router.push(`/`);
 
         } catch (err: any) {
             console.error("Lỗi khi cập nhật bài viết:", err);
@@ -334,7 +330,7 @@ const EditPostPage = () => {
                                     };
                                     reader.readAsDataURL(file);
                                 }
-                                e.target.value = ''; // Reset input
+                                e.target.value = '';
                             }}
                         />
 
@@ -377,7 +373,38 @@ const EditPostPage = () => {
                                     <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active font-bold' : ''} title="Bold"><span className="font-bold text-xl">B</span></button>
                                     <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active font-bold' : ''} title="Italic"><span className="italic text-xl">I</span></button>
                                     <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={editor.isActive('underline') ? 'is-active font-bold' : ''} title="Underline"><span className="underline text-xl">U</span></button>
-                                    <button onClick={() => editor.chain().focus().toggleHighlight({ color: '#FFD668' }).run()} className={editor.isActive('highlight', { color: '#FFD668' }) ? 'is-active bg-[#FFD668]' : ''} title="Highlight">Highlight</button>
+                                    <button
+                                        onClick={() => editor.chain().focus().toggleHighlight({color: '#FACBCC'}).run()}
+                                        className={editor.isActive('highlight', {color: '#FACBCC'}) ? 'is-active bg-[#FACBCC]' : ''}
+                                        title="Highlight">Highlight
+                                    </button>
+                                    {TEXT_COLORS.map((item) => (
+                                        <button
+                                            key={item.name}
+                                            onClick={() => {
+                                                if (item.color === '') {
+                                                    editor.chain().focus().unsetColor().run(); // Xóa màu
+                                                } else {
+                                                    editor.chain().focus().setColor(item.color).run();
+                                                }
+                                            }}
+                                            // Kiểm tra xem màu hiện tại có đang được active không
+                                            className={editor.isActive('textStyle', { color: item.color }) ? 'p-1 border-2 border-black rounded' : 'p-1 border-2 border-transparent rounded'}
+                                            title={item.name}
+                                            disabled={!editor.can().setColor(item.color)}
+                                        >
+                                            <div
+                                                style={{
+                                                    width: '16px',
+                                                    height: '16px',
+                                                    backgroundColor: item.color || 'transparent',
+                                                    border: item.color ? '1px solid #ccc' : '1px dashed #ccc',
+                                                }}
+                                            >
+                                                {item.color === '' && '✕'}
+                                            </div>
+                                        </button>
+                                    ))}
                                 </div>
                                 <EditorContent editor={editor} className="min-h-[200px] p-4 focus:outline-none"/>
                             </div>
