@@ -5,9 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
-import {signOut} from "next-auth/react";
 import {useAuth} from "@/app/hooks/useAuth";
 import React from 'react';
+import {router} from "next/client";
 
 const menuItems = [
     {
@@ -93,7 +93,10 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     const [deepSubmenuPositions, setDeepSubmenuPositions] = useState<Record<string, SubmenuPosition>>({});
     const submenuRefs = useRef<(HTMLDivElement | null)[]>([]);
     const deepSubmenuRefs = useRef<Record<string, HTMLUListElement | null>>({});
-
+    const handleLogout = () => {
+        localStorage.removeItem("user");
+        window.location.href = "/";
+    };
     const handleToggleMenu = () => {
         setIsOpen(!isOpen);
         setOpenIndex(null);
@@ -121,7 +124,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     };
 
     const { name: userName, role: userRole } = useAuth();
-
+    console.log("User Info:", { userName, userRole });
     const AuthButtons = ({ isMobile = false }) => (
         <div className={isMobile ? "flex flex-col gap-2" : "flex items-center gap-4"}>
             {/* Các nút chỉ hiển thị cho admin hoặc teacher */}
@@ -136,7 +139,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                 </>
             )}
             <button
-                onClick={() => signOut({ callbackUrl: "/" })}
+                onClick={() => handleLogout()}
                 className="w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-semibold"
             >
                 Đăng xuất

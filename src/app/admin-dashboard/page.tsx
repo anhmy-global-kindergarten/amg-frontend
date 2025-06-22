@@ -28,9 +28,9 @@ export default function AdminDashboard() {
                 🎓 Bảng điều khiển Admin
             </h1>
 
-            <div className="grid gap-6 md:grid-cols-2">
+            {/*<div className="grid gap-6 md:grid-cols-2">
                 <Charts />
-            </div>
+            </div>*/}
 
             <div className="mt-10">
                 <h2 className="text-xl font-semibold text-blue-800 mb-4">👤 Quản lý người dùng</h2>

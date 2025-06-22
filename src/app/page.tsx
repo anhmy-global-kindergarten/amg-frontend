@@ -6,6 +6,7 @@ import HeaderMenu from "@/components/HeaderMenu";
 import RegisterClassModal from "@/modals/RegisterClassModal";
 import {useEffect, useState} from 'react';
 import { FaArrowUp } from "react-icons/fa";
+import {router} from "next/client";
 
 export default function LandingPage() {
     const [isMobile, setIsMobile] = useState(false);
