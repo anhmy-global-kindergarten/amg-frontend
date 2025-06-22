@@ -113,11 +113,11 @@ const EditPostPage = () => {
     const TEXT_COLORS = [
         { name: 'Mặc định', color: '' },
         { name: 'Đỏ', color: '#E03131' },
-        { name: 'Hồng', color: '#C2255C' },
+        { name: 'Hồng', color: '#F6ADCD' },
         { name: 'Tím', color: '#9C36B5' },
         { name: 'Xanh đậm', color: '#1971C2' },
-        { name: 'Xanh dương', color: '#228BE6' },
-        { name: 'Xanh lá', color: '#37B24D' },
+        { name: 'Xanh dương', color: '#7ED3F7' },
+        { name: 'Xanh lá', color: '#BFD730' },
         { name: 'Vàng', color: '#FFD668' },
         { name: 'Cam', color: '#F76707' },
     ];

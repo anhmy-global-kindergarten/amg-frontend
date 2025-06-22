@@ -1,7 +1,18 @@
+'use client';
+/* eslint-disable */
+
 import Image from "next/image";
 import Link from "next/link";
+import {useSinglePostByCategory} from "@/app/hooks/useSinglePostByCategory";
+import RenderStaticHTMLContent from "@/app/utils/getStaticPageContent";
+import {Menu} from "@headlessui/react";
+import {MoreVertical} from "lucide-react";
+import React from "react";
+import {useAuth} from "@/app/hooks/useAuth";
 
-export default function Facilities() {
+export default function ValuePage() {
+    const { name, role } = useAuth();
+    const { post, loading, error } = useSinglePostByCategory('value');
     return (
         <div className="relative min-h-screen bg-[#FFFFFF] p-8 flex flex-col items-center overflow-hidden">
             {/* Background decor */}
@@ -37,51 +48,46 @@ export default function Facilities() {
                 </div>
                 {/* Title */}
                 <div className="max-w-4xl w-full ">
-                    <p className="text-xl mb-8 text-black z-20">
-                        TRIẾT LÝ GIÁO DỤC HỆ THỐNG MẦM NON AMG KINDERGARTEN
-                    </p>
-                    <br/>
+                    {loading && (
+                        <p className="text-center text-gray-600 py-10">Đang tải nội dung...</p>
+                    )}
 
-                    <h2 className="text-[#7ED3F7] text-lg mb-6">
-                        TÍNH HOẠT NGÔN
-                    </h2>
-                    <br/>
-                    <p className="text-base mb-8 text-black z-20">
-                        Chúng tôi quan tâm đến sự phát triển thể chất, tính cách của từng trẻ. Đặc biệt lấy ngôn ngữ làm
-                        công cụ kết nối để con trẻ thể hiện cảm xúc, cá tính; cũng là cầu nối để người lớn có thể cảm
-                        nhận, đồng hành cùng con một cách tốt nhất trên hành trình giáo dục mầm non.
-                    </p>
+                    {error && (
+                        <p className="text-center text-red-500 py-10">Lỗi: {error}</p>
+                    )}
 
-
-                    <br/>
-                    <h2 className="text-[#BFD730] text-lg mb-6">
-                        SỰ TÔN TRỌNG
-                    </h2>
-                    <br/>
-                    <p className="text-base mb-8 text-black z-20">
-                        Trẻ em có quyền được phát triển cá tính cá nhân phù hợp. Vì vậy, việc lắng nghe và đồng cảm với
-                        cảm xúc của trẻ là một trong những chìa khoá quan trọng. AMG luôn tạo ra cơ hội để trẻ có thể
-                        thể hiện cá tính, quan điểm, cảm xúc cá nhân một cách tự nhiên nhất.
-                    </p>
-                    <br/>
-
-                    <h2 className="text-[#FFD668] text-lg mb-6">
-                        SỰ TIN CẬY
-                    </h2>
-                    <br/>
-                    <p className="text-base mb-8 text-black z-20">
-                        Sự tin cậy được xây dựng dựa trên sự tôn trọng và chia sẻ trách nhiệm với nhau. Khi tôn trọng và tin cậy, trẻ sẽ tự do khám phá, thử nghiệm và dễ thích nghi với môi trường xung quanh.
-                    </p>
-                    <br/>
-
-                    <h2 className="text-[#F6ADCD] text-lg mb-6">
-                        DUY TRÌ NĂNG LƯỢNG TÍCH CỰC
-                    </h2>
-                    <br/>
-                    <p className="text-base mb-8 text-black z-20">
-                        AMG nỗ lực tạo ra các hoạt động truyền cảm hứng, thúc đẩy tinh thần, tạo thói quen tốt cho trẻ để mỗi ngày tới trường đều là những ngày mang đầy năng lượng tích cực. Từ đó, điều này sẽ là tiền đề cho sự phát triển và hình thành những cá thể năng động và có ích cho xã hội
-                    </p>
-                    <br/>
+                    {post && (
+                        <div className="prose prose-lg max-w-none text-black">
+                            <h1 className="text-2xl font-bold text-center mb-8 text-[#FFD668]">
+                                {post.title}
+                            </h1>
+                            {(role === "admin" || role === "teacher") && (
+                                <div className="absolute top-4 right-4">
+                                    <Menu>
+                                        <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
+                                            <MoreVertical className="w-5 h-5 text-[#FFC107]" />
+                                        </Menu.Button>
+                                        <Menu.Items
+                                            className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <Link
+                                                        href={`/static-post/edit/${post.id}`}
+                                                        className={`block w-full px-4 py-2 text-sm text-left ${
+                                                            active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
+                                                        }`}
+                                                    >
+                                                        Chỉnh sửa
+                                                    </Link>
+                                                )}
+                                            </Menu.Item>
+                                        </Menu.Items>
+                                    </Menu>
+                                </div>
+                            )}
+                            <RenderStaticHTMLContent content={post.content} />
+                        </div>
+                    )}
                 </div>
             </div>
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import UserTable from './components/UserTable';
 import RegisterTable from './components/RegisterTable';
 import Charts from './components/Charts';

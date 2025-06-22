@@ -1,12 +1,13 @@
 'use client';
 /* eslint-disable */
-import { useEffect, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
 import {signOut} from "next-auth/react";
 import {useAuth} from "@/app/hooks/useAuth";
+import React from 'react';
 
 const menuItems = [
     {
@@ -20,7 +21,7 @@ const menuItems = [
             { title: 'Thông điệp và giá trị cốt lõi', href: '/value' },
             { title: 'Phương pháp giáo dục', href: '/method' },
             { title: 'Cơ sở vật chất', href: '/facilities' },
-            { title: 'Nội quy An toàn trường học AMG', href: '#' },
+            { title: 'Nội quy An toàn trường học AMG', href: '/rules' },
         ],
     },
     {
@@ -40,10 +41,11 @@ const menuItems = [
             { title: 'Sự kiện AMG', href: '/events' },
             { title: 'Tuyển dụng', href: '/recruitments' },
             {
-                title: 'Private policy',
+                title: 'Privacy policy',
                 submenu: [
-                    { title: 'Chính sách bảo mật', href: '#' },
-                    { title: 'Điều khoản sử dụng', href: '#' },
+                    { title: 'Privacy policy 1', href: '/privacy/1' },
+                    { title: 'Privacy policy 2', href: '/privacy/2' },
+                    { title: 'AMG Management - Privacy policy', href: '/privacy/all' },
                 ],
             },
         ],
@@ -60,7 +62,15 @@ const menuItems = [
         title: 'Tuyển sinh',
         submenu: [
             { title: 'Thông tin tuyển sinh', href: '/admissions' },
-            { title: 'Quy định tài chính', href: '/financial-regulations' },
+            {
+                title: 'Quy định tài chính',
+                submenu: [
+                    { title: 'Quy định tài chính \nAMG Kindergarten', href: '/financial-regulations' },
+                    { title: 'Biểu phí AMG cơ sở \nHàm Nghi', href: '/financial-regulations/ham-nghi' },
+                    { title: 'Biểu phí AMG cơ sở \nDuy Tân', href: '/financial-regulations/duy-tan' },
+                    { title: 'Biểu phí AMG cơ sở \nEcopark', href: '/financial-regulations/ecopark' },
+                ],
+            },
         ],
     },
     {
@@ -73,10 +83,16 @@ type HeaderMenuProps = {
     isAuthenticated: boolean;
 };
 
+type SubmenuPosition = 'left' | 'right';
+
 export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+
+    const [deepSubmenuPositions, setDeepSubmenuPositions] = useState<Record<string, SubmenuPosition>>({});
+    const submenuRefs = useRef<(HTMLDivElement | null)[]>([]);
+    const deepSubmenuRefs = useRef<Record<string, HTMLUListElement | null>>({});
 
     const handleToggleMenu = () => {
         setIsOpen(!isOpen);
@@ -138,6 +154,26 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
             Đăng nhập
         </Link>
     );
+
+    const calculateDeepSubmenuPosition = (parentIndex: number, subIndex: number) => {
+        const key = `${parentIndex}-${subIndex}`;
+        const deepSubmenuElement = deepSubmenuRefs.current[key];
+        const parentLiElement = deepSubmenuElement?.closest('li.group');
+
+        if (deepSubmenuElement && parentLiElement) {
+            const rect = deepSubmenuElement.getBoundingClientRect();
+            const parentRect = parentLiElement.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+
+            const estimatedRightEdge = parentRect.right + rect.width;
+
+            if (estimatedRightEdge > viewportWidth && parentRect.left - rect.width > 0) {
+                setDeepSubmenuPositions(prev => ({ ...prev, [key]: 'left' }));
+            } else {
+                setDeepSubmenuPositions(prev => ({ ...prev, [key]: 'right' }));
+            }
+        }
+    };
 
     return (
         <div className="relative z-50">
@@ -290,8 +326,9 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                             )}
                                         </button>
                                         <AnimatePresence>
-                                            {openIndex === index && (
+                                            {openIndex === index && hasSubmenu && (
                                                 <motion.div
+                                                    ref={el => { submenuRefs.current[index] = el; }}
                                                     initial={{ opacity: 0, y: -5 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     exit={{ opacity: 0, y: -5 }}
@@ -300,21 +337,34 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                 >
                                                     <ul className="py-2">
                                                         {item.submenu?.map((sub, subIdx) => (
-                                                            <li key={subIdx} className="relative group">
+                                                            <li
+                                                                key={subIdx}
+                                                                className="relative group"
+                                                                onMouseEnter={() => {
+                                                                    if ('submenu' in sub) {
+                                                                        setTimeout(() => calculateDeepSubmenuPosition(index, subIdx), 0);
+                                                                    }
+                                                                }}
+                                                            >
                                                                 {'submenu' in sub ? (
                                                                     <>
-                                    <span className="block px-4 py-2 hover:bg-[#FFE5E5] transition cursor-pointer flex items-center">
-                                      {sub.title}
-                                        <ChevronRightIcon className="ml-2 h-4 w-4 text-gray-600" />
-                                    </span>
-                                                                        <ul className="absolute top-0 left-full mt-0 ml-1 w-56 bg-white shadow-lg rounded-xl border z-50 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-0 transition duration-200 translate-x-2 pointer-events-none group-hover:pointer-events-auto">
+                                                                        <span className="block px-4 py-2 hover:bg-[#FFE5E5] transition cursor-pointer flex items-center justify-between">
+                                                                          {sub.title}
+                                                                            <ChevronRightIcon className="ml-auto h-4 w-4 text-gray-600" />
+                                                                        </span>
+                                                                        <ul
+                                                                            ref={el => {deepSubmenuRefs.current[`${index}-${subIdx}`] = el;}}
+                                                                            className={`absolute top-0 mt-0 w-64 bg-white shadow-lg rounded-xl border z-50 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-0 transition duration-200 pointer-events-none group-hover:pointer-events-auto
+                                                                                ${deepSubmenuPositions[`${index}-${subIdx}`] === 'left' ? 'right-full mr-1' : 'left-full ml-1'} 
+                                                                            `}>
                                                                             {sub.submenu?.map((deep, deepIdx) => (
                                                                                 <li key={deepIdx}>
                                                                                     <Link
                                                                                         href={deep.href}
                                                                                         className="block px-4 py-2 hover:bg-[#FFE5E5] transition"
+                                                                                        onClick={() => setOpenIndex(null)}
                                                                                     >
-                                                                                        {deep.title}
+                                                                                        {deep.title.split('\n').map((line, i) => <React.Fragment key={i}>{line}<br/></React.Fragment>)}
                                                                                     </Link>
                                                                                 </li>
                                                                             ))}
@@ -324,8 +374,9 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                     <Link
                                                                         href={sub.href}
                                                                         className="block px-4 py-2 hover:bg-[#FFE5E5] transition"
+                                                                        onClick={() => setOpenIndex(null)}
                                                                     >
-                                                                        {sub.title}
+                                                                        {sub.title.split('\n').map((line, i) => <React.Fragment key={i}>{line}<br/></React.Fragment>)}
                                                                     </Link>
                                                                 )}
                                                             </li>

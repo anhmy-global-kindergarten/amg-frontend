@@ -2,32 +2,16 @@
 /* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
+import {useSinglePostByCategory} from "@/app/hooks/useSinglePostByCategory";
+import RenderStaticHTMLContent from "@/app/utils/getStaticPageContent";
+import {useAuth} from "@/app/hooks/useAuth";
 import {Menu} from "@headlessui/react";
 import {MoreVertical} from "lucide-react";
-import RenderStaticHTMLContent from "@/app/utils/getStaticPageContent";
 import React from "react";
-import {useAuth} from "@/app/hooks/useAuth";
-import {useSinglePostByCategory} from "@/app/hooks/useSinglePostByCategory";
-import {useParams} from "next/navigation";
 
-
-const Page = () => {
-    const params = useParams();
-    const className = params?.className as string;
-
+export default function Rule() {
     const { name, role } = useAuth();
-    const { post, loading, error } = useSinglePostByCategory(className ? `schedule-${className}` : "");
-
-    const classColors: Record<string, string> = {
-        "international": "#8ED4DD",
-        "blueberry": "#BF97C5",
-        "mango": "#F4E97A",
-        "lemon": "#BEDC94",
-        "cherry": "#ECBFC4",
-    };
-
-    const classColor = classColors[className] || "#87CEFA";
-
+    const { post, loading, error } = useSinglePostByCategory('rules');
     return (
         <div className="relative min-h-screen bg-[#FFFFFF] p-8 flex flex-col items-center overflow-hidden">
             {/* Background decor */}
@@ -48,7 +32,7 @@ const Page = () => {
                             Trang chủ
                         </Link>
                         <span>/</span>
-                        <span className="text-[#FFC107] font-medium">Tin tức sự kiện</span>
+                        <span className="text-[#FFC107] font-medium">Nội quy an toàn</span>
                     </div>
                 </div>
                 {/* Logo */}
@@ -62,60 +46,47 @@ const Page = () => {
                     />
                 </div>
                 {/* Title */}
-                <div className="text-center mb-10">
-                    <h1 className="text-2xl font-semibold text-[#558FCB] bg-[#FACBCC]">
-                        Hành trình một ngày của bé yêu tại AMG Kindergarten
-                    </h1>
-                    <h2
-                        className="text-4xl font-bold mt-2 uppercase tracking-wider inline-block px-2 py-1 rounded bg-[#FACBCC]"
-                        style={{color: classColor}}
-                    >
-                        {className === "international"
-                            ? "international class"
-                            : className.replace("-", " ")
-                        }
-                    </h2>
+                <div className="max-w-4xl w-full z-10">
+                    {loading && (
+                        <p className="text-center text-gray-600 py-10">Đang tải nội dung...</p>
+                    )}
 
-                </div>
-                {loading && (
-                    <p className="text-center text-gray-600 py-10">Đang tải nội dung...</p>
-                )}
+                    {error && (
+                        <p className="text-center text-red-500 py-10">Lỗi: {error}</p>
+                    )}
 
-                {error && (
-                    <p className="text-center text-red-500 py-10">Lỗi: {error}</p>
-                )}
-
-                {post && (
-                    <>
-                        {(role === "admin" || role === "teacher") && (
-                            <div className="absolute top-4 right-4">
-                                <Menu>
-                                    <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
-                                        <MoreVertical className="w-5 h-5 text-[#FFC107]" />
-                                    </Menu.Button>
-                                    <Menu.Items
-                                        className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
-                                        <Menu.Item>
-                                            {({ active }) => (
-                                                <Link
-                                                    href={`/static-post/edit/${post.id}`}
-                                                    className={`block w-full px-4 py-2 text-sm text-left ${
-                                                        active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
-                                                    }`}
-                                                >
-                                                    Chỉnh sửa
-                                                </Link>
-                                            )}
-                                        </Menu.Item>
-                                    </Menu.Items>
-                                </Menu>
+                    {post && (
+                        <>
+                            {(role === "admin" || role === "teacher") && (
+                                <div className="absolute top-4 right-4">
+                                    <Menu>
+                                        <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
+                                            <MoreVertical className="w-5 h-5 text-[#FFC107]" />
+                                        </Menu.Button>
+                                        <Menu.Items
+                                            className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
+                                            <Menu.Item>
+                                                {({ active }) => (
+                                                    <Link
+                                                        href={`/static-post/edit/${post.id}`}
+                                                        className={`block w-full px-4 py-2 text-sm text-left ${
+                                                            active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
+                                                        }`}
+                                                    >
+                                                        Chỉnh sửa
+                                                    </Link>
+                                                )}
+                                            </Menu.Item>
+                                        </Menu.Items>
+                                    </Menu>
+                                </div>
+                            )}
+                            <div className="prose prose-lg max-w-none text-black">
+                                <RenderStaticHTMLContent content={post.content} />
                             </div>
-                        )}
-                        <div className="prose prose-lg max-w-none text-black">
-                            <RenderStaticHTMLContent content={post.content} />
-                        </div>
-                    </>
-                )}
+                        </>
+                    )}
+                </div>
             </div>
 
 
@@ -193,5 +164,3 @@ const Page = () => {
         </div>
     );
 };
-
-export default Page;
