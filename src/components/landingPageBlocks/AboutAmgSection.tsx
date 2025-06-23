@@ -66,14 +66,7 @@ export default function AboutAmgSection({ isMobile, data }: AboutAmgSectionProps
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                         {/* Left - Text block */}
                         <div className="rounded-xl text-base leading-7 text-black space-y-4">
-                            {/*
-                                Để render HTML an toàn và có style từ `prose`, bạn nên dùng
-                                component RenderStaticHTMLContent nếu `introHtml` là HTML sạch.
-                                Đoạn HTML bạn cung cấp có nhiều `<span>` với `bg-[#FACBCC]`,
-                                cách tốt nhất là áp dụng nền đó cho div cha và chỉ dùng span màu cho text.
-                            */}
-                            {/* <RenderStaticHTMLContent content={introHtml} /> */}
-                            <div className="rounded-xl bg-[#FACBCC] p-4 text-justify"> {/* Áp dụng nền và padding ở đây */}
+                            <div className="rounded-xl p-4 text-justify">
                                 {introHtml.includes('<') ? <RenderStaticHTMLContent content={introHtml} /> : <p className="text-justify">{introHtml}</p>}
                             </div>
                         </div>
@@ -86,7 +79,6 @@ export default function AboutAmgSection({ isMobile, data }: AboutAmgSectionProps
                         </div>
                     </div>
                 </div>
-                {/* Class Gallery Section - Component này tự quản lý data của nó */}
                 <ClassGallery/>
             </div>
         </section>

@@ -31,19 +31,7 @@ const initialBlocksData: LandingPageBlock[] = [
     {
         id: 'block-banner-1',
         type: 'banner',
-        data: {
-            titleLine1: "Đăng Ký Ngay",
-            titleLine2: "Ưu Đãi Hấp Dẫn",
-            yearText: "Năm học 2024-2025",
-            descriptionMobileLine1: "Mầm non ABC",
-            descriptionMobileLine2: "Chất lượng hàng đầu",
-            descriptionMobileLine3: "Môi trường thân thiện",
-            descriptionDesktopLine1: "Nơi Ươm Mầm Tài Năng Việt",
-            descriptionDesktopLine2: "Cho một tương lai tươi sáng",
-            buttonImageUrl: "/banner/button_register_default.png",
-            kidsImageUrl: "/banner/banner_kids_default.png",
-            triangleImageUrl: "/banner/triangle_default.png"
-        }
+        data: {}
     },
     {
         id: 'block-photoGallery-1',
@@ -53,7 +41,7 @@ const initialBlocksData: LandingPageBlock[] = [
     {
         id: 'block-aboutAmg-1',
         type: 'aboutAmg',
-        data: { /* ... dữ liệu about amg đầy đủ, bao gồm cả introHtml sạch ... */ }
+        data: {}
     },
     {
         id: 'block-mealGallery-1',
@@ -95,23 +83,7 @@ const initialBlocksData: LandingPageBlock[] = [
     {
         id: 'block-testimonialFooter-1',
         type: 'testimonialFooter',
-        data: {
-            // testimonialsData sẽ được quản lý bởi TestimonialCarousel,
-            // nhưng bạn có thể truyền vào nếu muốn tùy chỉnh từ DB
-            decorCloudUrl1: "/banner/icon_cloud.png", // Vị trí có thể cần điều chỉnh
-            decorElephantUrl1: "/icons/icon_elephant3.png",
-            decorCloudUrl2: "/banner/icon_cloud.png",
-            systemInfo: { /* ... thông tin hệ thống ... */ },
-            fanpageThumbnailUrl: "https://img.youtube.com/vi/wR0SAVlV8xM/hqdefault.jpg",
-            fanpageLink: "https://www.facebook.com/yourfanpage", // Đổi link
-            youtubeThumbnailUrl: "https://img.youtube.com/vi/LKDxvXi21GI/hqdefault.jpg",
-            youtubeLink: "https://www.youtube.com/yourchannel", // Đổi link
-            linkColumns: [
-                { title: "LIÊN KẾT", items: [ {text:"Trang chủ", href:"/"}, /* ... */ ] },
-                { title: "HỖ TRỢ", items: [ {text:"Trang chủ", href:"/"}, /* ... */ ] }
-            ],
-            decorElephantFooterUrl: "/icons/icon_elephant_footer.png"
-        }
+        data: {}
     },
 ];
 
@@ -390,6 +362,26 @@ export default function LandingPage() {
                     </div>
                 </div>
             )}
+            {/* Header */}
+            <header className={`relative w-full ${isMobile ? 'h-[170px]' : 'h-[330px]'}`}>
+                <Image
+                    src="/banner/cloud_banner.png"
+                    alt="Header Cloud"
+                    fill
+                    className="object-cover z-0"
+                    priority
+                />
+                {/* Logo */}
+                <div className={`absolute top-4 z-10 ${isMobile ? 'left-1/2 -translate-x-1/2' : 'left-4'}`}>
+                    <Image src="/banner/logo.png" alt="Logo AMG" width={120} height={80}/>
+                </div>
+
+                {/* Nav Desktop */}
+                <HeaderMenu isAuthenticated={isAuthenticated}/>
+
+                {/* Nav Mobile (hamburger optional) */}
+
+            </header>
             {/* Header */}
             <DragDropContext onDragEnd={onDragEnd}>
                 <Droppable droppableId="landingPageDroppable" isDropDisabled={!isEditMode} isCombineEnabled={!isEditMode} ignoreContainerClipping={false}>

@@ -42,36 +42,36 @@ interface FooterData {
 
 interface TestimonialAndFooterSectionProps {
     isMobile: boolean;
-    data: FooterData;
+    data: FooterData | undefined;
     // testimonials có thể được truyền riêng hoặc là một phần của data
     // testimonialsData?: Testimonial[]; // Nếu TestimonialCarousel nhận props
 }
 
 export default function TestimonialAndFooterSection({ isMobile, data }: TestimonialAndFooterSectionProps) {
-    const systemInfo = data.systemInfo || {
-        title: data.systemInfo?.title || "HỆ THỐNG AMG",
-        brandName: data.systemInfo?.brandName || "ANHMY GLOBAL KINDERGARTEN",
-        addresses: data.systemInfo?.addresses || [ // Đảm bảo addresses luôn là mảng
+    const systemInfo = data?.systemInfo || {
+        title: data?.systemInfo?.title || "HỆ THỐNG AMG",
+        brandName: data?.systemInfo?.brandName || "ANHMY GLOBAL KINDERGARTEN",
+        addresses: data?.systemInfo?.addresses || [ // Đảm bảo addresses luôn là mảng
             "Cơ sở 1: No B18-06, Vinhomes Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.",
             "Cơ sở 2: No B18-05A, Vinhomes Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.",
             "Cơ sở 3: Tầng 2, Tòa nhà Dreamland Bonanza, 23 Duy Tân, Cầu Giấy, Hà Nội",
             "Cơ sở 4: S301, Sky 3, Aquabay, Khu đô thị Ecopark, Hưng Yên"
         ],
-        hotline: data.systemInfo?.hotline || "0972999201",
-        email: data.systemInfo?.email || "anhmykindergarten@gmail.com",
-        youtube: data.systemInfo?.youtube || "AMG - AnhMy Global Kindergarten"
+        hotline: data?.systemInfo?.hotline || "0972999201",
+        email: data?.systemInfo?.email || "anhmykindergarten@gmail.com",
+        youtube: data?.systemInfo?.youtube || "AMG - AnhMy Global Kindergarten"
     };
 
     const fanpage = {
-        thumb: data.fanpageThumbnailUrl || "https://img.youtube.com/vi/wR0SAVlV8xM/hqdefault.jpg",
-        link: data.fanpageLink || "https://www.youtube.com/watch?v=wR0SAVlV8xM" // Placeholder
+        thumb: data?.fanpageThumbnailUrl || "https://img.youtube.com/vi/wR0SAVlV8xM/hqdefault.jpg",
+        link: data?.fanpageLink || "https://www.youtube.com/watch?v=wR0SAVlV8xM" // Placeholder
     };
     const youtubeChannel = {
-        thumb: data.youtubeThumbnailUrl || "https://img.youtube.com/vi/LKDxvXi21GI/hqdefault.jpg",
-        link: data.youtubeLink || "https://www.youtube.com/watch?v=LKDxvXi21GI" // Placeholder
+        thumb: data?.youtubeThumbnailUrl || "https://img.youtube.com/vi/LKDxvXi21GI/hqdefault.jpg",
+        link: data?.youtubeLink || "https://www.youtube.com/watch?v=LKDxvXi21GI" // Placeholder
     };
 
-    const linkColumns = (data.linkColumns || [
+    const linkColumns = (data?.linkColumns || [
         { title: "LIÊN KẾT", items: [{text:"Trang chủ", href:"/"}, {text:"Giới thiệu"}, {text:"Hệ thống lớp học"}, {text:"Tin tức sự kiện"}, {text:"Thư viện AMG"}, {text:"Tuyển sinh"}, {text:"Liên hệ"}] },
         { title: "HỖ TRỢ", items: [{text:"Trang chủ", href:"/"}, {text:"Giới thiệu"}, {text:"Hệ thống lớp học"}, {text:"Tin tức sự kiện"}, {text:"Thư viện AMG"}, {text:"Tuyển sinh"}, {text:"Liên hệ"}] }
     ]).map(col => ({
@@ -79,10 +79,10 @@ export default function TestimonialAndFooterSection({ isMobile, data }: Testimon
         items: col.items || []
     }));
 
-    const decorCloud1 = data.decorCloudUrl1 || "/banner/icon_cloud.png";
-    const decorElephant1 = data.decorElephantUrl1 || "/icons/icon_elephant3.png";
-    const decorCloud2 = data.decorCloudUrl2 || "/banner/icon_cloud.png";
-    const decorElephantFooter = data.decorElephantFooterUrl || "/icons/icon_elephant_footer.png";
+    const decorCloud1 = data?.decorCloudUrl1 || "/banner/icon_cloud.png";
+    const decorElephant1 = data?.decorElephantUrl1 || "/icons/icon_elephant3.png";
+    const decorCloud2 = data?.decorCloudUrl2 || "/banner/icon_cloud.png";
+    const decorElephantFooter = data?.decorElephantFooterUrl || "/icons/icon_elephant_footer.png";
 
 
     return (
