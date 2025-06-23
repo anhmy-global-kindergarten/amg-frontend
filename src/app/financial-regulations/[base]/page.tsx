@@ -32,7 +32,7 @@ export default function Facilities() {
                             Trang chủ
                         </Link>
                         <span>/</span>
-                        <span className="text-[#FFC107] font-medium">Cơ sở vật chất</span>
+                        <span className="text-[#FFC107] font-medium">Quy định tài chính</span>
                     </div>
                 </div>
                 {/* Logo */}

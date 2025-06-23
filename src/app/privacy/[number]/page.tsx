@@ -37,7 +37,7 @@ const Page = () => {
                             Trang chủ
                         </Link>
                         <span>/</span>
-                        <span className="text-[#FFC107] font-medium">Tin tức sự kiện</span>
+                        <span className="text-[#FFC107] font-medium">Privacy policy</span>
                     </div>
                 </div>
                 {/* Logo */}

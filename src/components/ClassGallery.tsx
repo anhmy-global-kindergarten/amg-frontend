@@ -52,12 +52,12 @@ export default function ClassGallery() {
                 <Image src="/info/amg_box3.png" alt="Tab 3" width={isMobile ? 120 : 300} height={isMobile ? 70 : 100}
                        style={{height: isMobile ? '45px' : ''}} className="mb-4"/>
             </div>
-            <div>
+            <div className="flex justify-end">
                 <Image src="/icons/icon_elephant1.png" alt="" width={isMobile ? 60 : 100} height={isMobile ? 30 : 50}
-                       className="absolute right-0 top-[1200px]  lg:right-80 lg:top-[800px] z-99"/>
+                       className="right-0 top-[1200px] lg:right-80 lg:top-[800px] z-99"/>
             </div>
             {/* Carousel Section */}
-            <div className="mt-8 overflow-hidden">
+            <div className="overflow-hidden">
                 <div
                     ref={containerRef}
                     className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-2 ml-2 select-none cursor-grab active:cursor-grabbing"

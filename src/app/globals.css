@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+@layer components {
+  .prose ul > li > p:first-child,
+  .prose ol > li > p:first-child {
+    @apply mt-0 inline;
+  }
+}
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
