@@ -8,17 +8,27 @@ import {FaPlus, FaTrash} from "react-icons/fa";
 
 interface ClassGalleryProps {
     title: string;
-    box1Src: string;
-    box2Src: string;
-    box3Src: string;
+    boxes: { imageSrc: string; altText: string; }[];
     items: { name: string; imageSrc: string; }[];
     isEditMode: boolean;
     onSave: (id: string, value: string) => void;
-    onAddItem: () => void;
-    onDeleteItem: (index: number) => void;
+    onAddItemClass: () => void;
+    onDeleteItemClass: (index: number) => void;
+    onAddBox: () => void;
+    onDeleteBox: (index: number) => void;
 }
 
-export default function ClassGallery({ title, box1Src, box2Src, box3Src, items, isEditMode, onSave, onAddItem, onDeleteItem }: ClassGalleryProps) {
+export default function ClassGallery({
+                                         title,
+                                         boxes = [],
+                                         items = [],
+                                         isEditMode,
+                                         onSave,
+                                         onAddItemClass,
+                                         onDeleteItemClass,
+                                         onAddBox,
+                                         onDeleteBox
+                                     }: ClassGalleryProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const [startX, setStartX] = useState(0);
@@ -50,6 +60,9 @@ export default function ClassGallery({ title, box1Src, box2Src, box3Src, items, 
     const handleMouseUp = () => setIsDragging(false);
     const handleMouseLeave = () => setIsDragging(false);
 
+    const fixedBoxes = boxes.slice(0, 3);
+    const flexibleBoxes = boxes.slice(3);
+
     return (
         <div className="w-full max-w-9xl mx-auto text-center">
             <EditableText
@@ -59,30 +72,105 @@ export default function ClassGallery({ title, box1Src, box2Src, box3Src, items, 
                 isEditMode={isEditMode}
                 tag="h2"
                 className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
-                style={{ textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white' }}
+                style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}
             />
 
+            <div className="w-full bg-[#fff7cc] py-4 px-2">
+                <div className="flex flex-nowrap md:flex-wrap gap-3 items-center justify-center">
+                    {fixedBoxes.map((box, index) => (
+                        <div key={index} className="relative group flex-shrink-0">
+                            <EditableImage
+                                id={`classGalleryBox_${index}_imageSrc`}
+                                initialSrc={box.imageSrc}
+                                altText={box.altText}
+                                onSave={onSave}
+                                isEditMode={isEditMode}
+                                width={isMobile ? 120 : 300}
+                                height={isMobile ? 45 : 100}
+                            />
+                            {isEditMode && (
+                                <button
+                                    onClick={() => onDeleteBox(index)}
+                                    className="absolute -top-2 -right-2 text-white bg-red-600 hover:bg-red-700 w-6 h-6 flex items-center justify-center rounded-full shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                                    title="Xóa cơ sở này"
+                                >
+                                    <FaTrash size={12}/>
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                    {isEditMode && boxes.length < 3 && (
+                        <div className="flex-shrink-0">
+                            <button
+                                onClick={onAddBox}
+                                style={{width: isMobile ? '120px' : '300px', height: isMobile ? '45px' : '100px'}}
+                                className="border-2 border-dashed border-gray-400 text-gray-400 hover:bg-gray-100 hover:border-gray-500 rounded-lg flex items-center justify-center"
+                                title="Thêm cơ sở mới"
+                            >
+                                <FaPlus size={24}/>
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                {(flexibleBoxes.length > 0 || (isEditMode && boxes.length >= 3)) && (
+                    <div className="mt-3 flex flex-wrap gap-3 items-center justify-center">
+                        {flexibleBoxes.map((box, index) => (
+                            <div key={index + 3} className="relative group">
+                                <EditableImage
+                                    id={`classGalleryBox_${index + 3}_imageSrc`}
+                                    initialSrc={box.imageSrc}
+                                    altText={box.altText}
+                                    onSave={onSave}
+                                    isEditMode={isEditMode}
+                                    width={isMobile ? 120 : 300}
+                                    height={isMobile ? 45 : 100}
+                                />
+                                {isEditMode && (
+                                    <button
+                                        onClick={() => onDeleteBox(index + 3)}
+                                        className="absolute -top-2 -right-2 text-white bg-red-600 hover:bg-red-700 w-6 h-6 flex items-center justify-center rounded-full shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        title="Xóa cơ sở này"
+                                    >
+                                        <FaTrash size={12}/>
+                                    </button>
+                                )}
+                            </div>
+                        ))}
+                        {isEditMode && boxes.length >= 3 && (
+                            <div>
+                                <button
+                                    onClick={onAddBox}
+                                    style={{width: isMobile ? '120px' : '300px', height: isMobile ? '45px' : '100px'}}
+                                    className="border-2 border-dashed border-gray-400 text-gray-400 hover:bg-gray-100 hover:border-gray-500 rounded-lg flex items-center justify-center"
+                                    title="Thêm cơ sở mới"
+                                >
+                                    <FaPlus size={24}/>
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
+
+            {/* ICON CON VOI TRANG TRÍ */}
+            <div className="flex justify-end">
+                <Image src="/icons/icon_elephant1.png" alt="" width={isMobile ? 60 : 100} height={isMobile ? 30 : 50}
+                       className="right-0 top-[1200px]  lg:right-80 lg:top-[800px] z-99"/>
+            </div>
+
+            {/* NÚT THÊM LỚP HỌC MỚI */}
             {isEditMode && (
                 <button
-                    onClick={onAddItem}
-                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2"
+                    onClick={onAddItemClass}
+                    className="mt-8 mb-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 flex items-center gap-2 mx-auto"
                 >
-                    <FaPlus /> Thêm Lớp
+                    <FaPlus/> Thêm Lớp học
                 </button>
             )}
 
-            <div className="w-full bg-[#fff7cc] py-2 flex flex-wrap gap-3 items-center justify-center">
-                <EditableImage id="classGalleryBox1Src" initialSrc={box1Src} altText="Tab 1" onSave={onSave} isEditMode={isEditMode} width={isMobile ? 120 : 300} height={isMobile ? 45 : 100} className="mb-4" />
-                <EditableImage id="classGalleryBox2Src" initialSrc={box2Src} altText="Tab 2" onSave={onSave} isEditMode={isEditMode} width={isMobile ? 120 : 300} height={isMobile ? 45 : 100} className="mb-4" />
-                <EditableImage id="classGalleryBox3Src" initialSrc={box3Src} altText="Tab 3" onSave={onSave} isEditMode={isEditMode} width={isMobile ? 120 : 300} height={isMobile ? 45 : 100} className="mb-4" />
-            </div>
-
-            <div>
-                <Image src="/icons/icon_elephant1.png" alt="" width={isMobile ? 60 : 100} height={isMobile ? 30 : 50}
-                       className="absolute right-0 top-[1200px]  lg:right-80 lg:top-[800px] z-99"/>
-            </div>
-
-            <div className="mt-8 overflow-hidden">
+            {/* PHẦN DANH SÁCH LỚP HỌC */}
+            <div className="mt-4 overflow-hidden">
                 <div
                     ref={containerRef}
                     className={`flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory px-2 pb-2 ml-2 select-none ${!isEditMode && 'cursor-grab active:cursor-grabbing'}`}
@@ -93,7 +181,7 @@ export default function ClassGallery({ title, box1Src, box2Src, box3Src, items, 
                     onMouseLeave={handleMouseLeave}
                 >
                     {items.map((item, index) => (
-                        <div key={index} className="relative snap-start flex-shrink-0 w-[calc(33.333%-0.5rem)]">
+                        <div key={index} className="relative group snap-start flex-shrink-0 w-[calc(33.333%-0.5rem)]">
                             <EditableImage
                                 id={`classGalleryItem_${index}_imageSrc`}
                                 initialSrc={item.imageSrc}
@@ -107,8 +195,8 @@ export default function ClassGallery({ title, box1Src, box2Src, box3Src, items, 
                             />
                             {isEditMode && (
                                 <button
-                                    onClick={() => onDeleteItem(index)}
-                                    className="absolute top-2 right-2 text-white bg-red-600 hover:bg-red-700 w-8 h-8 flex items-center justify-center rounded-full shadow-lg z-10"
+                                    onClick={() => onDeleteItemClass(index)}
+                                    className="absolute top-2 right-2 text-white bg-red-600 hover:bg-red-700 w-8 h-8 flex items-center justify-center rounded-full shadow-lg z-10 opacity-0 group-hover:opacity-100 transition-opacity"
                                     title="Xóa lớp này"
                                 >
                                     <FaTrash size={14}/>

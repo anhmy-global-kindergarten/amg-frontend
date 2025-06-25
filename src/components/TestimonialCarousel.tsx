@@ -64,7 +64,7 @@ export default function TestimonialCarousel({ testimonials, isEditMode, onSave, 
     }
 
     return (
-        <div className="flex flex-col items-center space-y-6 mt-10 px-4 w-full">
+        <div className="flex flex-col items-center space-y-6 px-4 w-full">
             <div className="relative flex items-center justify-center w-full max-w-6xl">
                 <button
                     onClick={goBack}

@@ -54,9 +54,7 @@ interface PageContent {
 
     // Class Gallery Section
     classGalleryTitle: string;
-    classGalleryBox1Src: string;
-    classGalleryBox2Src: string;
-    classGalleryBox3Src: string;
+    classGalleryBoxes: { imageSrc: string; altText: string; }[];
     classGalleryItems: { name: string; imageSrc: string; }[];
 
 
@@ -147,9 +145,11 @@ const initialPageContent: PageContent = {
     aboutAmgIcon3Src: "/icons/icon_about3.png",
     aboutAmgIcon4Src: "/icons/icon_about4.png",
     classGalleryTitle: "HỆ THỐNG LỚP HỌC",
-    classGalleryBox1Src: "/info/amg_box1.png",
-    classGalleryBox2Src: "/info/amg_box2.png",
-    classGalleryBox3Src: "/info/amg_box3.png",
+    classGalleryBoxes: [
+        { imageSrc: "/info/amg_box1.png", altText: "Tab 1" },
+        { imageSrc: "/info/amg_box2.png", altText: "Tab 2" },
+        { imageSrc: "/info/amg_box3.png", altText: "Tab 3" },
+    ],
     classGalleryItems: [
         { name: 'BLUEBERRY', imageSrc: '/class/blueberry.png' },
         { name: 'CHERRY', imageSrc: '/class/cherry.png' },
@@ -235,6 +235,11 @@ const newClassGalleryItemTemplate = {
     imageSrc: '/placeholder.png'
 };
 
+const newClassGalleryBoxTemplate = {
+    imageSrc: '/placeholder.png',
+    altText: 'Cơ sở mới'
+};
+
 const LOCAL_STORAGE_KEY = "landingPageContent_AMG";
 
 export default function LandingPage() {
@@ -252,12 +257,18 @@ export default function LandingPage() {
         if (savedContent) {
             try {
                 const parsedContent = JSON.parse(savedContent);
-                if (parsedContent.topNavPhone && parsedContent.aboutAmgSectionTitle && parsedContent.testimonials) {
-                    setPageContent(parsedContent);
-                } else {
-                    setPageContent(initialPageContent);
-                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialPageContent));
-                }
+                // if (parsedContent.topNavPhone && parsedContent.aboutAmgSectionTitle && parsedContent.testimonials) {
+                //     setPageContent(parsedContent);
+                // } else {
+                //     setPageContent(initialPageContent);
+                //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialPageContent));
+                // }
+                const hydratedContent: PageContent = {
+                    ...initialPageContent,
+                    ...parsedContent,
+                };
+
+                setPageContent(hydratedContent);
             } catch (error) {
                 console.error("Failed to parse saved content:", error);
                 setPageContent(initialPageContent);
@@ -290,6 +301,16 @@ export default function LandingPage() {
                 // @ts-ignore
                 newItems[index] = { ...newItems[index], [key]: value };
                 return { ...newContent, classGalleryItems: newItems };
+            }
+
+            if (id.startsWith('classGalleryBox_')) {
+                const [, indexStr, key] = id.split('_');
+                const index = parseInt(indexStr, 10);
+                if (isNaN(index)) return prev;
+                const newBoxes = [...newContent.classGalleryBoxes];
+                // @ts-ignore
+                newBoxes[index] = { ...newBoxes[index], [key]: value };
+                return { ...newContent, classGalleryBoxes: newBoxes };
             }
 
             // Logic for footer links: e.g., id="footerLink_1_text"
@@ -463,7 +484,7 @@ export default function LandingPage() {
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
             {/* EDIT MODE TOGGLE AND SAVE BUTTON - Only for admin/teacher */}
             {canEdit && (
-                <div className="fixed top-2 right-2 z-[99999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
+                <div className="fixed top-20 right-2 z-[99999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
                     <button
                         onClick={() => setIsEditMode(!isEditMode)}
                         className={`px-3 py-1.5 text-sm rounded ${isEditMode ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white flex items-center gap-1.5`}
@@ -797,14 +818,14 @@ export default function LandingPage() {
                     {/* ClassGallery now receives editable content */}
                     <ClassGallery
                         title={pageContent.classGalleryTitle}
-                        box1Src={pageContent.classGalleryBox1Src}
-                        box2Src={pageContent.classGalleryBox2Src}
-                        box3Src={pageContent.classGalleryBox3Src}
+                        boxes={pageContent.classGalleryBoxes}
                         items={pageContent.classGalleryItems}
                         isEditMode={isEditMode}
                         onSave={handleSaveContent}
-                        onAddItem={() => handleAddItem('classGalleryItems', newClassGalleryItemTemplate)}
-                        onDeleteItem={(index) => handleDeleteItem('classGalleryItems', index)}
+                        onAddItemClass={() => handleAddItem('classGalleryItems', newClassGalleryItemTemplate)}
+                        onDeleteItemClass={(index) => handleDeleteItem('classGalleryItems', index)}
+                        onAddBox={() => handleAddItem('classGalleryBoxes', newClassGalleryBoxTemplate)}
+                        onDeleteBox={(index) => handleDeleteItem('classGalleryBoxes', index)}
                     />
                 </div>
             </section>
@@ -912,7 +933,7 @@ export default function LandingPage() {
                             <div className="flex gap-4 items-start">
                                 <Image src="/icons/icon_fork.png" alt="fork" width={50} height={100}
                                        className="object-contain"/>
-                                <div className="space-y-12 text-sm text-black">
+                                <div className="space-y-10 text-sm text-black">
                                     <EditableText id="reasonsCol1ForkPara1"
                                                   initialHtml={pageContent.reasonsCol1ForkPara1}
                                                   onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
@@ -953,14 +974,18 @@ export default function LandingPage() {
                 <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                        className="right-10 top-[6350px] lg:right-75 lg:top-[6100px]  z-99"/>
                 <div className="w-full max-w-7xl mx-auto flex flex-col items-center gap-12">
-                    <Image src="/icons/icon_elephant3.png" alt="" width={100} height={70}
-                           className="absolute right-10 -top-[20px] lg:right-150 lg:-top-[35px] z-99"/>
-                    {/* TestimonialCarousel now receives editable content */}
-                    <TestimonialCarousel testimonials={pageContent.testimonials} isEditMode={isEditMode}
-                                         onSave={handleSaveContent}
-                                         onAddItem={() => handleAddItem('testimonials', newTestimonialTemplate)}
-                                         onDeleteItem={(index) => handleDeleteItem('testimonials', index)}
-                    />
+                    <div className="gap-0">
+                        <div className="flex justify-end">
+                            <Image src="/icons/icon_elephant3.png" alt="elephant decorative" width={100} height={70}
+                                   className="right-10 -top-[20px] lg:right-150 lg:-top-[35px] z-99"/>
+                        </div>
+                        {/* TestimonialCarousel now receives editable content */}
+                        <TestimonialCarousel testimonials={pageContent.testimonials} isEditMode={isEditMode}
+                                             onSave={handleSaveContent}
+                                             onAddItem={() => handleAddItem('testimonials', newTestimonialTemplate)}
+                                             onDeleteItem={(index) => handleDeleteItem('testimonials', index)}
+                        />
+                    </div>
                     <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                            className="absolute left-5 top-[450px]  z-99"/>
 
