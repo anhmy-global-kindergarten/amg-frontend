@@ -12,6 +12,7 @@ interface ClassGalleryProps {
     items: { name: string; imageSrc: string; }[];
     isEditMode: boolean;
     onSave: (id: string, value: string) => void;
+    onFileSelect: (id: string, file: File) => void;
     onAddItemClass: () => void;
     onDeleteItemClass: (index: number) => void;
     onAddBox: () => void;
@@ -24,6 +25,7 @@ export default function ClassGallery({
                                          items = [],
                                          isEditMode,
                                          onSave,
+                                         onFileSelect,
                                          onAddItemClass,
                                          onDeleteItemClass,
                                          onAddBox,
@@ -83,7 +85,7 @@ export default function ClassGallery({
                                 id={`classGalleryBox_${index}_imageSrc`}
                                 initialSrc={box.imageSrc}
                                 altText={box.altText}
-                                onSave={onSave}
+                                onFileSelect={onFileSelect}
                                 isEditMode={isEditMode}
                                 width={isMobile ? 120 : 300}
                                 height={isMobile ? 45 : 100}
@@ -121,7 +123,7 @@ export default function ClassGallery({
                                     id={`classGalleryBox_${index + 3}_imageSrc`}
                                     initialSrc={box.imageSrc}
                                     altText={box.altText}
-                                    onSave={onSave}
+                                    onFileSelect={onFileSelect}
                                     isEditMode={isEditMode}
                                     width={isMobile ? 120 : 300}
                                     height={isMobile ? 45 : 100}
@@ -186,7 +188,7 @@ export default function ClassGallery({
                                 id={`classGalleryItem_${index}_imageSrc`}
                                 initialSrc={item.imageSrc}
                                 altText={item.name}
-                                onSave={onSave}
+                                onFileSelect={onFileSelect}
                                 isEditMode={isEditMode}
                                 width={380}
                                 height={280}

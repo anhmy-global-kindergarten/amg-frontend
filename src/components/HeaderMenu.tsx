@@ -124,7 +124,6 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     };
 
     const { name: userName, role: userRole } = useAuth();
-    console.log("User Info:", { userName, userRole });
     const AuthButtons = ({ isMobile = false }) => (
         <div className={isMobile ? "flex flex-col gap-2" : "flex items-center gap-4"}>
             {/* Các nút chỉ hiển thị cho admin hoặc teacher */}

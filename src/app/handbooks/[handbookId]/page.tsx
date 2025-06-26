@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {notFound, useParams} from "next/navigation";
-import React, { use } from "react";
+import React, {use, useEffect} from "react";
 import { useState } from "react";
 import {MoreVertical} from "lucide-react";
 import {Menu} from "@headlessui/react";
@@ -12,32 +12,31 @@ import {useAuth} from "@/app/hooks/useAuth";
 import formatDateDisplay from "@/app/utils/formatDate";
 import RenderHTMLContent from "@/app/utils/getContent";
 import {deletePost} from "@/app/utils/deletePost";
+import {usePostComments} from "@/app/hooks/useComment";
+import {CreateCommentPayload} from "@/app/utils/comment";
 
 export default function HandbookDetail() {
     const params = useParams();
     const articalId = params?.handbookId as string;
 
     const { post, images, loading, error } = usePostById(articalId);
-    const { name, role } = useAuth();
+    const { name: loggedInUserName, role, id: userId } = useAuth();
+    const {
+        comments,
+        loading: commentsLoading,
+        error: commentsError,
+        createComment,
+        deleteComment
+    } = usePostComments(articalId);
 
-    const [comments, setComments] = useState([
-        {
-            name: "Nguyễn Văn A",
-            email: "vana@example.com",
-            content: "Một sự kiện hay!",
-        },
-        {
-            name: "Trần Thị B",
-            email: "thib@example.com",
-            content: "Cảm ơn các cô vì những sự kiện tuyệt vời!",
-        },
-    ]);
-
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        content: "",
-    });
+    const [commentAuthor, setCommentAuthor] = useState("");
+    const [commentContent, setCommentContent] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    useEffect(() => {
+        if (loggedInUserName) {
+            setCommentAuthor(loggedInUserName);
+        }
+    }, [loggedInUserName]);
     // const handbooks = [
     //     {
     //         id: "1",
@@ -53,6 +52,47 @@ export default function HandbookDetail() {
     //         image5: "",
     //     },
     // ];
+
+    const handleCommentSubmit = async () => {
+        if (!userId?.trim()) {
+            alert("Vui lòng đăng nhập để gửi bình luận.");
+            return;
+        }
+
+        if (!commentAuthor.trim() || !commentContent.trim()) {
+            alert("Vui lòng nhập tên và nội dung bình luận.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        const payload: CreateCommentPayload = {
+            postId: articalId,
+            authorId: userId,
+            authorName: commentAuthor,
+            content: commentContent,
+        };
+
+        const success = await createComment(payload);
+
+        if (success) {
+            setCommentContent("");
+            if (!loggedInUserName) {
+                setCommentAuthor("");
+            }
+        } else {
+            alert("Gửi bình luận thất bại. Vui lòng thử lại.");
+        }
+
+        setIsSubmitting(false);
+    };
+
+    const handleCommentDelete = async (commentId: string) => {
+        if (window.confirm("Bạn có chắc muốn xóa bình luận này?")) {
+            await deleteComment(commentId);
+        }
+    };
+
     if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
     if (error && !post) {
         return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sổ tay.</p>;
@@ -178,8 +218,8 @@ export default function HandbookDetail() {
                                     className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow"
                                 >
                                     <div className="flex items-center justify-between mb-2">
-                                        <p className="text-base font-semibold text-[#795548]">{cmt.name}</p>
-                                        <p className="text-sm text-[#A1887F] italic">{cmt.email}</p>
+                                        <p className="text-base font-semibold text-[#795548]">{cmt.authorName}</p>
+                                        <p className="text-sm text-[#A1887F] italic">{new Date(cmt.createdAt).toLocaleString()}</p>
                                     </div>
                                     <p className="text-gray-800 text-sm leading-relaxed">{cmt.content}</p>
                                 </div>
@@ -190,36 +230,26 @@ export default function HandbookDetail() {
                             <h4 className="text-[#FFC107] mb-4">Viết bình luận của bạn:</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <input
-                                    type="text"
-                                    placeholder="Họ và tên"
-                                    className="rounded-full border px-4 py-2 text-black"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    className="rounded-full border px-4 py-2 text-black"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                        type="text"
+                                        placeholder="Họ và tên"
+                                        className="rounded-full border px-4 py-2 text-black"
+                                        value={commentAuthor}
+                                        onChange={(e) => setCommentAuthor(e.target.value)}
+                                        disabled={!!loggedInUserName}
                                 />
                             </div>
                             <textarea
                                 placeholder="Viết bình luận"
                                 className="w-full mt-4 border rounded-2xl px-4 py-2 text-black"
                                 rows={4}
-                                value={formData.content}
-                                onChange={(e) => setFormData({...formData, content: e.target.value})}
+                                value={commentContent}
+                                onChange={(e) => setCommentContent(e.target.value)}
                             ></textarea>
                             <img
                                 src="/buttons/btn_comment.png"
                                 alt="Gửi bình luận"
                                 className="mt-4 w-40 cursor-pointer"
-                                onClick={() => {
-                                    if (!formData.name || !formData.email || !formData.content) return;
-                                    setComments([...comments, formData]);
-                                    setFormData({name: "", email: "", content: ""});
-                                }}
+                                onClick={!isSubmitting ? handleCommentSubmit : undefined}
                             />
                         </div>
                     </div>

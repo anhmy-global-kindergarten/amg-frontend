@@ -1,13 +1,16 @@
 'use client';
+/* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React, { use } from "react";
+import React, {use, useEffect} from "react";
 import { useState } from "react";
 import {Menu} from "@headlessui/react";
 import {MoreVertical} from "lucide-react";
-import {useSession} from "next-auth/react";
 import {deletePost} from "@/app/utils/deletePost";
+import {useAuth} from "@/app/hooks/useAuth";
+import {usePostComments} from "@/app/hooks/useComment";
+import {CreateCommentPayload} from "@/app/utils/comment";
 
 function formatDateDisplay(dateStr: string) {
     const [day, month] = dateStr.split('/').map(Number);
@@ -46,28 +49,65 @@ function parseContent(content: string): React.ReactNode[] {
 }
 
 export default function AdmissionDetail({ params }: { params: Promise<{ admissionId: string }> }) {
-    const { data: session } = useSession();
-
-    const role = session?.user?.role;
-    const [comments, setComments] = useState([
-        {
-            name: "Nguyễn Văn A",
-            email: "vana@example.com",
-            content: "Một sự kiện hay!",
-        },
-        {
-            name: "Trần Thị B",
-            email: "thib@example.com",
-            content: "Cảm ơn các cô vì những sự kiện tuyệt vời!",
-        },
-    ]);
-
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        content: "",
-    });
     const { admissionId } = use(params);
+    const { name: loggedInUserName, role, id: userId } = useAuth();
+    const {
+        comments,
+        loading: commentsLoading,
+        error: commentsError,
+        createComment,
+        deleteComment
+    } = usePostComments(admissionId);
+
+    const [commentAuthor, setCommentAuthor] = useState("");
+    const [commentContent, setCommentContent] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    useEffect(() => {
+        if (loggedInUserName) {
+            setCommentAuthor(loggedInUserName);
+        }
+    }, [loggedInUserName]);
+
+    const handleCommentSubmit = async () => {
+        if (!userId?.trim()) {
+            alert("Vui lòng đăng nhập để gửi bình luận.");
+            return;
+        }
+
+        if (!commentAuthor.trim() || !commentContent.trim()) {
+            alert("Vui lòng nhập tên và nội dung bình luận.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        const payload: CreateCommentPayload = {
+            postId: admissionId,
+            authorId: userId,
+            authorName: commentAuthor,
+            content: commentContent,
+        };
+
+        const success = await createComment(payload);
+
+        if (success) {
+            setCommentContent("");
+            if (!loggedInUserName) {
+                setCommentAuthor("");
+            }
+        } else {
+            alert("Gửi bình luận thất bại. Vui lòng thử lại.");
+        }
+
+        setIsSubmitting(false);
+    };
+
+    const handleCommentDelete = async (commentId: string) => {
+        if (window.confirm("Bạn có chắc muốn xóa bình luận này?")) {
+            await deleteComment(commentId);
+        }
+    };
+
     const admissions = [
         {
             id: "1",
@@ -223,8 +263,7 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                                     className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow"
                                 >
                                     <div className="flex items-center justify-between mb-2">
-                                        <p className="text-base font-semibold text-[#795548]">{cmt.name}</p>
-                                        <p className="text-sm text-[#A1887F] italic">{cmt.email}</p>
+                                        <p className="text-base font-semibold text-[#795548]">{cmt.authorName}</p>
                                     </div>
                                     <p className="text-gray-800 text-sm leading-relaxed">{cmt.content}</p>
                                 </div>
@@ -238,33 +277,23 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                                     type="text"
                                     placeholder="Họ và tên"
                                     className="rounded-full border px-4 py-2 text-black"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    className="rounded-full border px-4 py-2 text-black"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                    value={commentAuthor}
+                                    onChange={(e) => setCommentAuthor(e.target.value)}
+                                    disabled={!!loggedInUserName}
                                 />
                             </div>
                             <textarea
                                 placeholder="Viết bình luận"
                                 className="w-full mt-4 border rounded-2xl px-4 py-2 text-black"
                                 rows={4}
-                                value={formData.content}
-                                onChange={(e) => setFormData({...formData, content: e.target.value})}
+                                value={commentContent}
+                                onChange={(e) => setCommentContent(e.target.value)}
                             ></textarea>
                             <img
                                 src="/buttons/btn_comment.png"
                                 alt="Gửi bình luận"
                                 className="mt-4 w-40 cursor-pointer"
-                                onClick={() => {
-                                    if (!formData.name || !formData.email || !formData.content) return;
-                                    setComments([...comments, formData]);
-                                    setFormData({name: "", email: "", content: ""});
-                                }}
+                                onClick={!isSubmitting ? handleCommentSubmit : undefined}
                             />
                         </div>
                     </div>

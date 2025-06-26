@@ -2,6 +2,7 @@
 /* eslint-disable */
 import React, {useState, useEffect, useRef, JSX} from 'react';
 import { FaBold, FaItalic, FaUnderline, FaPalette, FaSave, FaTimes } from 'react-icons/fa';
+import ContentEditable from "react-contenteditable";
 
 type EditableTextProps<T extends keyof JSX.IntrinsicElements = 'div'> = {
     id: string;
@@ -23,14 +24,14 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
                                                                          textEditorStyle,
                                                                          ...rest // Capture any other props like href, target, etc.
                                                                      }: EditableTextProps<T>) => {
-    const Tag = tag || ('div' as T); // Set default tag
+    const Tag = tag || ('div' as T);
     const [html, setHtml] = useState(initialHtml);
     const [isEditing, setIsEditing] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(false);
-    const editorRef = useRef<HTMLDivElement>(null);
+    const contentEditableRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        setHtml(initialHtml); // Sync with external changes if any
+        setHtml(initialHtml);
     }, [initialHtml]);
 
     const handleContentChange = (event: React.FormEvent<HTMLDivElement>) => {
@@ -39,10 +40,7 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
 
     const execCommand = (command: string, value?: string) => {
         document.execCommand(command, false, value);
-        if (editorRef.current) {
-            setHtml(editorRef.current.innerHTML); // Update state after execCommand
-        }
-        editorRef.current?.focus();
+        contentEditableRef.current?.focus();
     };
 
     const handleSave = () => {
@@ -51,9 +49,10 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
     };
 
     const handleCancel = () => {
-        setHtml(initialHtml); // Revert to original
+        setHtml(initialHtml);
         setIsEditing(false);
     }
+
     const commonProps = {
         className,
         style,
@@ -61,25 +60,21 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
         ...(rest as any)
     };
     if (!isEditMode && !isEditing) {
-        // Spread the `...rest` props onto the final element. This passes `href` etc.
         return <Tag {...commonProps} />;
     }
 
-    if (isEditMode && !isEditing) {
+    if (!isEditing) {
         return (
-            // The outer div is for the editing border and click handler
             <div
                 className="relative border border-dashed border-blue-400 p-1 cursor-pointer hover:bg-blue-50 transition-all"
                 onClick={() => setIsEditing(true)}
                 title="Click to edit"
             >
-                {/* The actual tag is rendered inside, preserving its type and props */}
-                <Tag {...commonProps} />;
+                <Tag {...commonProps} />
             </div>
         );
     }
 
-    // isEditing mode
     return (
         <div className="relative p-2 border border-blue-600 bg-white shadow-lg z-50" style={style}>
             <div className="flex items-center space-x-2 mb-2 p-1 bg-gray-100 rounded">
@@ -100,14 +95,15 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
                 <button title="Save" onClick={handleSave} className="p-1 text-green-500 hover:bg-green-100 rounded"><FaSave /></button>
                 <button title="Cancel" onClick={handleCancel} className="p-1 text-red-500 hover:bg-red-100 rounded"><FaTimes /></button>
             </div>
-            <div
-                ref={editorRef}
-                contentEditable
-                suppressContentEditableWarning // Important for React
-                className={`editable-content min-h-[50px] p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`} // Propagate className to the editor itself for base styling
-                style={textEditorStyle || { color: '#4D4D4D' }} // Propagate style, default to page's text color
-                onInput={handleContentChange}
-                dangerouslySetInnerHTML={{ __html: html }}
+
+            <ContentEditable
+                innerRef={contentEditableRef as React.RefObject<HTMLElement>}
+                html={html}
+                disabled={false}
+                onChange={handleContentChange}
+                tagName="div"
+                className={`editable-content min-h-[50px] p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
+                style={textEditorStyle || { color: '#4D4D4D' }}
             />
         </div>
     );

@@ -240,7 +240,73 @@ const newClassGalleryBoxTemplate = {
     altText: 'Cơ sở mới'
 };
 
-const LOCAL_STORAGE_KEY = "landingPageContent_AMG";
+async function fetchContentFromAPI(): Promise<PageContent> {
+    try {
+        const response = await fetch(`/api-v1/landing-page/get-content`);
+        if (response.status === 404) {
+            console.warn("API 404: Không có nội dung trong DB. Sử dụng dữ liệu mặc định.");
+            return initialPageContent;
+        }
+        if (!response.ok) throw new Error(`Lỗi mạng: ${response.statusText}`);
+        const content = await response.json();
+        const hydratedContent: PageContent = { ...initialPageContent, ...content };
+        return hydratedContent;
+    } catch (error) {
+        alert("Không thể kết nối tới server. Trang sẽ hiển thị nội dung mặc định.");
+        return initialPageContent;
+    }
+}
+
+async function saveContentToAPI(content: PageContent): Promise<{ success: boolean; message: string }> {
+    try {
+        const response = await fetch(`/api-v1/landing-page/update-content`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(content),
+        });
+        if (!response.ok) throw new Error(`Lỗi mạng: ${response.statusText}`);
+        const result = await response.json();
+        return { success: true, message: result.message || "Lưu thành công!" };
+    } catch (error) {
+        return { success: false, message: "Có lỗi xảy ra khi lưu dữ liệu." };
+    }
+}
+
+async function updateImagesStatusAPI(urls: string[]): Promise<boolean> {
+    if (urls.length === 0) return true; // Không có gì để cập nhật
+
+    console.log("Đang gọi API để cập nhật trạng thái ảnh...");
+    try {
+        const payload = urls.map(url => ({ url, style: '' })); // Style có thể để trống
+        const response = await fetch(`/api-v1/images/update-status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        });
+        if (!response.ok) {
+            throw new Error(`Lỗi mạng: ${response.statusText}`);
+        }
+        console.log("Cập nhật trạng thái ảnh thành công!");
+        return true;
+    } catch (error) {
+        console.error("Lỗi khi cập nhật trạng thái ảnh:", error);
+        return false;
+    }
+}
+
+function extractImageUrls(content: PageContent): string[] {
+    const urls = new Set<string>();
+    const urlRegex = /\/uploads\/[a-f0-9-]+\.(png|jpg|jpeg|gif|webp)/gi;
+
+    const contentString = JSON.stringify(content);
+
+    const matches = contentString.match(urlRegex);
+    if (matches) {
+        matches.forEach(url => urls.add(url));
+    }
+
+    return Array.from(urls);
+}
 
 export default function LandingPage() {
     const [isMobile, setIsMobile] = useState(false);
@@ -249,110 +315,168 @@ export default function LandingPage() {
     const [role, setRole] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-    const [pageContent, setPageContent] = useState<PageContent>(initialPageContent);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isSaving, setIsSaving] = useState(false);
+    const [pageContent, setPageContent] = useState<PageContent | null>(null);
+    const [originalContent, setOriginalContent] = useState<PageContent | null>(null);
     const [isEditMode, setIsEditMode] = useState(false);
 
-    useEffect(() => {
-        const savedContent = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (savedContent) {
-            try {
-                const parsedContent = JSON.parse(savedContent);
-                // if (parsedContent.topNavPhone && parsedContent.aboutAmgSectionTitle && parsedContent.testimonials) {
-                //     setPageContent(parsedContent);
-                // } else {
-                //     setPageContent(initialPageContent);
-                //     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialPageContent));
-                // }
-                const hydratedContent: PageContent = {
-                    ...initialPageContent,
-                    ...parsedContent,
-                };
+    const hasUnsavedChanges = JSON.stringify(pageContent) !== JSON.stringify(originalContent);
 
-                setPageContent(hydratedContent);
-            } catch (error) {
-                console.error("Failed to parse saved content:", error);
-                setPageContent(initialPageContent);
-            }
-        } else {
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialPageContent));
-        }
+    useEffect(() => {
+        const loadContent = async () => {
+            setIsLoading(true);
+            const contentFromAPI = await fetchContentFromAPI();
+            setPageContent(contentFromAPI);
+            setOriginalContent(contentFromAPI);
+            setIsLoading(false);
+        };
+        loadContent();
     }, []);
 
-    // HÀM LƯU TRỮ NÂNG CAO - XỬ LÝ DỮ LIỆU LỒNG NHAU
-    const handleSaveContent = useCallback((id: string, value: string) => {
-        setPageContent(prev => {
-            const newContent = { ...prev };
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadingImageId, setUploadingImageId] = useState<string | null>(null);
 
-            // Logic for testimonials: e.g., id="testimonial_0_content"
+    const handleImageUpload = async (id: string, file: File) => {
+        setIsUploading(true);
+        setUploadingImageId(id);
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        try {
+            const response = await fetch(`/api-v1/images/upload-image`, {
+                method: 'POST', body: formData,
+            });
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Upload thất bại');
+            }
+            const result = await response.json();
+            const newUrl = result.url;
+            if (newUrl) {
+                handleContentUpdate(id, newUrl);
+            }
+        } catch (error) {
+            alert(`Upload ảnh thất bại: ${error instanceof Error ? error.message : String(error)}`);
+        } finally {
+            setIsUploading(false);
+            setUploadingImageId(null);
+        }
+    };
+
+    const handleToggleEditMode = () => {
+        if (isEditMode) {
+            if (hasUnsavedChanges) {
+                if (window.confirm("Bạn có thay đổi chưa lưu. Bạn có chắc muốn thoát mà không lưu?")) {
+                    setPageContent(originalContent);
+                    setIsEditMode(false);
+                }
+            } else {
+                setIsEditMode(false);
+            }
+        } else {
+            setOriginalContent(pageContent);
+            setIsEditMode(true);
+        }
+    };
+
+    const handleSaveChanges = async () => {
+        if (!pageContent) return;
+        setIsSaving(true);
+        const usedImageUrls = extractImageUrls(pageContent);
+        const statusUpdateSuccess = await updateImagesStatusAPI(usedImageUrls);
+        if (!statusUpdateSuccess) {
+            alert("Có lỗi xảy ra khi cập nhật trạng thái ảnh. Nội dung chưa được lưu. Vui lòng thử lại.");
+            setIsSaving(false);
+            return;
+        }
+        const result = await saveContentToAPI(pageContent);
+        setIsSaving(false);
+        alert(result.message);
+        if (result.success) {
+            setOriginalContent(pageContent);
+            setIsEditMode(false);
+        }
+    };
+
+    const handleResetToDefault = async () => {
+        if (window.confirm("Bạn có chắc muốn khôi phục nội dung về mặc định? Hành động này sẽ không thể phục hồi, bạn vẫn chắc chắn muốn thực hiện ?.")) {
+            setIsSaving(true);
+            const result = await saveContentToAPI(initialPageContent);
+            setIsSaving(false);
+            alert(result.message);
+            if (result.success) {
+                setPageContent(initialPageContent);
+                setOriginalContent(initialPageContent);
+                setIsEditMode(false);
+            }
+        }
+    };
+
+    // --- Logic cập nhật, thêm, xóa nội dung ---
+    const handleContentUpdate = (id: string, value: string) => {
+        setPageContent(prev => {
+            if (!prev) return null;
+            const newContent = JSON.parse(JSON.stringify(prev));
+
             if (id.startsWith('testimonial_')) {
                 const [, indexStr, key] = id.split('_');
                 const index = parseInt(indexStr, 10);
+                if (isNaN(index)) return newContent;
                 const newTestimonials = [...newContent.testimonials];
-                // @ts-ignore
-                newTestimonials[index] = { ...newTestimonials[index], [key]: value };
-                return { ...newContent, testimonials: newTestimonials };
+                (newTestimonials[index] as any)[key] = value;
+                return {...newContent, testimonials: newTestimonials};
             }
 
-            // Logic for class gallery items: e.g., id="classGalleryItem_2_imageSrc"
             if (id.startsWith('classGalleryItem_')) {
                 const [, indexStr, key] = id.split('_');
                 const index = parseInt(indexStr, 10);
+                if (isNaN(index)) return newContent;
                 const newItems = [...newContent.classGalleryItems];
-                // @ts-ignore
-                newItems[index] = { ...newItems[index], [key]: value };
-                return { ...newContent, classGalleryItems: newItems };
+                (newItems[index] as any)[key] = value;
+                return {...newContent, classGalleryItems: newItems};
             }
 
             if (id.startsWith('classGalleryBox_')) {
                 const [, indexStr, key] = id.split('_');
                 const index = parseInt(indexStr, 10);
-                if (isNaN(index)) return prev;
+                if (isNaN(index)) return newContent;
                 const newBoxes = [...newContent.classGalleryBoxes];
-                // @ts-ignore
-                newBoxes[index] = { ...newBoxes[index], [key]: value };
-                return { ...newContent, classGalleryBoxes: newBoxes };
+                (newBoxes[index] as any)[key] = value;
+                return {...newContent, classGalleryBoxes: newBoxes};
             }
 
-            // Logic for footer links: e.g., id="footerLink_1_text"
-            if (id.startsWith('footerLink_')) {
-                const [, indexStr, key] = id.split('_');
-                const index = parseInt(indexStr, 10);
-                const newLinks = [...newContent.footerLinks];
-                // @ts-ignore
-                newLinks[index] = { ...newLinks[index], [key]: value };
-                return { ...newContent, footerLinks: newLinks };
-            }
+            // ... (Thêm các logic cho mảng khác nếu có)
 
-            // Logic for footer support links: e.g., id="footerSupportLink_1_text"
-            if (id.startsWith('footerSupportLink_')) {
-                const [, indexStr, key] = id.split('_');
-                const index = parseInt(indexStr, 10);
-                const newLinks = [...newContent.footerSupportLinks];
-                // @ts-ignore
-                newLinks[index] = { ...newLinks[index], [key]: value };
-                return { ...newContent, footerSupportLinks: newLinks };
-            }
-
-            // Fallback for simple key-value pairs
-            // @ts-ignore
-            newContent[id] = value;
+            (newContent as any)[id] = value;
             return newContent;
         });
-    }, []);
-
-    const persistContentToLocalStorage = () => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(pageContent));
-        alert("Nội dung đã được lưu vào Local Storage!");
-        setIsEditMode(false);
     };
 
-    const resetToDefaultContent = () => {
-        if (window.confirm("Bạn có chắc muốn khôi phục nội dung về mặc định? Mọi thay đổi chưa lưu sẽ bị mất.")) {
-            setPageContent(initialPageContent);
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(initialPageContent));
-            alert("Nội dung đã được khôi phục về mặc định.");
-            setIsEditMode(false);
-        }
+    const handleAddItem = (arrayKey: keyof PageContent, newItemTemplate: any) => {
+        setPageContent(prev => {
+            if (!prev) return null;
+            const currentArray = prev[arrayKey];
+            if (Array.isArray(currentArray)) {
+                const newArray = [...currentArray, { ...newItemTemplate }];
+                return { ...prev, [arrayKey]: newArray };
+            }
+            return prev;
+        });
+    };
+
+    const handleDeleteItem = (arrayKey: keyof PageContent, indexToDelete: number) => {
+        if (!window.confirm("Bạn có chắc muốn xóa mục này?")) return;
+        setPageContent(prev => {
+            if (!prev) return null;
+            const currentArray = prev[arrayKey];
+            if (Array.isArray(currentArray)) {
+                const newArray = currentArray.filter((_, index) => index !== indexToDelete);
+                return { ...prev, [arrayKey]: newArray };
+            }
+            return prev;
+        });
     };
 
 
@@ -372,7 +496,7 @@ export default function LandingPage() {
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
 
-    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    const scrollToTop = () => window.scrollTo({top: 0, behavior: 'smooth'});
 
     useEffect(() => {
         try {
@@ -391,6 +515,14 @@ export default function LandingPage() {
         localStorage.removeItem("user");
         window.location.href = "/";
     };
+
+    if (isLoading || !pageContent) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
 
     const canEdit = isAuthenticated && (role === "admin" || role === "teacher");
 
@@ -455,38 +587,13 @@ export default function LandingPage() {
         {id: "mealImage8Src", src: pageContent.mealImage8Src},
     ];
 
-    const handleAddItem = useCallback((arrayKey: keyof PageContent, newItem: any) => {
-        setPageContent(prev => {
-            const currentArray = prev[arrayKey];
-            if (Array.isArray(currentArray)) {
-                const newArray = [...currentArray, newItem];
-                return { ...prev, [arrayKey]: newArray };
-            }
-            return prev;
-        });
-    }, []);
-
-    const handleDeleteItem = useCallback((arrayKey: keyof PageContent, indexToDelete: number) => {
-        if (!window.confirm("Bạn có chắc muốn xóa mục này?")) {
-            return;
-        }
-        setPageContent(prev => {
-            const currentArray = prev[arrayKey];
-            if (Array.isArray(currentArray)) {
-                const newArray = currentArray.filter((_, index) => index !== indexToDelete);
-                return { ...prev, [arrayKey]: newArray };
-            }
-            return prev;
-        });
-    }, []);
-
     return (
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
             {/* EDIT MODE TOGGLE AND SAVE BUTTON - Only for admin/teacher */}
             {canEdit && (
                 <div className="fixed top-20 right-2 z-[99999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
                     <button
-                        onClick={() => setIsEditMode(!isEditMode)}
+                        onClick={handleToggleEditMode}
                         className={`px-3 py-1.5 text-sm rounded ${isEditMode ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white flex items-center gap-1.5`}
                     >
                         <FaEdit/> {isEditMode ? 'Tắt Chỉnh Sửa' : 'Bật Chỉnh Sửa'}
@@ -494,14 +601,16 @@ export default function LandingPage() {
                     {isEditMode && (
                         <>
                             <button
-                                onClick={persistContentToLocalStorage}
-                                className="px-3 py-1.5 text-sm rounded bg-green-500 hover:bg-green-600 text-white flex items-center gap-1.5"
+                                onClick={handleSaveChanges}
+                                disabled={!hasUnsavedChanges || isSaving}
+                                className="px-3 py-1.5 text-sm rounded bg-green-500 hover:bg-green-600 text-white flex items-center gap-1.5 disabled:bg-gray-400 disabled:cursor-not-allowed"
                             >
-                                <FaSave/> Lưu Thay Đổi
+                                <FaSave/> {isSaving ? 'Đang lưu...' : 'Lưu Thay Đổi'}
                             </button>
                             <button
-                                onClick={resetToDefaultContent}
-                                className="px-3 py-1.5 text-sm rounded bg-yellow-500 hover:bg-yellow-600 text-white"
+                                onClick={handleResetToDefault}
+                                disabled={isSaving}
+                                className="px-3 py-1.5 text-sm rounded bg-yellow-500 hover:bg-yellow-600 text-white disabled:bg-gray-400"
                             >
                                 Reset Mặc Định
                             </button>
@@ -520,13 +629,13 @@ export default function LandingPage() {
                             <EditableText
                                 id="topNavPhone"
                                 initialHtml={pageContent.topNavPhone}
-                                onSave={handleSaveContent}
+                                onSave={handleContentUpdate}
                                 isEditMode={isEditMode}
                                 tag="a"
                                 className="hover:underline"
-                                style={{color: '#FFC107'}} // Match existing style
+                                style={{color: '#FFC107'}}
                                 // @ts-ignore
-                                href={`tel:${pageContent.topNavPhone.replace(/<[^>]*>?/gm, '')}`} // Use plain text for href
+                                href={`tel:${pageContent.topNavPhone.replace(/<[^>]*>?/gm, '')}`}
                             />
                         </div>
                         <div className="flex items-center space-x-2">
@@ -534,7 +643,7 @@ export default function LandingPage() {
                             <EditableText
                                 id="topNavEmail"
                                 initialHtml={pageContent.topNavEmail}
-                                onSave={handleSaveContent}
+                                onSave={handleContentUpdate}
                                 isEditMode={isEditMode}
                                 tag="a"
                                 className="hover:underline"
@@ -618,7 +727,8 @@ export default function LandingPage() {
                         id="headerLogoSrc"
                         initialSrc={pageContent.headerLogoSrc}
                         altText="Logo AMG"
-                        onSave={handleSaveContent}
+                        onFileSelect={handleImageUpload}
+                        isUploading={isUploading && uploadingImageId === 'headerLogoSrc'}
                         isEditMode={isEditMode}
                         width={120} height={80}
                     />
@@ -632,7 +742,8 @@ export default function LandingPage() {
                     <div
                         className="absolute right-1/2 translate-x-[40%] w-[70%] max-w-[550px] h-[570px] mb-6 z-10 -top-48">
                         <EditableImage id="bannerMobileKidsImageSrc" initialSrc={pageContent.bannerMobileKidsImageSrc}
-                                       altText="Kids" onSave={handleSaveContent} isEditMode={isEditMode} fill
+                                       altText="Kids" onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
+                                       isUploading={isUploading && uploadingImageId === 'bannerMobileKidsImageSrc'}
                                        objectFit="contain" width={550} height={570} className="w-full h-full"/>
                     </div>
                     {/* Decorative elements */}
@@ -646,26 +757,27 @@ export default function LandingPage() {
                            className="w-[250vw] h-[250px] max-w-none absolute left-1/2 -translate-x-100 top-[380px] z-10 scale-x-[-1]"/>
                     <div className="relative w-full max-w-xl z-20 top-60 pb-2">
                         <EditableText id="bannerMobileTitle" initialHtml={pageContent.bannerMobileTitle}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="h1"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="h1"
                                       className="text-4xl sm:text-5xl text-[#EA570A] leading-tight"
                                       style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                         <EditableText id="bannerMobileSubtitle" initialHtml={pageContent.bannerMobileSubtitle}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                       className="text-3xl text-[#FFD105] mb-1"/>
                         <EditableText id="bannerMobileDescription" initialHtml={pageContent.bannerMobileDescription}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                       className="mb-4 text-[#EA570A] text-xs leading-relaxed"/>
                         <div className="relative w-fit mx-auto">
                             <button onClick={openModal} className="relative">
                                 <EditableImage id="bannerMobileRegisterButtonImageSrc"
                                                initialSrc={pageContent.bannerMobileRegisterButtonImageSrc}
-                                               altText="Register" onSave={handleSaveContent} isEditMode={isEditMode}
+                                               altText="Register" onFileSelect={handleImageUpload} isEditMode={isEditMode}
                                                width={200} height={60} className="hover:opacity-90 transition"/>
                                 <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
                                     <EditableImage id="bannerMobilePlayIconSrc"
                                                    initialSrc={pageContent.bannerMobilePlayIconSrc} altText="Play"
-                                                   onSave={handleSaveContent} isEditMode={isEditMode} fill
-                                                   objectFit="contain" width={40} height={40} className="w-full h-full"/>
+                                                   onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
+                                                   objectFit="contain" width={40} height={40}
+                                                   className="w-full h-full"/>
                                 </div>
                             </button>
                         </div>
@@ -676,26 +788,28 @@ export default function LandingPage() {
                     className="relative px-4 sm:px-6 pt-10 pb-20 z-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
                     <div className="w-full lg:w-auto max-w-xl z-20 lg:pr-10 text-center lg:text-left">
                         <EditableText id="bannerDesktopTitle" initialHtml={pageContent.bannerDesktopTitle}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="h1"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="h1"
                                       className="text-4xl sm:text-5xl text-[#EA570A] leading-tight mb-3"
                                       style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                         <EditableText id="bannerDesktopSubtitle" initialHtml={pageContent.bannerDesktopSubtitle}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                       className="text-3xl sm:text-3xl text-[#FFD105] mb-4"/>
                         <EditableText id="bannerDesktopDescription" initialHtml={pageContent.bannerDesktopDescription}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                       className="mb-2 text-[#EA570A]"/>
                         <div className="relative w-fit mx-auto lg:mx-0">
                             <button onClick={openModal} className="relative">
                                 <EditableImage id="bannerDesktopRegisterButtonImageSrc"
                                                initialSrc={pageContent.bannerDesktopRegisterButtonImageSrc}
-                                               altText="Register" onSave={handleSaveContent} isEditMode={isEditMode}
+                                               altText="Register" onFileSelect={handleImageUpload} isEditMode={isEditMode}
+                                               isUploading={isUploading && uploadingImageId === 'bannerDesktopRegisterButtonImageSrc'}
                                                width={200} height={60} className="hover:opacity-90 transition"/>
                                 <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
                                     <EditableImage id="bannerDesktopPlayIconSrc"
                                                    initialSrc={pageContent.bannerDesktopPlayIconSrc} altText="Play"
-                                                   onSave={handleSaveContent} isEditMode={isEditMode} fill
-                                                   objectFit="contain" width={40} height={40} className="w-full h-full"/>
+                                                   onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
+                                                   objectFit="contain" width={40} height={40}
+                                                   className="w-full h-full"/>
                                 </div>
                             </button>
                         </div>
@@ -703,7 +817,8 @@ export default function LandingPage() {
                     <div
                         className={`absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0 ${isMobile ? 'top-50' : ''}`}>
                         <EditableImage id="bannerDesktopKidsImageSrc" initialSrc={pageContent.bannerDesktopKidsImageSrc}
-                                       altText="Kids" onSave={handleSaveContent} isEditMode={isEditMode} fill
+                                       isUploading={isUploading && uploadingImageId === 'bannerDesktopKidsImageSrc'}
+                                       altText="Kids" onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
                                        objectFit="contain" width={600} height={800} className="w-full h-full"/>
                     </div>
                     {/* Decorative */}
@@ -726,7 +841,8 @@ export default function LandingPage() {
                                 id={img.id}
                                 initialSrc={img.src}
                                 altText="Gallery Image"
-                                onSave={handleSaveContent}
+                                onFileSelect={handleImageUpload}
+                                isUploading={isUploading && uploadingImageId === img.id}
                                 isEditMode={isEditMode}
                                 fill
                                 objectFit="cover"
@@ -744,7 +860,8 @@ export default function LandingPage() {
                                 id={img.id}
                                 initialSrc={img.src}
                                 altText="Gallery Image"
-                                onSave={handleSaveContent}
+                                onFileSelect={handleImageUpload}
+                                isUploading={isUploading && uploadingImageId === img.id}
                                 isEditMode={isEditMode}
                                 fill
                                 objectFit="cover"
@@ -762,7 +879,8 @@ export default function LandingPage() {
                                 id={img.id}
                                 initialSrc={img.src}
                                 altText="Gallery Image"
-                                onSave={handleSaveContent}
+                                onFileSelect={handleImageUpload}
+                                isUploading={isUploading && uploadingImageId === img.id}
                                 isEditMode={isEditMode}
                                 fill
                                 objectFit="cover"
@@ -783,16 +901,16 @@ export default function LandingPage() {
                                 height={isMobile ? 40 : 70} className="absolute left-[10%] -top-[70px] z-99"/></div>
                     <div className="w-full px-4 py-8">
                         <EditableText id="aboutAmgSectionTitle" initialHtml={pageContent.aboutAmgSectionTitle}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="h2"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                       className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
                                       style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                         <EditableText id="aboutAmgIntroHeading" initialHtml={pageContent.aboutAmgIntroHeading}
-                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                       className="text-lg md:text-xl font-semibold text-[#7ED3F7]"/>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                             <div className="rounded-xl text-left text-base leading-7 text-black space-y-4">
                                 <EditableText id="aboutAmgParagraph" initialHtml={pageContent.aboutAmgParagraph}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="rounded-xl"
                                               textEditorStyle={{lineHeight: '1.75rem', color: 'black'}}/>
                             </div>
@@ -801,16 +919,20 @@ export default function LandingPage() {
                                    className="absolute right-5 top-[140px] lg:right-130 lg:top-[140px]  z-99"/>
                             <div className="grid grid-cols-2 gap-4 place-items-center">
                                 <EditableImage id="aboutAmgIcon1Src" initialSrc={pageContent.aboutAmgIcon1Src}
-                                               altText="Phương pháp giáo dục Phần Lan" onSave={handleSaveContent}
+                                               altText="Phương pháp giáo dục Phần Lan" onFileSelect={handleImageUpload}
+                                               isUploading={isUploading && uploadingImageId === 'aboutAmgIcon1Src'}
                                                isEditMode={isEditMode} width={300} height={170}/>
                                 <EditableImage id="aboutAmgIcon2Src" initialSrc={pageContent.aboutAmgIcon2Src}
-                                               altText="Cơ sở vật chất chuẩn Quốc tế" onSave={handleSaveContent}
+                                               altText="Cơ sở vật chất chuẩn Quốc tế" onFileSelect={handleImageUpload}
+                                               isUploading={isUploading && uploadingImageId === 'aboutAmgIcon2Src'}
                                                isEditMode={isEditMode} width={300} height={170}/>
                                 <EditableImage id="aboutAmgIcon3Src" initialSrc={pageContent.aboutAmgIcon3Src}
-                                               altText="Lớp học từ 6 tháng đến 6 tuổi" onSave={handleSaveContent}
+                                               altText="Lớp học từ 6 tháng đến 6 tuổi" onFileSelect={handleImageUpload}
+                                               isUploading={isUploading && uploadingImageId === 'aboutAmgIcon3Src'}
                                                isEditMode={isEditMode} width={300} height={170}/>
                                 <EditableImage id="aboutAmgIcon4Src" initialSrc={pageContent.aboutAmgIcon4Src}
-                                               altText="Ngôn ngữ giảng dạy Việt, Anh" onSave={handleSaveContent}
+                                               altText="Ngôn ngữ giảng dạy Việt, Anh" onFileSelect={handleImageUpload}
+                                               isUploading={isUploading && uploadingImageId === 'aboutAmgIcon4Src'}
                                                isEditMode={isEditMode} width={300} height={170}/>
                             </div>
                         </div>
@@ -821,7 +943,8 @@ export default function LandingPage() {
                         boxes={pageContent.classGalleryBoxes}
                         items={pageContent.classGalleryItems}
                         isEditMode={isEditMode}
-                        onSave={handleSaveContent}
+                        onSave={handleContentUpdate}
+                        onFileSelect={handleImageUpload}
                         onAddItemClass={() => handleAddItem('classGalleryItems', newClassGalleryItemTemplate)}
                         onDeleteItemClass={(index) => handleDeleteItem('classGalleryItems', index)}
                         onAddBox={() => handleAddItem('classGalleryBoxes', newClassGalleryBoxTemplate)}
@@ -835,7 +958,7 @@ export default function LandingPage() {
                 <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                        className="absolute right-5 -top-[60px] lg:right-50 lg:top-[4700px]  z-99"/>
                 <EditableText id="mealSectionTitle" initialHtml={pageContent.mealSectionTitle}
-                              onSave={handleSaveContent} isEditMode={isEditMode} tag="h2"
+                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                               className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
                               style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
@@ -847,7 +970,8 @@ export default function LandingPage() {
                                 id={img.id}
                                 initialSrc={img.src}
                                 altText="Meal Image"
-                                onSave={handleSaveContent}
+                                onFileSelect={handleImageUpload}
+                                isUploading={isUploading && uploadingImageId === img.id}
                                 isEditMode={isEditMode}
                                 fill
                                 objectFit="cover"
@@ -865,7 +989,8 @@ export default function LandingPage() {
                                 id={img.id}
                                 initialSrc={img.src}
                                 altText="Meal Image"
-                                onSave={handleSaveContent}
+                                onFileSelect={handleImageUpload}
+                                isUploading={isUploading && uploadingImageId === img.id}
                                 isEditMode={isEditMode}
                                 fill
                                 objectFit="cover"
@@ -883,7 +1008,8 @@ export default function LandingPage() {
                                 id={img.id}
                                 initialSrc={img.src}
                                 altText="Meal Image"
-                                onSave={handleSaveContent}
+                                onFileSelect={handleImageUpload}
+                                isUploading={isUploading && uploadingImageId === img.id}
                                 isEditMode={isEditMode}
                                 fill
                                 objectFit="cover"
@@ -902,11 +1028,11 @@ export default function LandingPage() {
                        className="left-5 lg:left-30 top-[8800px] lg:top-[4550px] z-99"/>
                 <div className="w-full max-w-7xl mx-auto">
                     <EditableText id="reasonsSectionTitle1" initialHtml={pageContent.reasonsSectionTitle1}
-                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="h2"
+                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                   className="text-4xl md:text-4xl text-center text-[#F7B052] mb-2"
                                   style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                     <EditableText id="reasonsSectionTitle2" initialHtml={pageContent.reasonsSectionTitle2}
-                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="h2"
+                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                   className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
                                   style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -916,18 +1042,18 @@ export default function LandingPage() {
                                     <div className="flex flex-col">
                                         <EditableText id="reasonsCol1Heading1"
                                                       initialHtml={pageContent.reasonsCol1Heading1}
-                                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                                       className="text-[#7ED3F7] font-semibold text-lg"/>
                                         <EditableText id="reasonsCol1Heading2"
                                                       initialHtml={pageContent.reasonsCol1Heading2}
-                                                      onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                                       className="text-[#7ED3F7] font-semibold text-lg mb-3"/>
                                     </div>
                                     <Image src="/banner/icon_cloud.png" alt="cloud" width={100} height={50}
                                            className="right-2 z-10 ml-10"/>
                                 </div>
                                 <EditableText id="reasonsCol1Para1" initialHtml={pageContent.reasonsCol1Para1}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="text-black leading-relaxed text-sm"/>
                             </div>
                             <div className="flex gap-4 items-start">
@@ -936,13 +1062,13 @@ export default function LandingPage() {
                                 <div className="space-y-10 text-sm text-black">
                                     <EditableText id="reasonsCol1ForkPara1"
                                                   initialHtml={pageContent.reasonsCol1ForkPara1}
-                                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                     <EditableText id="reasonsCol1ForkPara2"
                                                   initialHtml={pageContent.reasonsCol1ForkPara2}
-                                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                     <EditableText id="reasonsCol1ForkPara3"
                                                   initialHtml={pageContent.reasonsCol1ForkPara3}
-                                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 </div>
                             </div>
                         </div>
@@ -952,15 +1078,16 @@ export default function LandingPage() {
                                     <EditableImage id={item.iconKey}
                                                    initialSrc={pageContent[item.iconKey as keyof PageContent] as string}
                                                    altText={pageContent[item.titleKey as keyof PageContent] as string}
-                                                   onSave={handleSaveContent} isEditMode={isEditMode} width={400}
+                                                   onFileSelect={handleImageUpload} isEditMode={isEditMode} width={400}
+                                                   isUploading={isUploading && uploadingImageId === item.iconKey}
                                                    height={150} className="mx-auto"/>
                                     <EditableText id={item.titleKey}
                                                   initialHtml={pageContent[item.titleKey as keyof PageContent] as string}
-                                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                                   className="font-bold text-xl" style={{color: item.ttColor}}/>
                                     <EditableText id={item.descKey}
                                                   initialHtml={pageContent[item.descKey as keyof PageContent] as string}
-                                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                                   className="text-xs text-black"/>
                                 </div>
                             ))}
@@ -981,7 +1108,7 @@ export default function LandingPage() {
                         </div>
                         {/* TestimonialCarousel now receives editable content */}
                         <TestimonialCarousel testimonials={pageContent.testimonials} isEditMode={isEditMode}
-                                             onSave={handleSaveContent}
+                                             onSave={handleContentUpdate}
                                              onAddItem={() => handleAddItem('testimonials', newTestimonialTemplate)}
                                              onDeleteItem={(index) => handleDeleteItem('testimonials', index)}
                         />
@@ -993,36 +1120,36 @@ export default function LandingPage() {
                         <div className="flex flex-col gap-10 w-full">
                             <div className="space-y-1">
                                 <EditableText id="footerSystemTitle" initialHtml={pageContent.footerSystemTitle}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                               className="font-bold text-base"/>
                                 <EditableText id="footerSystemName" initialHtml={pageContent.footerSystemName}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="font-semibold"/>
                                 <EditableText id="footerAddress1" initialHtml={pageContent.footerAddress1}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerAddress2" initialHtml={pageContent.footerAddress2}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerAddress3" initialHtml={pageContent.footerAddress3}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerAddress4" initialHtml={pageContent.footerAddress4}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerHotline" initialHtml={pageContent.footerHotline}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerEmail" initialHtml={pageContent.footerEmail}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerYoutubeName" initialHtml={pageContent.footerYoutubeName}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                             </div>
                             <div className="flex flex-row flex-wrap gap-x-10 gap-y-4">
                                 <div>
                                     <EditableText id="footerLinkTitle" initialHtml={pageContent.footerLinkTitle}
-                                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                                   className="font-bold text-sm mb-2"/>
                                     <ul className="space-y-1 text-sm">
                                         {pageContent.footerLinks.map((link, index) => (
                                             <li key={index}><EditableText id={`footerLink_${index}_text`}
                                                                           initialHtml={link.text}
-                                                                          onSave={handleSaveContent}
+                                                                          onSave={handleContentUpdate}
                                                                           isEditMode={isEditMode} tag="a"
                                                                           href={link.href}/></li>
                                         ))}
@@ -1030,13 +1157,13 @@ export default function LandingPage() {
                                 </div>
                                 <div>
                                     <EditableText id="footerSupportTitle" initialHtml={pageContent.footerSupportTitle}
-                                                  onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                                   className="font-bold text-sm mb-2"/>
                                     <ul className="space-y-1 text-sm">
                                         {pageContent.footerSupportLinks.map((link, index) => (
                                             <li key={index}><EditableText id={`footerSupportLink_${index}_text`}
                                                                           initialHtml={link.text}
-                                                                          onSave={handleSaveContent}
+                                                                          onSave={handleContentUpdate}
                                                                           isEditMode={isEditMode} tag="a"
                                                                           href={link.href}/></li>
                                         ))}
@@ -1050,7 +1177,8 @@ export default function LandingPage() {
                                        rel="noopener noreferrer">
                                         <EditableImage id="footerFanpageImageSrc"
                                                        initialSrc={pageContent.footerFanpageImageSrc}
-                                                       altText="YouTube Thumbnail" onSave={handleSaveContent}
+                                                       altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
+                                                       isUploading={isUploading && uploadingImageId === 'footerFanpageImageSrc'}
                                                        isEditMode={isEditMode} width={200} height={100}
                                                        className="rounded-lg mt-2"/>
                                     </a>
@@ -1061,7 +1189,8 @@ export default function LandingPage() {
                                        rel="noopener noreferrer">
                                         <EditableImage id="footerYoutubeImageSrc"
                                                        initialSrc={pageContent.footerYoutubeImageSrc}
-                                                       altText="YouTube Thumbnail" onSave={handleSaveContent}
+                                                       altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
+                                                       isUploading={isUploading && uploadingImageId === 'footerYoutubeImageSrc'}
                                                        isEditMode={isEditMode} width={200} height={100}
                                                        className="rounded-lg mt-2"/>
                                     </a>
@@ -1078,25 +1207,25 @@ export default function LandingPage() {
                             className="w-full flex flex-col lg:flex-row justify-between items-start gap-10 text-sm relative">
                             <div className="space-y-1">
                                 <EditableText id="footerSystemTitle" initialHtml={pageContent.footerSystemTitle}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                               className="font-bold text-base"/>
                                 <EditableText id="footerSystemName" initialHtml={pageContent.footerSystemName}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="font-semibold"/>
                                 <EditableText id="footerAddress1" initialHtml={pageContent.footerAddress1}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerAddress2" initialHtml={pageContent.footerAddress2}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerAddress3" initialHtml={pageContent.footerAddress3}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerAddress4" initialHtml={pageContent.footerAddress4}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerHotline" initialHtml={pageContent.footerHotline}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerEmail" initialHtml={pageContent.footerEmail}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <EditableText id="footerYoutubeName" initialHtml={pageContent.footerYoutubeName}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
                                 <div className="flex flex-wrap sm:flex-nowrap gap-6 mt-4">
                                     <div className="flex flex-col items-start">
                                         <h3 className="font-bold">FANPAGE</h3>
@@ -1104,7 +1233,8 @@ export default function LandingPage() {
                                            rel="noopener noreferrer">
                                             <EditableImage id="footerFanpageImageSrc"
                                                            initialSrc={pageContent.footerFanpageImageSrc}
-                                                           altText="YouTube Thumbnail" onSave={handleSaveContent}
+                                                           altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
+                                                           isUploading={isUploading && uploadingImageId === 'footerFanpageImageSrc'}
                                                            isEditMode={isEditMode} width={180} height={100}
                                                            className="rounded-lg mt-2"/>
                                         </a>
@@ -1115,7 +1245,8 @@ export default function LandingPage() {
                                            rel="noopener noreferrer">
                                             <EditableImage id="footerYoutubeImageSrc"
                                                            initialSrc={pageContent.footerYoutubeImageSrc}
-                                                           altText="YouTube Thumbnail" onSave={handleSaveContent}
+                                                           altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
+                                                           isUploading={isUploading && uploadingImageId === 'footerYoutubeImageSrc'}
                                                            isEditMode={isEditMode} width={180} height={100}
                                                            className="rounded-lg mt-2"/>
                                         </a>
@@ -1124,12 +1255,13 @@ export default function LandingPage() {
                             </div>
                             <div>
                                 <EditableText id="footerLinkTitle" initialHtml={pageContent.footerLinkTitle}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                               className="font-bold text-base mb-2"/>
                                 <ul className="space-y-1">
                                     {pageContent.footerLinks.map((link, index) => (
                                         <li key={index}><EditableText id={`footerLink_${index}_text`}
-                                                                      initialHtml={link.text} onSave={handleSaveContent}
+                                                                      initialHtml={link.text}
+                                                                      onSave={handleContentUpdate}
                                                                       isEditMode={isEditMode} tag="a" href={link.href}/>
                                         </li>
                                     ))}
@@ -1137,12 +1269,13 @@ export default function LandingPage() {
                             </div>
                             <div>
                                 <EditableText id="footerSupportTitle" initialHtml={pageContent.footerSupportTitle}
-                                              onSave={handleSaveContent} isEditMode={isEditMode} tag="h3"
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                               className="font-bold text-base mb-2"/>
                                 <ul className="space-y-1">
                                     {pageContent.footerSupportLinks.map((link, index) => (
                                         <li key={index}><EditableText id={`footerSupportLink_${index}_text`}
-                                                                      initialHtml={link.text} onSave={handleSaveContent}
+                                                                      initialHtml={link.text}
+                                                                      onSave={handleContentUpdate}
                                                                       isEditMode={isEditMode} tag="a" href={link.href}/>
                                         </li>
                                     ))}
