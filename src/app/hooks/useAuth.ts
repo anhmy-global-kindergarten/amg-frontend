@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 
 interface AuthInfo {
     name: string | null;
-    role: string | null;
-    id: string | null;
+    role: string | undefined;
+    id: string | undefined;
 }
 
 interface StoredUser {
@@ -22,8 +22,8 @@ interface StoredUser {
 export function useAuth(): AuthInfo {
     const [authInfo, setAuthInfo] = useState<AuthInfo>({
         name: null,
-        role: null,
-        id: null,
+        role: undefined,
+        id: undefined,
     });
 
     useEffect(() => {
@@ -36,8 +36,8 @@ export function useAuth(): AuthInfo {
                 const parsed: StoredUser = JSON.parse(storedUser);
 
                 const name = parsed?.user?.name || parsed?.name || null;
-                const role = parsed?.user?.role || parsed?.role || null;
-                const id = parsed?.user?.id || parsed?.id || null;
+                const role = parsed?.user?.role || parsed?.role || undefined;
+                const id = parsed?.user?.id || parsed?.id || undefined;
                 if (isMounted) {
                     setAuthInfo({ name, role, id });
                 }

@@ -3,8 +3,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Comment, CreateCommentPayload } from "@/app/utils/comment";
 
-const API_BASE_URL = '/amg/v1/comments';
-
 export function usePostComments(postId: string | undefined) {
     const [comments, setComments] = useState<Comment[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
@@ -49,6 +47,7 @@ export function usePostComments(postId: string | undefined) {
                 const errData = await res.json();
                 throw new Error(errData.error || "Failed to update comment");
             }
+            await fetchComments();
             return true;
         } catch (err: any) {
             console.error("Update comment error:", err);
@@ -79,7 +78,7 @@ export function usePostComments(postId: string | undefined) {
     // Hàm xóa comment
     const deleteComment = async (commentId: string): Promise<boolean> => {
         try {
-            const res = await fetch(`${API_BASE_URL}/delete-comment/${commentId}`, {
+            const res = await fetch(`/api-v1/comments/delete-comment/${commentId}`, {
                 method: 'POST',
             });
             if (!res.ok) {

@@ -13,13 +13,19 @@ interface CommentItemProps {
         id?: string | undefined;
         role?: string;
     };
-    onDelete: (commentId: string) => Promise<void>;
+    onDelete: (commentId: string) => Promise<boolean>;
     onUpdate: (commentId: string, newContent: string) => Promise<boolean>;
+}
+
+function canUserDelete(item: { authorId?: string }, user: { id?: string, role?: string }): boolean {
+    if (!user || !item) return false;
+    if (user.role === 'admin') return true;
+    if (user.id && item.authorId && user.id === item.authorId) return true;
+    return false;
 }
 
 function canUserModify(item: { authorId?: string }, user: { id?: string, role?: string }): boolean {
     if (!user || !item) return false;
-    if (user.role === 'admin') return true;
     if (user.id && item.authorId && user.id === item.authorId) return true;
     return false;
 }
@@ -30,7 +36,8 @@ export default function CommentItem({ comment, currentUser, onDelete, onUpdate }
     const [editedContent, setEditedContent] = useState(comment.content);
     const [isUpdating, setIsUpdating] = useState(false);
 
-    const hasPermission = canUserModify(comment, currentUser);
+    const hasPermissionDelete = canUserDelete(comment, currentUser);
+    const hasPermissionEdit = canUserModify(comment, currentUser);
 
     const handleUpdate = async () => {
         if (editedContent.trim() === comment.content || !editedContent.trim()) {
@@ -65,20 +72,24 @@ export default function CommentItem({ comment, currentUser, onDelete, onUpdate }
             <div className="flex items-start justify-between">
                 <div>
                     <p className="text-base font-semibold text-[#795548]">{comment.authorName}</p>
-                    <p className="text-xs text-[#A1887F] italic">{new Date(comment.createdAt).toLocaleString()}</p>
+                    <p className="text-xs text-[#A1887F] italic">{new Date(comment.updatedAt).toLocaleString()}</p>
                 </div>
-                {hasPermission && !isEditing && (
+                {hasPermissionDelete && !isEditing && (
                     <div className="relative flex-shrink-0">
                         <Menu>
-                            <Menu.Button className="p-1 rounded-full hover:bg-gray-200 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <Menu.Button className="p-1 rounded-full text-black opacity-20 group-hover:opacity-100 transition-opacity">
                                 <MoreVertical size={16} />
                             </Menu.Button>
                             <Menu.Items className="absolute right-0 mt-1 w-28 bg-white border rounded-lg shadow-lg z-20">
-                                <Menu.Item>
-                                    {({ active }) => (
-                                        <button onClick={() => setIsEditing(true)} className={`block w-full text-left px-3 py-1.5 text-sm ${active ? 'bg-gray-100' : ''}`}>Sửa</button>
-                                    )}
-                                </Menu.Item>
+                                {
+                                    hasPermissionEdit && (
+                                        <Menu.Item>
+                                            {({ active }) => (
+                                                <button onClick={() => setIsEditing(true)} className={`block w-full text-left px-3 py-1.5 text-sm text-yellow-600 ${active ? 'bg-yellow-100' : ''}`}>Sửa</button>
+                                            )}
+                                        </Menu.Item>
+                                    )
+                                }
                                 <Menu.Item>
                                     {({ active }) => (
                                         <button onClick={handleDelete} className={`block w-full text-left px-3 py-1.5 text-sm text-red-600 ${active ? 'bg-red-50' : ''}`}>Xóa</button>

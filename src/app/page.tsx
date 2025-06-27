@@ -768,15 +768,12 @@ export default function LandingPage() {
                                       className="mb-4 text-[#EA570A] text-xs leading-relaxed"/>
                         <div className="relative w-fit mx-auto">
                             <button onClick={openModal} className="relative">
-                                <EditableImage id="bannerMobileRegisterButtonImageSrc"
-                                               initialSrc={pageContent.bannerMobileRegisterButtonImageSrc}
-                                               altText="Register" onFileSelect={handleImageUpload} isEditMode={isEditMode}
+                                <Image alt="bannerMobileRegisterButtonImageSrc"
+                                    src="/banner/button_register.png"
                                                width={200} height={60} className="hover:opacity-90 transition"/>
                                 <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                                    <EditableImage id="bannerMobilePlayIconSrc"
-                                                   initialSrc={pageContent.bannerMobilePlayIconSrc} altText="Play"
-                                                   onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
-                                                   objectFit="contain" width={40} height={40}
+                                    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill
+                                                   objectFit="contain"
                                                    className="w-full h-full"/>
                                 </div>
                             </button>
@@ -799,16 +796,12 @@ export default function LandingPage() {
                                       className="mb-2 text-[#EA570A]"/>
                         <div className="relative w-fit mx-auto lg:mx-0">
                             <button onClick={openModal} className="relative">
-                                <EditableImage id="bannerDesktopRegisterButtonImageSrc"
-                                               initialSrc={pageContent.bannerDesktopRegisterButtonImageSrc}
-                                               altText="Register" onFileSelect={handleImageUpload} isEditMode={isEditMode}
-                                               isUploading={isUploading && uploadingImageId === 'bannerDesktopRegisterButtonImageSrc'}
+                                <Image alt="bannerMobileRegisterButtonImageSrc"
+                                       src="/banner/button_register.png"
                                                width={200} height={60} className="hover:opacity-90 transition"/>
                                 <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                                    <EditableImage id="bannerDesktopPlayIconSrc"
-                                                   initialSrc={pageContent.bannerDesktopPlayIconSrc} altText="Play"
-                                                   onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
-                                                   objectFit="contain" width={40} height={40}
+                                    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill
+                                                   objectFit="contain"
                                                    className="w-full h-full"/>
                                 </div>
                             </button>
@@ -908,7 +901,7 @@ export default function LandingPage() {
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                       className="text-lg md:text-xl font-semibold text-[#7ED3F7]"/>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                            <div className="rounded-xl text-left text-base leading-7 text-black space-y-4">
+                            <div className="rounded-xl text-base leading-7 text-black space-y-4 text-justify">
                                 <EditableText id="aboutAmgParagraph" initialHtml={pageContent.aboutAmgParagraph}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="rounded-xl"
@@ -1054,7 +1047,7 @@ export default function LandingPage() {
                                 </div>
                                 <EditableText id="reasonsCol1Para1" initialHtml={pageContent.reasonsCol1Para1}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="text-black leading-relaxed text-sm"/>
+                                              className="text-black leading-relaxed text-sm text-justify"/>
                             </div>
                             <div className="flex gap-4 items-start">
                                 <Image src="/icons/icon_fork.png" alt="fork" width={50} height={100}
@@ -1080,15 +1073,15 @@ export default function LandingPage() {
                                                    altText={pageContent[item.titleKey as keyof PageContent] as string}
                                                    onFileSelect={handleImageUpload} isEditMode={isEditMode} width={400}
                                                    isUploading={isUploading && uploadingImageId === item.iconKey}
-                                                   height={150} className="mx-auto"/>
+                                                   height={150} className="mx-auto text-justify"/>
                                     <EditableText id={item.titleKey}
                                                   initialHtml={pageContent[item.titleKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                                  className="font-bold text-xl" style={{color: item.ttColor}}/>
+                                                  className="font-bold text-xl text-justify" style={{color: item.ttColor}}/>
                                     <EditableText id={item.descKey}
                                                   initialHtml={pageContent[item.descKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                                  className="text-xs text-black"/>
+                                                  className="text-xs text-black text-justify"/>
                                 </div>
                             ))}
                         </div>

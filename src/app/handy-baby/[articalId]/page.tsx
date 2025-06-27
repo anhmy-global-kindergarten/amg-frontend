@@ -13,6 +13,7 @@ import RenderHTMLContent from "@/app/utils/getContent";
 import {deletePost} from "@/app/utils/deletePost";
 import {usePostComments} from "@/app/hooks/useComment";
 import {CreateCommentPayload} from "@/app/utils/comment";
+import CommentItem from "@/components/CommentItem";
 
 export default function HandyBabyDetail() {
     const params = useParams();
@@ -25,7 +26,8 @@ export default function HandyBabyDetail() {
         loading: commentsLoading,
         error: commentsError,
         createComment,
-        deleteComment
+        deleteComment,
+        updateComment,
     } = usePostComments(articalId);
 
     const [commentAuthor, setCommentAuthor] = useState("");
@@ -282,17 +284,14 @@ export default function HandyBabyDetail() {
                                 <p className="text-gray-500 italic">Chưa có bình luận nào.</p>
                             )}
 
-                            {comments.map((cmt, index) => (
-                                <div
-                                    key={index}
-                                    className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow"
-                                >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <p className="text-base font-semibold text-[#795548]">{cmt.authorName}</p>
-                                        <p className="text-sm text-[#A1887F] italic">{new Date(cmt.createdAt).toLocaleString()}</p>
-                                    </div>
-                                    <p className="text-gray-800 text-sm leading-relaxed">{cmt.content}</p>
-                                </div>
+                            {!commentsLoading && !commentsError && comments.length > 0 && comments.map((cmt) => (
+                                <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt}
+                                    currentUser={{ id: userId, role }}
+                                    onDelete={deleteComment}
+                                    onUpdate={updateComment}
+                                />
                             ))}
                         </div>
 
@@ -300,12 +299,12 @@ export default function HandyBabyDetail() {
                             <h4 className="text-[#FFC107] mb-4">Viết bình luận của bạn:</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <input
-                                        type="text"
-                                        placeholder="Họ và tên"
-                                        className="rounded-full border px-4 py-2 text-black"
-                                        value={commentAuthor}
-                                        onChange={(e) => setCommentAuthor(e.target.value)}
-                                        disabled={!!loggedInUserName}
+                                    type="text"
+                                    placeholder="Họ và tên"
+                                    className="rounded-full border px-4 py-2 text-black"
+                                    value={commentAuthor}
+                                    onChange={(e) => setCommentAuthor(e.target.value)}
+                                    disabled={!!loggedInUserName}
                                 />
                             </div>
                             <textarea

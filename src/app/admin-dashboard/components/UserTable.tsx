@@ -1,8 +1,10 @@
 "use client";
 /* eslint-disable */
-import { useState } from "react";
+import React, {Fragment, useCallback, useState} from "react";
 import { useUsers, User } from "@/app/hooks/useAdminData";
 import { format } from "date-fns";
+import {Menu, Transition} from "@headlessui/react";
+import {ChevronDownIcon} from "@heroicons/react/20/solid";
 
 const formatDate = (dateString: string | undefined) => {
     if (!dateString) return 'N/A';
@@ -13,8 +15,158 @@ const formatDate = (dateString: string | undefined) => {
     }
 };
 
+const USER_STATUSES = {
+    active: { label: 'Hoạt động', color: 'bg-green-100 text-green-800', is_active: true },
+    inactive: { label: 'Vô hiệu hóa', color: 'bg-red-100 text-red-800', is_active: false },
+};
+
+const STATUS_ACTIONS = [
+    { label: 'Kích hoạt', newStatus: 'active', endpointSuffix: 'reactivate-user' },
+    { label: 'Vô hiệu hóa', newStatus: 'inactive', endpointSuffix: 'deactivate-user' },
+];
+
+const USER_ROLES = {
+    admin: { label: 'Admin', color: 'bg-purple-100 text-purple-800' },
+    teacher: { label: 'Giáo viên', color: 'bg-blue-100 text-blue-800' },
+    parent: { label: 'Phụ huynh', color: 'bg-yellow-100 text-yellow-800' },
+};
+
+const ROLE_ACTIONS = [
+    { label: 'Giáo viên', newRole: 'teacher' },
+    { label: 'Phụ huynh', newRole: 'parent' },
+];
+
+const RoleMenu = ({ user, onUpdate }: { user: User, onUpdate: () => void }) => {
+    const currentRoleInfo = USER_ROLES[user.role as keyof typeof USER_ROLES] ?? USER_ROLES.parent;
+
+    const handleRoleChange = async (newRole: string) => {
+        const roleInfo = USER_ROLES[newRole as keyof typeof USER_ROLES];
+        if (!roleInfo) return;
+
+        if (window.confirm(`Bạn có chắc muốn đổi vai trò người dùng này thành "${roleInfo.label}"?`)) {
+            try {
+                const response = await fetch(`/api-v1/users/update-user/${user.id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: newRole }),
+                });
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Cập nhật vai trò thất bại');
+                }
+                onUpdate();
+            } catch (err: any) {
+                alert(`Lỗi: ${err.message}`);
+            }
+        }
+    };
+
+    return (
+        <Menu as="div" className="relative inline-block text-left w-full">
+            <Menu.Button className={`w-full inline-flex justify-center items-center rounded-md px-3 py-1.5 text-xs font-medium shadow-sm hover:opacity-80 ${currentRoleInfo.color}`}>
+                {currentRoleInfo.label}
+                <ChevronDownIcon className="ml-2 -mr-1 h-4 w-4" />
+            </Menu.Button>
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1">
+                        {ROLE_ACTIONS.map((action) => (
+                            <Menu.Item key={action.newRole} disabled={user.role === action.newRole}>
+                                {({ active, disabled }) => (
+                                    <button
+                                        onClick={() => handleRoleChange(action.newRole)}
+                                        className={`group flex w-full items-center rounded-md px-2 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} ${disabled ? 'cursor-not-allowed text-gray-400' : ''}`}
+                                        disabled={disabled}
+                                    >
+                                        {action.label}
+                                    </button>
+                                )}
+                            </Menu.Item>
+                        ))}
+                    </div>
+                </Menu.Items>
+        </Menu>
+    );
+}
+
+const StatusMenu = ({ user, onUpdate }: { user: User, onUpdate: () => void }) => {
+    const currentStatusInfo = user.is_active ? USER_STATUSES.active : USER_STATUSES.inactive;
+
+    const handleStatusChange = async (newStatusKey: 'active' | 'inactive') => {
+        const newStatus = USER_STATUSES[newStatusKey];
+        if (window.confirm(`Bạn có chắc muốn chuyển người dùng này thành "${newStatus.label}"?`)) {
+            const endpoint = newStatus.is_active ? 'reactivate-user' : 'deactivate-user';
+            try {
+                const response = await fetch(`/api-v1/users/${endpoint}/${user.id}`, { method: 'POST' });
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Cập nhật trạng thái thất bại');
+                }
+                onUpdate();
+            } catch (err: any) {
+                alert(`Lỗi: ${err.message}`);
+            }
+        }
+    };
+
+    return (
+        <Menu as="div" className="relative inline-block text-left w-full">
+            <Menu.Button className={`w-full inline-flex justify-center items-center rounded-md px-3 py-1.5 text-xs font-medium shadow-sm hover:opacity-80 ${currentStatusInfo.color}`}>
+                {currentStatusInfo.label}
+                <ChevronDownIcon className="ml-2 -mr-1 h-4 w-4" />
+            </Menu.Button>
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1">
+                        {STATUS_ACTIONS.map((action) => (
+                            <Menu.Item key={action.newStatus} disabled={currentStatusInfo.is_active === (action.newStatus === 'active')}>
+                                {({ active, disabled }) => (
+                                    <button
+                                        onClick={() => handleStatusChange(action.newStatus as any)}
+                                        className={`group flex w-full items-center rounded-md px-2 py-2 text-sm ${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} ${disabled ? 'cursor-not-allowed text-gray-400' : ''}`}
+                                        disabled={disabled}
+                                    >
+                                        {action.label}
+                                    </button>
+                                )}
+                            </Menu.Item>
+                        ))}
+                    </div>
+                </Menu.Items>
+        </Menu>
+    );
+};
+
+
+const UserRow = React.memo(({ user, onUpdate }: { user: User, onUpdate: () => void }) => {
+
+    const isAdmin = user.role === 'admin';
+    const currentStatusInfo = user.is_active ? USER_STATUSES.active : USER_STATUSES.inactive;
+    const currentRoleInfo = USER_ROLES[user.role as keyof typeof USER_ROLES] ?? USER_ROLES.parent;
+
+    return (
+        <tr className="hover:bg-yellow-50 text-sm text-gray-700">
+            <td className="py-2 px-4 border">{user.name}</td>
+            <td className="py-2 px-4 border">{user.username}</td>
+            <td className="py-2 px-4 border relative">
+                {isAdmin ? (
+                    <span className={`px-3 py-1.5 text-xs font-medium rounded-md ${currentRoleInfo.color}`}>{currentRoleInfo.label}</span>
+                ) : (
+                    <RoleMenu user={user} onUpdate={onUpdate} />
+                )}
+            </td>
+            <td className="py-2 px-4 border">{formatDate(user.date_created)}</td>
+            <td className="py-2 px-4 border relative">
+                {isAdmin ? (
+                    <span className={`px-3 py-1.5 text-xs font-medium rounded-md ${currentStatusInfo.color}`}>{currentStatusInfo.label}</span>
+                ) : (
+                    <StatusMenu user={user} onUpdate={onUpdate} />
+                )}
+            </td>
+        </tr>
+    );
+});
+
 export default function UserTable() {
-    const { users, loading, error, setUsers } = useUsers();
+    const { users, loading, error, fetchUsers } = useUsers();
     const [currentPage, setCurrentPage] = useState(1);
     const [recordsPerPage, setRecordsPerPage] = useState(5);
 
@@ -27,27 +179,6 @@ export default function UserTable() {
     const handlePageChange = (page: number) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
-        }
-    };
-
-    const handleToggleActive = async (userId: string, currentIsActive: boolean) => {
-        const action = currentIsActive ? "vô hiệu hóa" : "kích hoạt lại";
-        const endpoint = currentIsActive
-            ? `/api-v1/users/deactivate-user/${userId}`
-            : `/api-v1/users/reactivate-user/${userId}`;
-
-        if (window.confirm(`Bạn có chắc muốn ${action} người dùng này?`)) {
-            try {
-                const res = await fetch(endpoint, { method: 'POST' });
-                if (!res.ok) {
-                    const errData = await res.json();
-                    throw new Error(errData.error || `Lỗi khi ${action}`);
-                }
-                alert(`Đã ${action} người dùng.`);
-                setUsers(prev => prev.map(u => u.id === userId ? { ...u, is_active: !currentIsActive } : u));
-            } catch (err: any) {
-                alert(`Lỗi: ${err.message}`);
-            }
         }
     };
 
@@ -89,37 +220,18 @@ export default function UserTable() {
                     <th className="py-2 px-4 border text-left">Vai trò</th>
                     <th className="py-2 px-4 border text-left">Ngày tạo</th>
                     <th className="py-2 px-4 border text-left">Trạng thái</th>
-                    <th className="py-2 px-4 border text-center">Hành động</th>
                 </tr>
                 </thead>
                 <tbody>
-                {currentUsers.length > 0 ? currentUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-yellow-50 text-sm text-gray-700">
-                        <td className="py-2 px-4 border">{user.name}</td>
-                        <td className="py-2 px-4 border">{user.username}</td>
-                        <td className="py-2 px-4 border">{user.role}</td>
-                        <td className="py-2 px-4 border">{formatDate(user.date_created)}</td>
-                        <td className="py-2 px-4 border">
-                             <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
-                                 user.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                             }`}>
-                                {user.is_active ? 'Hoạt động' : 'Vô hiệu hóa'}
-                            </span>
-                        </td>
-                        <td className="py-2 px-4 border text-center space-x-1">
-                            {/* <button className="text-blue-600 hover:underline text-xs p-1">Sửa</button> */}
-                            <button
-                                onClick={() => handleToggleActive(user.id, user.is_active)}
-                                className={`text-xs p-1 ${user.is_active ? 'text-red-500 hover:underline' : 'text-green-500 hover:underline'}`}>
-                                {user.is_active ? 'Vô hiệu hóa' : 'Kích hoạt'}
-                            </button>
-                        </td>
-                    </tr>
-                )) : (
-                    <tr>
-                        <td colSpan={6} className="text-center py-10 border text-gray-500">Không có người dùng nào.</td>
-                    </tr>
-                )}
+                    {currentUsers.length > 0 ? currentUsers.map((user) => (
+                        <UserRow
+                            key={user.id}
+                            user={user}
+                            onUpdate={fetchUsers}
+                        />
+                    )) : (
+                        <tr><td colSpan={5} className="text-center py-10 border text-gray-500">Không có người dùng nào.</td></tr>
+                    )}
                 </tbody>
             </table>
 
@@ -131,7 +243,7 @@ export default function UserTable() {
                 >
                     ← Trước
                 </button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNumber => (
+                {Array.from({length: totalPages}, (_, i) => i + 1).map(pageNumber => (
                     <button
                         key={pageNumber}
                         onClick={() => handlePageChange(pageNumber)}

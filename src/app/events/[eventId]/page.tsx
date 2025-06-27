@@ -14,6 +14,7 @@ import RenderHTMLContent from "@/app/utils/getContent";
 import {deletePost} from "@/app/utils/deletePost";
 import {usePostComments} from "@/app/hooks/useComment";
 import {CreateCommentPayload} from "@/app/utils/comment";
+import CommentItem from "@/components/CommentItem";
 
 export default function EventDetail() {
     const params = useParams();
@@ -27,7 +28,8 @@ export default function EventDetail() {
         loading: commentsLoading,
         error: commentsError,
         createComment,
-        deleteComment
+        deleteComment,
+        updateComment,
     } = usePostComments(articalId);
 
     const [commentAuthor, setCommentAuthor] = useState("");
@@ -96,7 +98,7 @@ export default function EventDetail() {
 
     if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
     if (error && !post) {
-        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải bài học.</p>;
+        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sự kiện.</p>;
     }
 
     if (!post) {
@@ -212,24 +214,21 @@ export default function EventDetail() {
                                 <p className="text-gray-500 italic">Chưa có bình luận nào.</p>
                             )}
 
-                            {comments.map((cmt, index) => (
-                                <div
-                                    key={index}
-                                    className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow"
-                                >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <p className="text-base font-semibold text-[#795548]">{cmt.authorName}</p>
-                                        <p className="text-sm text-[#A1887F] italic">{new Date(cmt.createdAt).toLocaleString()}</p>
-                                    </div>
-                                    <p className="text-gray-800 text-sm leading-relaxed">{cmt.content}</p>
-                                </div>
+                            {!commentsLoading && !commentsError && comments.length > 0 && comments.map((cmt) => (
+                                <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt}
+                                    currentUser={{ id: userId, role }}
+                                    onDelete={deleteComment}
+                                    onUpdate={updateComment}
+                                />
                             ))}
                         </div>
 
                         <div className="w-full max-w-4xl mt-8 px-4 md:px-0">
                             <h4 className="text-[#FFC107] mb-4">Viết bình luận của bạn:</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <input
+                                <input
                                     type="text"
                                     placeholder="Họ và tên"
                                     className="rounded-full border px-4 py-2 text-black"

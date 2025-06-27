@@ -2,7 +2,7 @@
 /* eslint-disable */
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import {notFound, useParams} from "next/navigation";
 import React, {use, useEffect} from "react";
 import { useState } from "react";
 import {Menu} from "@headlessui/react";
@@ -11,52 +11,23 @@ import {deletePost} from "@/app/utils/deletePost";
 import {useAuth} from "@/app/hooks/useAuth";
 import {usePostComments} from "@/app/hooks/useComment";
 import {CreateCommentPayload} from "@/app/utils/comment";
+import {usePostById} from "@/app/hooks/usePostById";
+import CommentItem from "@/components/CommentItem";
+import RenderHTMLContent from "@/app/utils/getContent";
+import formatDateDisplay from "@/app/utils/formatDate";
 
-function formatDateDisplay(dateStr: string) {
-    const [day, month] = dateStr.split('/').map(Number);
-    return { day, month };
-}
-
-function parseContent(content: string): React.ReactNode[] {
-    const regex = /\[highlight\]([\s\S]*?)\[\/highlight\]/g;
-    const parts: React.ReactNode[] = [];
-
-    let lastIndex = 0;
-    let match;
-
-    while ((match = regex.exec(content)) !== null) {
-        const [fullMatch, highlightedText] = match;
-        const index = match.index;
-
-        if (index > lastIndex) {
-            parts.push(content.slice(lastIndex, index));
-        }
-
-        parts.push(
-            <span key={index} className="text-[#FFD668]">
-        {highlightedText}
-      </span>
-        );
-
-        lastIndex = index + fullMatch.length;
-    }
-
-    if (lastIndex < content.length) {
-        parts.push(content.slice(lastIndex));
-    }
-
-    return parts;
-}
-
-export default function AdmissionDetail({ params }: { params: Promise<{ admissionId: string }> }) {
-    const { admissionId } = use(params);
+export default function AdmissionDetail() {
+    const params = useParams();
+    const admissionId = params?.admissionId as string;
+    const { post, images, loading, error } = usePostById(admissionId);
     const { name: loggedInUserName, role, id: userId } = useAuth();
     const {
         comments,
         loading: commentsLoading,
         error: commentsError,
         createComment,
-        deleteComment
+        deleteComment,
+        updateComment,
     } = usePostComments(admissionId);
 
     const [commentAuthor, setCommentAuthor] = useState("");
@@ -108,33 +79,39 @@ export default function AdmissionDetail({ params }: { params: Promise<{ admissio
         }
     };
 
-    const admissions = [
-        {
-            id: "1",
-            title: "TUYỂN SINH LỚP HỌC AMG TẠI NHÀ SAU KỲ NGHỈ TẾT",
-            date: "27/06/2022",
-            author: "admin",
-            content: `Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ...
-Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ các quý bậc phụ huynh dành cho dự án “#Lớp_học_AMG_tại_nhà” 
-Một năm qua thật dài với cả cô và các con, lễ khai giảng online, Giáng sinh online... tất cả đã qua cùng với rất nhiều sự cố gắng của các con, các bố mẹ và cô giáo.
-Kỳ nghỉ Tết lần này cũng kéo dài hơn mọi năm, bố mẹ cũng chuẩn bị quay trở lại với bộn bề công việc và mối bận tâm tìm kiếm phương án giáo dục, chăm sóc cho con. Nhưng bố mẹ đừng lo vì đã có AMG và giải pháp toàn diện giúp phụ huynh đồng hành cùng con phát triển mỗi ngày. 
-Không dừng lại ở việc chăm sóc, các con sẽ được tham gia các hoạt động học tập, trải nghiệm nhận biết khám phá với những ưu điểm vượt trội, giúp phụ huynh an tâm:
-Giáo án chuẩn Quốc tế, áp dụng phương pháp giáo dục Phần Lan dành riêng cho trẻ từ 1 tuổi trở lên, nội dung chi tiết cụ thể theo từng ngày,
-Cung cấp bộ sách bản quyền giúp trẻ phát triển toàn diện,
-Giải pháp trọn gói từ giáo dục đến dinh dưỡng, cung cấp dịch vụ bữa ăn cho trẻ đảm bảo an toàn thực phẩm với sự tư vấn tận tình từ các chuyên gia,
-Đội ngũ giáo viên yêu nghề, chuyên môn cao, bằng cấp quốc tế.
-Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt đẹp nhất cho con yêu của bạn! "Lớp học AMG tại nhà” đồng hành cùng bé phát triển, giáo dục sớm mùa dịch!`,
-            imageHeader: "/admissions/admission1.png",
-            image1: "",
-            image2: "",
-            image3: "",
-            image4: "",
-            image5: "",
-        },
-    ];
-    const admission = admissions.find((item) => item.id === admissionId);
-    if (!admission) return notFound();
-    const { day, month } = formatDateDisplay(admission.date);
+//     const admissions = [
+//         {
+//             id: "1",
+//             title: "TUYỂN SINH LỚP HỌC AMG TẠI NHÀ SAU KỲ NGHỈ TẾT",
+//             date: "27/06/2022",
+//             author: "admin",
+//             content: `Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ...
+// Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ các quý bậc phụ huynh dành cho dự án “#Lớp_học_AMG_tại_nhà”
+// Một năm qua thật dài với cả cô và các con, lễ khai giảng online, Giáng sinh online... tất cả đã qua cùng với rất nhiều sự cố gắng của các con, các bố mẹ và cô giáo.
+// Kỳ nghỉ Tết lần này cũng kéo dài hơn mọi năm, bố mẹ cũng chuẩn bị quay trở lại với bộn bề công việc và mối bận tâm tìm kiếm phương án giáo dục, chăm sóc cho con. Nhưng bố mẹ đừng lo vì đã có AMG và giải pháp toàn diện giúp phụ huynh đồng hành cùng con phát triển mỗi ngày.
+// Không dừng lại ở việc chăm sóc, các con sẽ được tham gia các hoạt động học tập, trải nghiệm nhận biết khám phá với những ưu điểm vượt trội, giúp phụ huynh an tâm:
+// Giáo án chuẩn Quốc tế, áp dụng phương pháp giáo dục Phần Lan dành riêng cho trẻ từ 1 tuổi trở lên, nội dung chi tiết cụ thể theo từng ngày,
+// Cung cấp bộ sách bản quyền giúp trẻ phát triển toàn diện,
+// Giải pháp trọn gói từ giáo dục đến dinh dưỡng, cung cấp dịch vụ bữa ăn cho trẻ đảm bảo an toàn thực phẩm với sự tư vấn tận tình từ các chuyên gia,
+// Đội ngũ giáo viên yêu nghề, chuyên môn cao, bằng cấp quốc tế.
+// Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt đẹp nhất cho con yêu của bạn! "Lớp học AMG tại nhà” đồng hành cùng bé phát triển, giáo dục sớm mùa dịch!`,
+//             imageHeader: "/admissions/admission1.png",
+//             image1: "",
+//             image2: "",
+//             image3: "",
+//             image4: "",
+//             image5: "",
+//         },
+//     ];
+    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (error && !post) {
+        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sổ tay.</p>;
+    }
+
+    if (!post) {
+        return notFound();
+    }
+    const { day, month } = formatDateDisplay(post.create_at);
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
             {/* Background */}
@@ -165,7 +142,7 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                         </Link>
                         <span>/</span>
                         <span className="text-[#FFC107] font-medium">
-                            {admission.title}
+                            {post.title}
                         </span>
                     </div>
                 </div>
@@ -175,16 +152,16 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                     Tuyển sinh
                 </h3>
                 <Image
-                    src={admission.imageHeader}
-                    alt={admission.title}
+                    src={post.header_image}
+                    alt={post.title}
                     width={600}
                     height={300}
                     className="rounded-lg shadow mb-6"
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {admission.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{admission.title}</h1>
+                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
+                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{post.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -196,7 +173,7 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <Link
-                                                    href={`/post/edit/${admission.id}`}
+                                                    href={`/post/edit/${post.id}`}
                                                     className={`block w-full px-4 py-2 text-sm text-left ${
                                                         active ? 'bg-[#FFF9E5] text-[#FFC107]' : 'text-gray-700'
                                                     }`}
@@ -209,7 +186,7 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <button
-                                                    onClick={() => deletePost(admission.id, "/admissions")}
+                                                    onClick={() => deletePost(post.id, "/admissions")}
                                                     className={`block w-full px-4 py-2 text-sm text-left ${
                                                         active ? 'bg-[#FFE5E5] text-[#FF0000]' : 'text-gray-700'
                                                     }`}
@@ -233,22 +210,10 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">{parseContent(admission.content)}</span>
+                            <span className="bg-[#FDCED0]">
+                                <RenderHTMLContent content={post.content} images={images} />
+                            </span>
                         </div>
-
-                        {/* Optional images */}
-                        {[admission.image1, admission.image2, admission.image3, admission.image4, admission.image5]
-                            .filter(Boolean)
-                            .map((img, i) => (
-                                <Image
-                                    key={i}
-                                    src={img}
-                                    alt={`Event image ${i + 1}`}
-                                    width={800}
-                                    height={400}
-                                    className="w-full h-auto rounded-lg shadow mt-6"
-                                />
-                            ))}
 
                         <div className="w-full max-w-4xl mt-12 px-4 md:px-0">
                             <h4 className="text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
@@ -257,16 +222,14 @@ Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt 
                                 <p className="text-gray-500 italic">Chưa có bình luận nào.</p>
                             )}
 
-                            {comments.map((cmt, index) => (
-                                <div
-                                    key={index}
-                                    className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow"
-                                >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <p className="text-base font-semibold text-[#795548]">{cmt.authorName}</p>
-                                    </div>
-                                    <p className="text-gray-800 text-sm leading-relaxed">{cmt.content}</p>
-                                </div>
+                            {!commentsLoading && !commentsError && comments.length > 0 && comments.map((cmt) => (
+                                <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt}
+                                    currentUser={{ id: userId, role }}
+                                    onDelete={deleteComment}
+                                    onUpdate={updateComment}
+                                />
                             ))}
                         </div>
 

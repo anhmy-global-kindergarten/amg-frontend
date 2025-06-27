@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useCallback} from 'react';
 
 export interface User {
     id: string;
@@ -29,32 +29,85 @@ export interface ChartDataPoint {
     count: number;
 }
 
+const fetcher = async (url: string) => {
+    const res = await fetch(url);
+    if (!res.ok) {
+        const error = new Error('An error occurred while fetching the data.');
+        (error as any).info = await res.json();
+        (error as any).status = res.status;
+        throw error;
+    }
+    return res.json();
+};
+
 export function useUsers() {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        const fetchUsers = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const res = await fetch(`/api-v1/users/get-all-user`);
-                if (!res.ok) {
-                    throw new Error('Failed to fetch users');
-                }
-                const data: User[] = await res.json();
-                setUsers(data || []);
-            } catch (err: any) {
-                setError(err.message);
-                console.error("Fetch users error:", err);
-            } finally {
-                setLoading(false);
+    const fetchUsers = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await fetcher(`/api-v1/users/get-all-user`);
+            if (Array.isArray(data)) {
+                setUsers(data);
+            } else {
+                setUsers([]);
+                console.warn("API did not return an array for users:", data);
             }
-        };
-        fetchUsers();
+        } catch (err: any) {
+            setError(err.message || 'Failed to fetch users');
+            setUsers([]);
+        } finally {
+            setLoading(false);
+        }
     }, []);
-    return { users, loading, error, setUsers };
+
+    useEffect(() => {
+        fetchUsers();
+    }, [fetchUsers]);
+
+    // const updateUserStatus = useCallback(async (userId: string, isActive: boolean) => {
+    //     const endpoint = isActive ? 'reactivate-user' : 'deactivate-user';
+    //
+    //     try {
+    //         const response = await fetch(`/api-v1/users/${endpoint}/${userId}`, { method: 'POST' });
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.error || 'Cập nhật trạng thái thất bại');
+    //         }
+    //         setUsers(prev =>
+    //             prev.map(u => u.id === userId ? { ...u, is_active: isActive } : u)
+    //         );
+    //     } catch (err: any) {
+    //         alert(`Lỗi: ${err.message}`);
+    //     }
+    // }, []);
+    //
+    // const updateUserRole = useCallback(async (userId: string, newRole: string) => {
+    //     try {
+    //         const response = await fetch(`/api-v1/users/update-user/${userId}`, {
+    //             method: 'POST',
+    //             headers: { 'Content-Type': 'application/json' },
+    //             body: JSON.stringify({ role: newRole }),
+    //         });
+    //
+    //         if (!response.ok) {
+    //             const errData = await response.json();
+    //             throw new Error(errData.error || 'Cập nhật vai trò thất bại');
+    //         }
+    //
+    //         setUsers(prev =>
+    //             prev.map(u => u.id === userId ? { ...u, role: newRole } : u)
+    //         );
+    //
+    //     } catch (err: any) {
+    //         alert(`Lỗi: ${err.message}`);
+    //     }
+    // }, []);
+
+    return { users, loading, error, fetchUsers };
 }
 
 export function useCandidates() {
