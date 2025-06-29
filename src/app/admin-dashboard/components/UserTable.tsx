@@ -190,7 +190,7 @@ export default function UserTable() {
     }
 
     return (
-        <div className="bg-white p-4 rounded-xl shadow-md overflow-x-auto">
+        <div className="font-mali bg-white p-4 rounded-xl shadow-md overflow-x-auto">
             <div className="flex justify-between items-center mb-4">
                 <span className="text-sm  text-orange-700">Tổng số: {users.length} người dùng</span>
                 <label className="text-sm text-orange-700">

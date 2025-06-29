@@ -42,7 +42,6 @@ export default function FinancialRegulations() {
 
                 {/* Title */}
                 <h3 className="font-mali-bold text-[#FFD668] text-2xl md:text-2xl text-center mt-8 uppercase">
-                    {/*QUY ĐỊNH TÀI CHÍNH AMG KINDERGARTEN*/}
                     {post?.title}
                 </h3>
 
@@ -59,7 +58,7 @@ export default function FinancialRegulations() {
                     {post && (
                         <>
                             {(role === "admin" || role === "teacher") && (
-                                <div className="absolute top-4 right-4">
+                                <div className="font-mali absolute top-4 right-4">
                                     <Menu>
                                         <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
                                             <MoreVertical className="w-5 h-5 text-[#FFC107]" />

@@ -360,7 +360,7 @@ const CreatePostPage = () => {
                             height={120}
                             className="object-contain"
                         />
-                        <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">
+                        <span className="font-mali-bold text-lg font-semibold text-[#FFC107] hover:underline transition">
                             Trang chủ
                         </span>
                     </a>
@@ -369,31 +369,31 @@ const CreatePostPage = () => {
 
     <section className="w-full bg-[#FFF6C7] min-h-screen px-4 md:px-8 py-10 text-[#4D4D4D]">
         <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-6">
-            <h1 className="text-3xl font-bold text-center text-[#F86161]">Tạo bài viết mới</h1>
+            <h1 className="font-mali-bold text-3xl font-bold text-center text-[#F86161]">Tạo bài viết mới</h1>
 
             <input
                 type="text"
                 placeholder="Nhập tiêu đề..."
-                className="w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg"
+                className="font-mali-semibold w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
             />
             <div>
-                <label className="block font-semibold mb-1 mt-4">Danh mục bài viết:</label>
+                <label className="font-mali-semibold block font-semibold mb-1 mt-4">Danh mục bài viết:</label>
                 <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg bg-white"
+                    className="font-mali-medium w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg bg-white"
                 >
                     {categories.map((cat) => (
-                        <option key={cat.value} value={cat.value}>
+                        <option key={cat.value} value={cat.value} className="font-mali-medium">
                             {cat.label}
                         </option>
                     ))}
                 </select>
             </div>
             <div>
-                <label className="block font-semibold mb-1">Ảnh minh họa:</label>
+                <label className="font-mali-semibold block font-semibold mb-1">Ảnh minh họa:</label>
                 {/*<input className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]" type="file"*/}
                 {/*       accept="image/*" onChange={handleImageChange}/>*/}
                 {/*{imagePreview && (*/}
@@ -410,7 +410,7 @@ const CreatePostPage = () => {
                 <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
                     <label
                         htmlFor="header-image-upload"
-                        className="cursor-pointer bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors whitespace-nowrap inline-block text-center"
+                        className="font-mali-semibold cursor-pointer bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors whitespace-nowrap inline-block text-center"
                     >
                         Chọn tệp
                     </label>
@@ -435,11 +435,11 @@ const CreatePostPage = () => {
                 </div>
             </div>
             <div className="mt-4">
-                <label className="block font-semibold mb-2">Thêm ảnh vào bài viết:</label>
+                <label className="font-mali-semibold block font-semibold mb-2">Thêm ảnh vào bài viết:</label>
                 <div>
                     <label
                         htmlFor="content-image-upload"
-                        className="cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
+                        className="font-mali-semibold cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
                     >
                         Tải ảnh lên
                     </label>
@@ -492,7 +492,7 @@ const CreatePostPage = () => {
             <div className="mt-4">
                 <label className="block font-semibold mb-2">Nội dung bài viết:</label>
                 {editor && (
-                    <div className="border border-[#FFA552] rounded-lg">
+                    <div className="font-mali border border-[#FFA552] rounded-lg">
                         {/* TOOLBAR CỐ ĐỊNH */}
                         <div className="flex gap-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
 
@@ -544,7 +544,7 @@ const CreatePostPage = () => {
             <div className="text-center mt-6">
                 <button
                     onClick={handleValidateAndConfirm}
-                    className="bg-[#FFA552] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FF9333] transition"
+                    className="font-mali-semibold bg-[#FFA552] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FF9333] transition"
                 >
                     Đăng bài
                 </button>
@@ -561,18 +561,18 @@ const CreatePostPage = () => {
             size="md"
             withCloseButton={false}
         >
-            <p className="text-center text-sm text-[#666]">
+            <p className="font-mali-medium text-center text-sm text-[#666]">
                 Bạn có chắc chắn muốn đăng bài viết này không?
             </p>
             <div className="flex justify-center gap-4 mt-6">
                 <button
-                    className="bg-gray-300 px-4 py-2 rounded-full"
+                    className="font-mali-semibold bg-gray-300 px-4 py-2 rounded-full"
                     onClick={() => setIsConfirmOpen(false)}
                 >
                     Hủy
                 </button>
                 <button
-                    className="bg-[#FFA552] text-white px-4 py-2 rounded-full"
+                    className="font-mali-semibold bg-[#FFA552] text-white px-4 py-2 rounded-full"
                     onClick={handlePostSubmit}
                 >
                     Đồng ý

@@ -55,9 +55,9 @@ export default function LoginPage() {
                             height={120}
                             className="object-contain"
                         />
-                        <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">
-              Trang chủ
-            </span>
+                        <span className="font-mali-bold text-lg font-semibold text-[#FFC107] hover:underline transition">
+                          Trang chủ
+                        </span>
                     </a>
                 </div>
             </header>
@@ -65,16 +65,16 @@ export default function LoginPage() {
             {/* Login Card */}
             <div className="w-full items-center justify-center flex">
                 <div className="mt-10 bg-white rounded-2xl shadow-lg p-8 max-w-md w-full">
-                    <h2 className="text-center text-2xl font-semibold text-[#FFC107] mb-6">
+                    <h2 className="font-mali-bold text-center text-2xl font-semibold text-[#FFC107] mb-6">
                         Đăng nhập vào hệ thống
                     </h2>
 
                     <form onSubmit={handleLogin}>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-[#555] mb-1">Username</label>
+                            <label className="font-mali-semibold block text-sm font-medium text-[#555] mb-1">Username</label>
                             <input
                                 type="text"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                                className="font-mali w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
                                 placeholder="Nhập username"
                                 value={userName}
                                 onChange={(e) => setUserName(e.target.value)}
@@ -82,10 +82,10 @@ export default function LoginPage() {
                         </div>
 
                         <div className="mb-6">
-                            <label className="block text-sm font-medium text-[#555] mb-1">Mật khẩu</label>
+                            <label className="font-mali-semibold block text-sm font-medium text-[#555] mb-1">Mật khẩu</label>
                             <input
                                 type="password"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                                className="font-mali w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
                                 placeholder="Nhập mật khẩu"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -93,20 +93,20 @@ export default function LoginPage() {
                         </div>
 
                         {error && (
-                            <p className="mb-4 text-red-600 font-semibold">{error}</p>
+                            <p className="font-mali-semibold mb-4 text-red-600 font-semibold">{error}</p>
                         )}
 
                         <button
                             type="submit"
-                            className="w-full bg-[#FFC107] text-white font-semibold py-2 rounded-xl hover:bg-[#e5a906] transition"
+                            className="font-mali-semibold w-full bg-[#FFC107] text-white font-semibold py-2 rounded-xl hover:bg-[#e5a906] transition"
                         >
                             Đăng nhập
                         </button>
                     </form>
 
-                    <p className="text-center text-sm text-gray-600 mt-6">
+                    <p className="font-mali text-center text-sm text-gray-600 mt-6">
                         Chưa có tài khoản?{" "}
-                        <a href="/signup" className="text-[#FFC107] hover:underline">
+                        <a href="/signup" className="font-mali-semibold text-[#FFC107] hover:underline">
                             Đăng ký ngay
                         </a>
                     </p>

@@ -19,6 +19,19 @@ function hasLeadingListItemMarkerInText(node: DOMNode | null | undefined): boole
     return false;
 }
 
+function getDeepTextContent(nodes: DOMNode[] | undefined): string {
+    if (!nodes) return '';
+    let text = '';
+    for (const node of nodes) {
+        if (node.type === 'text') {
+            text += node.data;
+        } else if (node.type === 'tag' && node.children) {
+            text += getDeepTextContent(node.children as DOMNode[]);
+        }
+    }
+    return text;
+}
+
 export default function RenderStaticHTMLContent({ content , images = [] }: RenderHTMLContentProps) {
     if (!content) return null;
 
@@ -81,44 +94,23 @@ export default function RenderStaticHTMLContent({ content , images = [] }: Rende
                 if (elementNode.name === 'ol' || elementNode.name === 'ul') {
                     let hasManualMarkers = false;
                     if (children && children.length > 0) {
-                        for (const childNode of children) {
-                            if (childNode.type === 'tag' && childNode.name === 'li') {
-                                const liElement = childNode as Element;
+                        const firstLiChild = children.find(child => child.type === 'tag' && child.name === 'li') as Element | undefined;
 
-                                // ✅ KIỂM TRA TRỰC TIẾP VÀO CẤU TRÚC MONG ĐỢI
-                                let textNodeToCheck: Text | null | undefined = null;
+                        if (firstLiChild) {
+                            const liTextContent = getDeepTextContent(firstLiChild.children as DOMNode[]);
 
-                                if (liElement.children && liElement.children.length > 0) {
-                                    const firstChildOfLi = liElement.children[0];
-
-                                    if (firstChildOfLi.type === 'text') {
-                                        // Trường hợp 1: <li>- Text</li>
-                                        textNodeToCheck = firstChildOfLi as unknown as Text;
-                                    } else if (firstChildOfLi.type === 'tag' &&
-                                        (firstChildOfLi as Element).name === 'span' && // Hoặc các thẻ inline khác bạn dùng
-                                        (firstChildOfLi as Element).children &&
-                                        (firstChildOfLi as Element).children.length > 0 &&
-                                        (firstChildOfLi as Element).children[0].type === 'text') {
-                                        // Trường hợp 2: <li><span>- Text</span></li>
-                                        textNodeToCheck = (firstChildOfLi as Element).children[0] as unknown as Text;
-                                    }
-                                    // Bạn có thể thêm các else if cho các cấu trúc lồng nhau khác nếu cần
-                                }
-
-                                if (hasLeadingListItemMarkerInText(textNodeToCheck as DOMNode | null | undefined)) {
-                                    hasManualMarkers = true;
-                                    break;
-                                }
+                            if (/^\s*(\d+\.|[a-zA-Z]\.|[ivxlcdm]+\.|-|\*|•)\s/.test(liTextContent.trimStart())) {
+                                hasManualMarkers = true;
                             }
                         }
                     }
 
                     let listClasses = `${props.className || ''} space-y-2`;
-                    if (!hasManualMarkers) {
+                    if (hasManualMarkers) {
+                        listClasses += ' list-none pl-0';
+                    } else {
                         if (elementNode.name === 'ol') listClasses += ' list-decimal list-inside';
                         else listClasses += ' list-disc list-inside';
-                    } else {
-                        listClasses += ' list-none pl-0';
                     }
 
                     const ListTag = elementNode.name as keyof JSX.IntrinsicElements;
@@ -142,7 +134,7 @@ export default function RenderStaticHTMLContent({ content , images = [] }: Rende
     };
 
     return (
-        <div className="prose prose-lg max-w-none text-black">
+        <div className="font-mali prose prose-lg max-w-none text-black text-justify">
             {parse(content, options)}
         </div>
     );

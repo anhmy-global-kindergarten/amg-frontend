@@ -787,7 +787,27 @@ export default function LandingPage() {
                         <EditableText id="bannerDesktopTitle" initialHtml={pageContent.bannerDesktopTitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h1"
                                       className="font-cadena text-7xl text-[#EA570A] leading-tight mb-3"
-                                      style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
+                                      style={{
+                                          textShadow: `
+                                          -4px -4px 0 white,
+                                          4px -4px 0 white,
+                                          -4px 4px 0 white,
+                                          4px 4px 0 white,
+                                          -6px 2px 0 white,
+                                          6px 2px 0 white,
+                                          2px -6px 0 white,
+                                          2px 6px 0 white,
+                                          -3px -6px 0 white,
+                                          3px -6px 0 white,
+                                          -6px -3px 0 white,
+                                          6px -3px 0 white,
+                                          -3px 6px 0 white,
+                                          3px 6px 0 white,
+                                          -6px 3px 0 white,
+                                          6px 3px 0 white
+                                        `
+                                      }}
+                        />
                         <EditableText id="bannerDesktopSubtitle" initialHtml={pageContent.bannerDesktopSubtitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                       className="font-cadena text-3xl sm:text-3xl text-[#FFD105] mb-4"/>
@@ -798,7 +818,7 @@ export default function LandingPage() {
                             <button onClick={openModal} className="relative">
                                 <Image alt="bannerMobileRegisterButtonImageSrc"
                                        src="/banner/button_register.png"
-                                               width={350} height={100} className="hover:opacity-90 transition"/>
+                                               width={300} height={100} className="hover:opacity-90 transition"/>
                                 {/*<div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">*/}
                                 {/*    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill*/}
                                 {/*                   objectFit="contain"*/}
@@ -808,7 +828,7 @@ export default function LandingPage() {
                         </div>
                     </div>
                     <div
-                        className={`absolute w-full right-90 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0 ${isMobile ? 'top-50' : ''}`}>
+                        className={`absolute w-full right-60 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0 ${isMobile ? 'top-50' : ''}`}>
                         <EditableImage id="bannerDesktopKidsImageSrc" initialSrc={pageContent.bannerDesktopKidsImageSrc}
                                        isUploading={isUploading && uploadingImageId === 'bannerDesktopKidsImageSrc'}
                                        altText="Kids" onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
@@ -816,7 +836,7 @@ export default function LandingPage() {
                     </div>
                     {/* Decorative */}
                     <div
-                        className="absolute sm:block right-100 top-70 lg:top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-9">
+                        className="absolute sm:block right-70 top-70 lg:top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-9">
                         <Image src="/banner/triangle_shade.png" alt="Triangle" fill className="object-contain"/></div>
                     <Image src="/banner/big_cloud.png" alt="" width={2100} height={80}
                            className="w-full absolute top-[970px] lg:top-[400px] z-10"/>
@@ -896,7 +916,27 @@ export default function LandingPage() {
                         <EditableText id="aboutAmgSectionTitle" initialHtml={pageContent.aboutAmgSectionTitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                       className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
-                                      style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
+                                      style={{
+                                          textShadow: `
+                                          -4px -4px 0 white,
+                                          4px -4px 0 white,
+                                          -4px 4px 0 white,
+                                          4px 4px 0 white,
+                                          -6px 2px 0 white,
+                                          6px 2px 0 white,
+                                          2px -6px 0 white,
+                                          2px 6px 0 white,
+                                          -3px -6px 0 white,
+                                          3px -6px 0 white,
+                                          -6px -3px 0 white,
+                                          6px -3px 0 white,
+                                          -3px 6px 0 white,
+                                          3px 6px 0 white,
+                                          -6px 3px 0 white,
+                                          6px 3px 0 white
+                                        `
+                                      }}
+                        />
                         <EditableText id="aboutAmgIntroHeading" initialHtml={pageContent.aboutAmgIntroHeading}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
                                       className="font-mali-semibold text-lg md:text-xl font-semibold text-[#7ED3F7]"/>
@@ -953,7 +993,27 @@ export default function LandingPage() {
                 <EditableText id="mealSectionTitle" initialHtml={pageContent.mealSectionTitle}
                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                               className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
-                              style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
+                              style={{
+                                  textShadow: `
+                                          -4px -4px 0 white,
+                                          4px -4px 0 white,
+                                          -4px 4px 0 white,
+                                          4px 4px 0 white,
+                                          -6px 2px 0 white,
+                                          6px 2px 0 white,
+                                          2px -6px 0 white,
+                                          2px 6px 0 white,
+                                          -3px -6px 0 white,
+                                          3px -6px 0 white,
+                                          -6px -3px 0 white,
+                                          6px -3px 0 white,
+                                          -3px 6px 0 white,
+                                          3px 6px 0 white,
+                                          -6px 3px 0 white,
+                                          6px 3px 0 white
+                                        `
+                              }}
+                />
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
                     <div className="flex flex-col gap-2">
@@ -1023,11 +1083,51 @@ export default function LandingPage() {
                     <EditableText id="reasonsSectionTitle1" initialHtml={pageContent.reasonsSectionTitle1}
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                   className={`font-cadena text-center text-[#F7B052] mb-2 ${isMobile ? 'text-3xl' : 'text-7xl'}`}
-                                  style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
+                                  style={{
+                                      textShadow: `
+                                          -4px -4px 0 white,
+                                          4px -4px 0 white,
+                                          -4px 4px 0 white,
+                                          4px 4px 0 white,
+                                          -6px 2px 0 white,
+                                          6px 2px 0 white,
+                                          2px -6px 0 white,
+                                          2px 6px 0 white,
+                                          -3px -6px 0 white,
+                                          3px -6px 0 white,
+                                          -6px -3px 0 white,
+                                          6px -3px 0 white,
+                                          -3px 6px 0 white,
+                                          3px 6px 0 white,
+                                          -6px 3px 0 white,
+                                          6px 3px 0 white
+                                        `
+                                  }}
+                    />
                     <EditableText id="reasonsSectionTitle2" initialHtml={pageContent.reasonsSectionTitle2}
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                   className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-3xl' : 'text-7xl'}`}
-                                  style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
+                                  style={{
+                                      textShadow: `
+                                          -4px -4px 0 white,
+                                          4px -4px 0 white,
+                                          -4px 4px 0 white,
+                                          4px 4px 0 white,
+                                          -6px 2px 0 white,
+                                          6px 2px 0 white,
+                                          2px -6px 0 white,
+                                          2px 6px 0 white,
+                                          -3px -6px 0 white,
+                                          3px -6px 0 white,
+                                          -6px -3px 0 white,
+                                          6px -3px 0 white,
+                                          -3px 6px 0 white,
+                                          3px 6px 0 white,
+                                          -6px 3px 0 white,
+                                          6px 3px 0 white
+                                        `
+                                  }}
+                    />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                         <div className="space-y-6">
                             <div>
@@ -1049,20 +1149,28 @@ export default function LandingPage() {
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="font-mali text-black leading-relaxed text-sm text-justify"/>
                             </div>
-                            <div className="flex gap-4 items-start">
-                                <Image src="/icons/icon_fork.png" alt="fork" width={50} height={150}
-                                       className="object-contain"/>
-                                <div className="space-y-5 text-sm text-black">
-                                    <EditableText id="reasonsCol1ForkPara1"
-                                                  initialHtml={pageContent.reasonsCol1ForkPara1}
-                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p" className="font-mali"/>
-                                    <EditableText id="reasonsCol1ForkPara2"
-                                                  initialHtml={pageContent.reasonsCol1ForkPara2}
-                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p" className="font-mali"/>
-                                    <EditableText id="reasonsCol1ForkPara3"
-                                                  initialHtml={pageContent.reasonsCol1ForkPara3}
-                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p" className="font-mali"/>
-                                </div>
+                            <div className="grid grid-cols-[auto_1fr] gap-x-4 items-center">
+                                <Image
+                                    src="/icons/icon_fork.png"
+                                    alt="fork"
+                                    width={50}
+                                    height={150}
+                                    className="object-contain row-span-3"
+                                />
+                                <EditableText id="reasonsCol1ForkPara1"
+                                              initialHtml={pageContent.reasonsCol1ForkPara1}
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali text-sm text-black"/>
+
+                                <EditableText id="reasonsCol1ForkPara2"
+                                              initialHtml={pageContent.reasonsCol1ForkPara2}
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali text-sm text-black"/>
+
+                                <EditableText id="reasonsCol1ForkPara3"
+                                              initialHtml={pageContent.reasonsCol1ForkPara3}
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali text-sm text-black"/>
                             </div>
                         </div>
                         <div className="md:col-span-2 grid grid-cols-2 gap-2 transform scale-[0.95] md:scale-100">
@@ -1077,7 +1185,7 @@ export default function LandingPage() {
                                     <EditableText id={item.titleKey}
                                                   initialHtml={pageContent[item.titleKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                                  className="font-mali-medium font-bold text-xl text-justify" style={{color: item.ttColor}}/>
+                                                  className="font-mali-medium font-bold text-xl" style={{color: item.ttColor}}/>
                                     <EditableText id={item.descKey}
                                                   initialHtml={pageContent[item.descKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
@@ -1172,33 +1280,43 @@ export default function LandingPage() {
                                     </ul>
                                 </div>
                             </div>
-                            <div className="flex flex-wrap gap-6 mt-4 items-start relative w-full">
-                                <div className="flex flex-col items-start">
+                            <div className="flex justify-between items-start mt-4 w-full">
+                                <div className="flex flex-col items-start space-y-4">
                                     <h3 className="font-mali-bold font-bold">FANPAGE</h3>
+
                                     <a href="https://www.youtube.com/watch?v=wR0SAVlV8xM" target="_blank"
                                        rel="noopener noreferrer">
-                                        <EditableImage id="footerFanpageImageSrc"
-                                                       initialSrc={pageContent.footerFanpageImageSrc}
-                                                       altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
-                                                       isUploading={isUploading && uploadingImageId === 'footerFanpageImageSrc'}
-                                                       isEditMode={isEditMode} width={145} height={80}
-                                                       className="rounded-lg mt-2"/>
+                                        <EditableImage
+                                            id="footerFanpageImageSrc"
+                                            initialSrc={pageContent.footerFanpageImageSrc}
+                                            altText="YouTube Thumbnail"
+                                            onFileSelect={handleImageUpload}
+                                            isUploading={isUploading && uploadingImageId === 'footerFanpageImageSrc'}
+                                            isEditMode={isEditMode}
+                                            width={145}
+                                            height={80}
+                                            className="rounded-lg"
+                                        />
                                     </a>
-                                </div>
-                                <br/>
-                                <div></div>
-                                <div className="flex flex-col items-start">
+
                                     <h3 className="font-mali-bold font-bold">YOUTUBE</h3>
+
                                     <a href="https://www.youtube.com/watch?v=LKDxvXi21GI" target="_blank"
                                        rel="noopener noreferrer">
-                                        <EditableImage id="footerYoutubeImageSrc"
-                                                       initialSrc={pageContent.footerYoutubeImageSrc}
-                                                       altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
-                                                       isUploading={isUploading && uploadingImageId === 'footerYoutubeImageSrc'}
-                                                       isEditMode={isEditMode} width={145} height={80}
-                                                       className="rounded-lg mt-2"/>
+                                        <EditableImage
+                                            id="footerYoutubeImageSrc"
+                                            initialSrc={pageContent.footerYoutubeImageSrc}
+                                            altText="YouTube Thumbnail"
+                                            onFileSelect={handleImageUpload}
+                                            isUploading={isUploading && uploadingImageId === 'footerYoutubeImageSrc'}
+                                            isEditMode={isEditMode}
+                                            width={145}
+                                            height={80}
+                                            className="rounded-lg"
+                                        />
                                     </a>
                                 </div>
+
                                 <div
                                     className="flex items-start absolute -right-2 sm:top-auto sm:relative mt-4 sm:mt-0">
                                     <Image src="/icons/icon_elephant_footer.png" alt="" width={isMobile ? 190 : 300}

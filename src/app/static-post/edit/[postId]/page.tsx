@@ -291,26 +291,26 @@ const EditPostPage = () => {
             <header className="w-full py-4 px-4 lg:px-10 flex justify-between items-center bg-[#FFF6C7]">
                 <a href="/" className="flex items-center space-x-2">
                     <Image src="/banner/logo.png" alt="Logo" width={120} height={120} className="object-contain" />
-                    <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">Trang chủ</span>
+                    <span className="font-mali-bold text-lg font-semibold text-[#FFC107] hover:underline transition">Trang chủ</span>
                 </a>
             </header>
 
             <section className="w-full bg-[#FFF6C7] min-h-screen px-4 md:px-8 py-10 text-[#4D4D4D]">
                 <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-6">
-                    <h1 className="text-3xl font-bold text-center text-[#F86161]">Chỉnh sửa bài viết</h1>
+                    <h1 className="font-mali-bold text-3xl font-bold text-center text-[#F86161]">Chỉnh sửa bài viết</h1>
 
-                    <input type="text" placeholder="Nhập tiêu đề..." value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg" />
+                    <input type="text" placeholder="Nhập tiêu đề..." value={title} onChange={(e) => setTitle(e.target.value)} className="font-mali-semibold w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg" />
 
                     <div>
-                        <label className="block font-semibold mb-1 mt-4">Danh mục bài viết:</label>
-                        <label>{post?.category}</label>
+                        <label className="font-mali-semibold block font-semibold mb-1 mt-4">Danh mục bài viết:</label>
+                        <label className="font-mali-semibold">{post?.category}</label>
                     </div>
 
                     <div className="items-center gap-4 mt-4">
-                        <label className="block font-semibold mb-1">Thêm ảnh vào bài viết:</label>
+                        <label className="font-mali-semibold block font-semibold mb-1">Thêm ảnh vào bài viết:</label>
                         <label
                             htmlFor="edit-content-image-upload"
-                            className="cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
+                            className="font-mali-semibold cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
                         >
                             Tải ảnh lên
                         </label>
@@ -364,9 +364,9 @@ const EditPostPage = () => {
                     </div>
 
                     <div className="mt-4">
-                        <label className="block font-semibold mb-2">Nội dung bài viết:</label>
+                        <label className="font-mali-semibold block font-semibold mb-2">Nội dung bài viết:</label>
                         {editor && (
-                            <div className="border border-[#FFA552] rounded-lg">
+                            <div className="font-mali border border-[#FFA552] rounded-lg">
                                 <div
                                     className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
                                     {/* Toolbar giống hệt */}
@@ -414,17 +414,17 @@ const EditPostPage = () => {
                     {error && <p className="text-red-500 text-sm mb-4" role="alert">{error}</p>}
 
                     <div className="text-center mt-6">
-                        <button onClick={handleValidateAndConfirm} className="bg-[#FFA552] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FF9333] transition">
+                        <button onClick={handleValidateAndConfirm} className="font-mali-semibold bg-[#FFA552] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FF9333] transition">
                             Cập nhật bài viết
                         </button>
                     </div>
                 </div>
 
                 <Modal opened={isConfirmOpen} onClose={() => setIsConfirmOpen(false)} title="Xác nhận cập nhật?" centered size="md" withCloseButton={false}>
-                    <p className="text-center text-sm text-[#666]">Bạn có chắc chắn muốn lưu lại những thay đổi này không?</p>
+                    <p className="font-mali-medium text-center text-sm text-[#666]">Bạn có chắc chắn muốn lưu lại những thay đổi này không?</p>
                     <div className="flex justify-center gap-4 mt-6">
-                        <button className="bg-gray-300 px-4 py-2 rounded-full" onClick={() => setIsConfirmOpen(false)}>Hủy</button>
-                        <button className="bg-[#FFA552] text-white px-4 py-2 rounded-full" onClick={handleUpdatePost}>Đồng ý</button>
+                        <button className="font-mali-semibold bg-gray-300 px-4 py-2 rounded-full" onClick={() => setIsConfirmOpen(false)}>Hủy</button>
+                        <button className="font-mali-semibold bg-[#FFA552] text-white px-4 py-2 rounded-full" onClick={handleUpdatePost}>Đồng ý</button>
                     </div>
                 </Modal>
             </section>
