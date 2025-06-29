@@ -62,7 +62,7 @@ const Page = () => {
                 {post && (
                     <>
                         {(role === "admin" || role === "teacher") && (
-                            <div className="absolute top-4 right-4">
+                            <div className="font-mali absolute top-4 right-4">
                                 <Menu>
                                     <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
                                         <MoreVertical className="w-5 h-5 text-[#FFC107]" />
@@ -85,7 +85,7 @@ const Page = () => {
                                 </Menu>
                             </div>
                         )}
-                        <div className="prose prose-lg max-w-none text-black">
+                        <div className="font-mali prose prose-lg max-w-none text-black">
                             <RenderStaticHTMLContent content={post.content} />
                         </div>
                     </>

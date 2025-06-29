@@ -41,8 +41,8 @@ export default function FinancialRegulations() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
-                    QUY ĐỊNH TÀI CHÍNH AMG KINDERGARTEN
+                <h3 className="font-mali-bold text-[#FFD668] text-2xl md:text-2xl text-center mt-8 uppercase">
+                    {post?.title}
                 </h3>
 
                 {/* Content */}
@@ -58,7 +58,7 @@ export default function FinancialRegulations() {
                     {post && (
                         <>
                             {(role === "admin" || role === "teacher") && (
-                                <div className="absolute top-4 right-4">
+                                <div className="font-mali absolute top-4 right-4">
                                     <Menu>
                                         <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
                                             <MoreVertical className="w-5 h-5 text-[#FFC107]" />
@@ -81,7 +81,7 @@ export default function FinancialRegulations() {
                                     </Menu>
                                 </div>
                             )}
-                            <div className="prose prose-lg max-w-none text-black">
+                            <div className="font-mali prose prose-lg max-w-none text-black">
                                 <RenderStaticHTMLContent content={post.content} />
                             </div>
                         </>

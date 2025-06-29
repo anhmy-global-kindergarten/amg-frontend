@@ -48,7 +48,7 @@ const Page = () => {
                             Trang chủ
                         </Link>
                         <span>/</span>
-                        <span className="text-[#FFC107] font-medium">Tin tức sự kiện</span>
+                        <span className="text-[#FFC107] font-medium">Lịch trình học tập</span>
                     </div>
                 </div>
                 {/* Logo */}
@@ -63,11 +63,11 @@ const Page = () => {
                 </div>
                 {/* Title */}
                 <div className="text-center mb-10">
-                    <h1 className="text-2xl font-semibold text-[#558FCB] bg-[#FACBCC]">
+                    <h1 className="font-cadena text-4xl font-semibold text-[#558FCB]">
                         Hành trình một ngày của bé yêu tại AMG Kindergarten
                     </h1>
                     <h2
-                        className="text-4xl font-bold mt-2 uppercase tracking-wider inline-block px-2 py-1 rounded bg-[#FACBCC]"
+                        className="font-cadena text-6xl font-bold mt-2 uppercase tracking-wider inline-block px-2 py-1 rounded"
                         style={{color: classColor}}
                     >
                         {className === "international"

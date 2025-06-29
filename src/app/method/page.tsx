@@ -59,11 +59,11 @@ export default function Method() {
 
                     {post && (
                         <>
-                            <h1 className="text-2xl font-bold mb-8 text-[#FFD668]">
+                            <h1 className="font-mali text-2xl font-bold mb-8 text-[#FFD668]">
                                 {post.title}
                             </h1>
                             {(role === "admin" || role === "teacher") && (
-                                <div className="absolute top-4 right-4">
+                                <div className="font-mali absolute top-4 right-4">
                                     <Menu>
                                         <Menu.Button className="p-2 rounded-full hover:bg-[#FFF9E5]">
                                             <MoreVertical className="w-5 h-5 text-[#FFC107]" />
@@ -86,7 +86,7 @@ export default function Method() {
                                     </Menu>
                                 </div>
                             )}
-                            <div className="text-black">
+                            <div className="font-mali text-black">
                                 <RenderStaticHTMLContent content={post.content}/>
                             </div>
                         </>

@@ -3,24 +3,32 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
+import {format} from "date-fns";
+import LineClampContent from "@/app/utils/lineClamp";
 
-const admissions = [
-    {
-        id: 1,
-        date: "27/06/2022",
-        title: "TUYỂN SINH LỚP HỌC AMG TẠI NHÀ SAU KỲ NGHỈ TẾT",
-        author: "admin",
-        content: "Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ phía phụ huynh và các em học sinh. Để đáp ứng nhu cầu học tập của các em học sinh, nhà trường quyết định mở lớp học tại nhà cho các em học sinh có nhu cầu.",
-        image: "/admissions/admission1.png",
-    },
-];
+// const admissions = [
+//     {
+//         id: 1,
+//         date: "27/06/2022",
+//         title: "TUYỂN SINH LỚP HỌC AMG TẠI NHÀ SAU KỲ NGHỈ TẾT",
+//         author: "admin",
+//         content: "Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ phía phụ huynh và các em học sinh. Để đáp ứng nhu cầu học tập của các em học sinh, nhà trường quyết định mở lớp học tại nhà cho các em học sinh có nhu cầu.",
+//         image: "/admissions/admission1.png",
+//     },
+// ];
 
 export default function AdmissionPage() {
-    const itemsPerPage = 6;
-    const totalPages = Math.ceil(admissions.length / itemsPerPage);
+    const { posts, loading, error } = usePostsByCategory("admissions");
     const [page, setPage] = useState(0);
     const router = useRouter();
-    const pagedAdmissions = admissions.slice(
+
+    if (loading) return <div>Đang tải dữ liệu...</div>;
+    if (error) return <div>Lỗi: {error}</div>;
+
+    const itemsPerPage = 6;
+    const totalPages = Math.ceil(posts.length / itemsPerPage);
+    const pagedArticals = posts.slice(
         page * itemsPerPage,
         (page + 1) * itemsPerPage
     );
@@ -53,13 +61,13 @@ export default function AdmissionPage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Tuyển sinh
                 </h3>
                 {/* Grid Lessons */}
                 <div className="min-h-[830px]">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-                        {pagedAdmissions.map((admission) => (
+                        {pagedArticals.map((admission) => (
                             <div
                                 key={admission.id}
                                 onClick={() => router.push(`/admissions/${admission.id}`)}
@@ -68,11 +76,11 @@ export default function AdmissionPage() {
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        src={admission.image}
+                                        src={admission.header_image}
                                         alt={admission.title}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute bottom-0">
+                                    <div className="absolute bottom-0 font-mali-bold">
                                         <div
                                             className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
                                             style={{
@@ -80,22 +88,18 @@ export default function AdmissionPage() {
                                                 backgroundSize: "100% 100%",
                                             }}
                                         >
-                                            {admission.date}
+                                            {format(new Date(admission.create_at), "dd/MM/yyyy")}
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Text content */}
                                 <div className="p-4 flex flex-col flex-1">
-                                    <h4 className="text-[#FFD668] font-semibold text-base mb-1">
+                                    <h4 className="font-mali-bold text-[#FFD668] font-semibold text-base mb-1">
                                         {admission.title}
                                     </h4>
-                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {admission.author}</p>
-                                    <p className="text-sm text-black line-clamp-3">
-                                        {admission.content.length > 101
-                                            ? `${admission.content.slice(0, 100)}...`
-                                            : admission.content}
-                                    </p>
+                                    <p className="font-mali text-xs text-black line-clamp-3">Đăng bởi: {admission.author}</p>
+                                    <LineClampContent content={admission.content} />
                                 </div>
                             </div>
                         ))}

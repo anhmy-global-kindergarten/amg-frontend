@@ -85,11 +85,11 @@ export default function LearningOnlinePage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Học online cùng AMG
                 </h3>
                 {/* Grid Lessons */}
-                <div className="min-h-[800px]">
+                <div className="min-h-[830px]">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
                         {pagedArticals.map(artical => (
                             <div
@@ -104,7 +104,7 @@ export default function LearningOnlinePage() {
                                         alt={artical.title}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute bottom-0">
+                                    <div className="absolute bottom-0 font-mali-bold">
                                         <div
                                             className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
                                             style={{
@@ -119,17 +119,16 @@ export default function LearningOnlinePage() {
 
                                 {/* Text content */}
                                 <div className="p-4 flex flex-col flex-1">
-                                    <h4 className="text-[#FFD668] font-semibold text-base mb-1">
+                                    <h4 className="font-mali-bold text-[#FFD668] font-semibold text-base mb-1">
                                         {artical.title}
                                     </h4>
-                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {artical.author}</p>
+                                    <p className="font-mali text-xs text-black line-clamp-3">Đăng bởi: {artical.author}</p>
                                     <LineClampContent content={artical.content} />
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
-                {/* Pagination Buttons */}
                 <div className="w-full flex justify-end">
                     <div className="mt-8 flex items-center space-x-2">
                         {page > 0 && (
@@ -163,7 +162,7 @@ export default function LearningOnlinePage() {
                                 &raquo;
                             </button>
                         ) : (
-                            <div className="w-8 h-8" />
+                            <div className="w-8 h-8"/>
                         )}
                     </div>
                 </div>

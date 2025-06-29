@@ -80,7 +80,7 @@ export default function RecruitmentDetail() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Tuyển dụng
                 </h3>
                 <Image
@@ -92,8 +92,8 @@ export default function RecruitmentDetail() {
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase mb-2">{post.title}</h1>
+                        <p className="font-mali absolute top-10 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
+                        <h1 className="font-mali-bold absolute top-15 left-30 text-[#FFC107] text-xl font-bold uppercase mb-2">{post.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -101,7 +101,7 @@ export default function RecruitmentDetail() {
                                         <MoreVertical className="w-5 h-5 text-[#FFC107]" />
                                     </Menu.Button>
                                     <Menu.Items
-                                        className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
+                                        className="font-mali-semibold absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <Link
@@ -134,15 +134,15 @@ export default function RecruitmentDetail() {
                         <div
                             className="w-[70px] h-[70px] bg-[#FFD668] absolute top-5 left-7 rounded-xl flex items-center justify-center shadow-md">
                             <div
-                                className="bg-[#FDCED0] w-[50px] h-[50px] rounded flex flex-col items-center justify-center">
-                                <span className="text-white text-2xl font-bold leading-none">{day}</span>
-                                <span className="text-white text-xs leading-none">Tháng {month}</span>
+                                className="w-[50px] h-[50px] rounded flex flex-col items-center justify-center">
+                                <span className="font-mali-bold text-white text-2xl font-bold leading-none">{day}</span>
+                                <span className="font-mali-medium text-white text-xs leading-none">Tháng {month}</span>
                             </div>
                         </div>
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">
+                            <span className="font-mali bg-[#FDCED0]">
                                 <RenderHTMLContent content={post.content} images={images} />
                             </span>
                         </div>

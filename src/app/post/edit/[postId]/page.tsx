@@ -288,28 +288,28 @@ const EditPostPage = () => {
             <header className="w-full py-4 px-4 lg:px-10 flex justify-between items-center bg-[#FFF6C7]">
                 <a href="/" className="flex items-center space-x-2">
                     <Image src="/banner/logo.png" alt="Logo" width={120} height={120} className="object-contain" />
-                    <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">Trang chủ</span>
+                    <span className="font-mali-bold text-lg font-semibold text-[#FFC107] hover:underline transition">Trang chủ</span>
                 </a>
             </header>
 
             <section className="w-full bg-[#FFF6C7] min-h-screen px-4 md:px-8 py-10 text-[#4D4D4D]">
                 <div className="max-w-4xl mx-auto bg-white shadow-xl rounded-3xl p-6 space-y-6">
-                    <h1 className="text-3xl font-bold text-center text-[#F86161]">Chỉnh sửa bài viết</h1>
+                    <h1 className="font-mali-bold text-3xl font-bold text-center text-[#F86161]">Chỉnh sửa bài viết</h1>
 
                     <input type="text" placeholder="Nhập tiêu đề..." value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg" />
 
                     <div>
-                        <label className="block font-semibold mb-1 mt-4">Danh mục bài viết:</label>
-                        <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg bg-white">
-                            {categories.map((cat) => <option key={cat.value} value={cat.value}>{cat.label}</option>)}
+                        <label className="font-mali-semibold block font-semibold mb-1 mt-4">Danh mục bài viết:</label>
+                        <select value={category} onChange={(e) => setCategory(e.target.value)} className="font-mali-semibold w-full px-4 py-3 border border-[#FFA552] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFA552] text-lg bg-white">
+                            {categories.map((cat) => <option key={cat.value} value={cat.value} className="font-mali-semibold">{cat.label}</option>)}
                         </select>
                     </div>
 
                     <div>
-                        <label className="block font-semibold mb-1">Ảnh minh họa (thay đổi nếu cần):</label>
+                        <label className="font-mali-semibold block font-semibold mb-1">Ảnh minh họa (thay đổi nếu cần):</label>
                         <label
                             htmlFor="edit-header-image-upload"
-                            className="cursor-pointer bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors whitespace-nowrap inline-block text-center"
+                            className="font-mali-semibold cursor-pointer bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors whitespace-nowrap inline-block text-center"
                         >
                             Chọn tệp mới
                         </label>
@@ -325,7 +325,7 @@ const EditPostPage = () => {
                         }}/>
                         {imagePreview && (
                             <div className="mt-4">
-                                <p className="text-sm mb-2">Ảnh hiện tại:</p>
+                                <p className="font-mali-semibold text-sm mb-2">Ảnh hiện tại:</p>
                                 <Image src={imagePreview} alt="Preview" width={400} height={250}
                                        className="rounded-lg shadow border border-gray-200"/>
                             </div>
@@ -333,10 +333,10 @@ const EditPostPage = () => {
                     </div>
 
                     <div className="items-center gap-4 mt-4">
-                        <label className="block font-semibold mb-1">Thêm ảnh vào bài viết:</label>
+                        <label className="font-mali-semibold block font-semibold mb-1">Thêm ảnh vào bài viết:</label>
                         <label
                             htmlFor="edit-content-image-upload"
-                            className="cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
+                            className="font-mali-semibold cursor-pointer inline-block bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726] transition-colors"
                         >
                             Tải ảnh lên
                         </label>
@@ -390,9 +390,9 @@ const EditPostPage = () => {
                     </div>
 
                     <div className="mt-4">
-                        <label className="block font-semibold mb-2">Nội dung bài viết:</label>
+                        <label className="font-mali-semibold block font-semibold mb-2">Nội dung bài viết:</label>
                         {editor && (
-                            <div className="border border-[#FFA552] rounded-lg">
+                            <div className="font-mali border border-[#FFA552] rounded-lg">
                                 <div
                                     className="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
                                     <button onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active font-bold' : ''} title="Bold"><span className="font-bold text-xl">B</span></button>

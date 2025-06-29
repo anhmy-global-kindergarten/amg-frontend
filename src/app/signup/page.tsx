@@ -81,97 +81,97 @@ export default function SignupPage() {
                         height={120}
                         className="object-contain"
                     />
-                    <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">
-            Trang chủ
-          </span>
+                    <span className="font-mali-bold text-lg font-semibold text-[#FFC107] hover:underline transition">
+                        Trang chủ
+                    </span>
                 </Link>
             </header>
 
             {/* Signup Card */}
             <div className="mt-10 bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-                <h2 className="text-center text-2xl font-semibold text-[#FFC107] mb-6">
+                <h2 className="font-mali-bold text-center text-2xl font-semibold text-[#FFC107] mb-6">
                     Tạo tài khoản AMG
                 </h2>
 
                 <form onSubmit={handleRegister}>
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-[#555] mb-1">
+                        <label className="font-mali-semibold block text-sm font-medium text-[#555] mb-1">
                             Họ và tên
                         </label>
                         <input
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                            className="font-mali w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
                             placeholder="Nhập họ tên"
                             required={true}
                         />
                     </div>
 
                     <div className="mb-4">
-                        <label className="block text-sm font-medium text-[#555] mb-1">
+                        <label className="font-mali-semibold block text-sm font-medium text-[#555] mb-1">
                             Username
                         </label>
                         <input
                             type="text"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                            className="font-mali w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
                             placeholder="Nhập username"
                             required={true}
                         />
                     </div>
 
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-[#555] mb-1">
+                        <label className="font-mali-semibold block text-sm font-medium text-[#555] mb-1">
                             Mật khẩu
                         </label>
                         <input
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                            className="font-mali w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
                             placeholder="Nhập mật khẩu"
                             required={true}
                         />
                     </div>
 
                     <div className="mb-6">
-                        <label className="block text-sm font-medium text-[#555] mb-1">
+                        <label className="font-mali-semibold block text-sm font-medium text-[#555] mb-1">
                             Nhập lại mật khẩu
                         </label>
                         <input
                             type="password"
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
-                            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
+                            className="font-mali w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FFC107] bg-[#FFFAE6]"
                             placeholder="Nhập lại mật khẩu"
                             required={true}
                         />
                     </div>
 
                     {error && (
-                        <p className="text-red-500 text-sm mb-4" role="alert">
+                        <p className="font-mali text-red-500 text-sm mb-4" role="alert">
                             {error}
                         </p>
                     )}
                     {success && (
-                        <p className="text-green-600 text-sm mb-4" role="alert">
+                        <p className="font-mali text-green-600 text-sm mb-4" role="alert">
                             {success}
                         </p>
                     )}
 
                     <button
                         type="submit"
-                        className="w-full bg-[#FFC107] text-white font-semibold py-2 rounded-xl hover:bg-[#e5a906] transition"
+                        className="font-mali-semibold w-full bg-[#FFC107] text-white font-semibold py-2 rounded-xl hover:bg-[#e5a906] transition"
                     >
                         Đăng ký
                     </button>
                 </form>
 
-                <p className="text-center text-sm text-gray-600 mt-6">
+                <p className="font-mali text-center text-sm text-gray-600 mt-6">
                     Đã có tài khoản?{" "}
-                    <a href="/login" className="text-[#FFC107] hover:underline">
+                    <a href="/login" className="font-mali-semibold text-[#FFC107] hover:underline">
                         Đăng nhập
                     </a>
                 </p>
@@ -194,29 +194,29 @@ export default function SignupPage() {
                     <div className="relative bg-yellow-50 rounded-xl shadow-2xl max-w-xs sm:max-w-sm w-full p-6 z-10">
                         <button
                             onClick={() => setShowModal(false)}
-                            className="absolute top-3 right-3 text-yellow-700 hover:text-yellow-900 font-bold text-2xl leading-none"
+                            className="font-mali-semibold absolute top-3 right-3 text-yellow-700 hover:text-yellow-900 font-bold text-2xl leading-none"
                             aria-label="Close modal"
                         >
                             &times;
                         </button>
 
-                        <h2 className="text-2xl sm:text-3xl font-extrabold text-yellow-700 mb-4 text-center">
+                        <h2 className="font-mali-medium text-2xl sm:text-3xl font-extrabold text-yellow-700 mb-4 text-center">
                             Đăng ký thành công!
                         </h2>
-                        <p className="text-yellow-800 mb-6 text-center text-sm sm:text-base">
+                        <p className="font-mali text-yellow-800 mb-6 text-center text-sm sm:text-base">
                             Bạn có thể đăng nhập hoặc quay về trang chủ.
                         </p>
 
                         <div className="flex flex-col sm:flex-row justify-center gap-4">
                             <button
                                 onClick={() => router.push("/login")}
-                                className="bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold py-2 px-6 rounded-lg shadow-md transition-colors"
+                                className="font-mali-semibold bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-semibold py-2 px-6 rounded-lg shadow-md transition-colors"
                             >
                                 Đến trang đăng nhập
                             </button>
                             <button
                                 onClick={() => router.push("/")}
-                                className="bg-yellow-300 hover:bg-yellow-400 text-yellow-900 font-semibold py-2 px-6 rounded-lg shadow-md transition-colors"
+                                className="font-mali-semibold bg-yellow-300 hover:bg-yellow-400 text-yellow-900 font-semibold py-2 px-6 rounded-lg shadow-md transition-colors"
                             >
                                 Về trang chủ
                             </button>

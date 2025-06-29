@@ -101,7 +101,7 @@ export default function HandyBabyPage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Bé khéo tay
                 </h3>
                 {/* Grid Lessons */}
@@ -120,7 +120,7 @@ export default function HandyBabyPage() {
                                         alt={artical.title}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute bottom-0">
+                                    <div className="absolute bottom-0 font-mali-bold">
                                         <div
                                             className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
                                             style={{
@@ -135,17 +135,16 @@ export default function HandyBabyPage() {
 
                                 {/* Text content */}
                                 <div className="p-4 flex flex-col flex-1">
-                                    <h4 className="text-[#FFD668] font-semibold text-base mb-1">
+                                    <h4 className="font-mali-bold text-[#FFD668] font-semibold text-base mb-1">
                                         {artical.title}
                                     </h4>
-                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {artical.author}</p>
+                                    <p className="font-mali text-xs text-black line-clamp-3">Đăng bởi: {artical.author}</p>
                                     <LineClampContent content={artical.content} />
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
-                {/* Pagination Buttons */}
                 <div className="w-full flex justify-end">
                     <div className="mt-8 flex items-center space-x-2">
                         {page > 0 && (
@@ -179,7 +178,7 @@ export default function HandyBabyPage() {
                                 &raquo;
                             </button>
                         ) : (
-                            <div className="w-8 h-8" />
+                            <div className="w-8 h-8"/>
                         )}
                     </div>
                 </div>

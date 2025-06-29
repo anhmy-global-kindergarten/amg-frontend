@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {ChangeEvent, FormEvent, useState} from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -15,6 +15,56 @@ const mapUrls = {
 
 export default function Contact() {
     const [currentMap, setCurrentMap] = useState(mapUrls.hamnghi);
+
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        message: "",
+    });
+    const [status, setStatus] = useState({
+        loading: false,
+        success: false,
+        error: "",
+    });
+
+    const handleChange = (
+        e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    ) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setStatus({ loading: true, success: false, error: "" });
+
+        try {
+            const response = await fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+
+            setStatus({ loading: false, success: true, error: "" });
+            // Reset form sau khi gửi thành công
+            setFormData({ name: "", email: "", message: "" });
+        } catch (error) {
+            setStatus({
+                loading: false,
+                success: false,
+                error: "Gửi thông tin thất bại. Vui lòng thử lại.",
+            });
+            console.error("Failed to send message:", error);
+        }
+    };
 
     return (
         <div className="relative min-h-screen bg-white p-4 md:p-8 flex flex-col items-center overflow-hidden">
@@ -84,14 +134,14 @@ export default function Contact() {
                 </div>
 
                 {/* Tiêu đề liên hệ */}
-                <h3 className="text-xl md:text-2xl text-center lg:translate-x-[130px] mt-8 text-black">
+                <h3 className="font-mali-bold text-xl md:text-2xl text-center lg:translate-x-[130px] mt-8 text-black">
                     Liên hệ với chúng tôi
                 </h3>
 
                 {/* Info + Form */}
                 <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8 rounded-xl p-4 md:p-6 z-10">
                     {/* Thông tin liên hệ */}
-                    <div className="flex-1 space-y-4 text-sm text-[#333]">
+                    <div className="font-mali-medium flex-1 space-y-4 text-sm text-[#FFD668]">
                         <div className="flex items-start gap-2">
                             <Image
                                 src="/icons/icon_location.png"
@@ -99,9 +149,9 @@ export default function Contact() {
                                 width={16}
                                 height={16}
                             />
-                            <span className="bg-[#FACBCC]">
-                No B18-06, Vinhome Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.
-              </span>
+                            <span>
+                                No B18-06, Vinhome Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.
+                            </span>
                         </div>
                         <div className="flex items-start gap-2">
                             <Image
@@ -110,9 +160,9 @@ export default function Contact() {
                                 width={16}
                                 height={16}
                             />
-                            <span className="bg-[#FACBCC]">
-                No B18-05A, Vinhome Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.
-              </span>
+                            <span>
+                                No B18-05A, Vinhome Gardenia, P. Hàm Nghi, Mỹ Đình, Hà Nội.
+                            </span>
                         </div>
                         <div className="flex items-start gap-2">
                             <Image
@@ -121,9 +171,9 @@ export default function Contact() {
                                 width={16}
                                 height={16}
                             />
-                            <span className="bg-[#FACBCC]">
-                Tầng 2, Tòa nhà Dreamland Bonanza, 23 Duy Tân, Cầu Giấy, Hà Nội
-              </span>
+                            <span>
+                                Tầng 2, Tòa nhà Dreamland Bonanza, 23 Duy Tân, Cầu Giấy, Hà Nội
+                            </span>
                         </div>
                         <div className="flex items-start gap-2">
                             <Image
@@ -132,9 +182,9 @@ export default function Contact() {
                                 width={16}
                                 height={16}
                             />
-                            <span className="bg-[#FACBCC]">
-                S301, Sky 3, Aquabay, Khu đô thị Ecopark, Hưng Yên
-              </span>
+                            <span>
+                                S301, Sky 3, Aquabay, Khu đô thị Ecopark, Hưng Yên
+                            </span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Image
@@ -143,7 +193,7 @@ export default function Contact() {
                                 width={16}
                                 height={16}
                             />
-                            <span className="bg-[#FACBCC]">097.399.2001</span>
+                            <span>097.399.2001</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <Image
@@ -152,32 +202,54 @@ export default function Contact() {
                                 width={16}
                                 height={16}
                             />
-                            <span className="bg-[#FACBCC]">anhmy.kindergarten@gmail.com</span>
+                            <span>anhmy.kindergarten@gmail.com</span>
                         </div>
                     </div>
 
                     {/* Form liên hệ */}
-                    <form className="flex-1 space-y-4">
+                    <form onSubmit={handleSubmit} className="flex-1 space-y-4">
                         <input
                             type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
                             placeholder="Họ và tên"
-                            className="w-full border rounded-2xl px-4 py-2 text-black"
+                            className="font-mali w-full border rounded-2xl px-4 py-2 text-black"
                         />
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
                             placeholder="Email"
-                            className="w-full border rounded-2xl px-4 py-2 text-black"
+                            className="font-mali w-full border rounded-2xl px-4 py-2 text-black"
                         />
                         <textarea
+                            name="message"
+                            value={formData.message}
+                            onChange={handleChange}
+                            required
                             placeholder="Nội dung"
-                            className="w-full border rounded-2xl px-4 py-2 h-32 resize-none text-black"
+                            className="font-mali w-full border rounded-2xl px-4 py-2 h-32 resize-none text-black"
                         ></textarea>
                         <button
                             type="submit"
-                            className="bg-[#FFC107] text-white px-6 py-2 rounded-full hover:bg-yellow-400 transition"
+                            disabled={status.loading}
+                            className="font-mali bg-[#FFC107] text-white px-6 py-2 rounded-full hover:bg-yellow-400 transition disabled:bg-gray-400"
                         >
-                            Gửi thông tin
+                            {status.loading ? "Đang gửi..." : "Gửi thông tin"}
                         </button>
+
+                        {status.success && (
+                            <p className="font-mali text-green-600 font-mali">
+                                Cảm ơn bạn! Chúng tôi đã nhận được thông tin.
+                            </p>
+                        )}
+                        {status.error && (
+                            <p className="font-mali text-red-600 font-mali">{status.error}</p>
+                        )}
                     </form>
                 </div>
             </div>

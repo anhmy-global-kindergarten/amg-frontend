@@ -18,13 +18,13 @@ export default function AdminDashboard() {
                             height={120}
                             className="object-contain"
                         />
-                        <span className="text-lg font-semibold text-[#FFC107] hover:underline transition">
-              Trang chủ
-            </span>
+                        <span className="font-mali-bold text-lg font-semibold text-[#FFC107] hover:underline transition">
+                          Trang chủ
+                        </span>
                     </a>
                 </div>
             </header>
-            <h1 className="text-2xl md:text-3xl font-bold text-orange-500 mb-6 text-center">
+            <h1 className="font-mali-bold text-2xl md:text-3xl font-bold text-orange-500 mb-6 text-center">
                 🎓 Bảng điều khiển Admin
             </h1>
 
@@ -33,12 +33,12 @@ export default function AdminDashboard() {
             </div>*/}
 
             <div className="mt-10">
-                <h2 className="text-xl font-semibold text-blue-800 mb-4">👤 Quản lý người dùng</h2>
+                <h2 className="font-mali-bold text-xl font-semibold text-blue-800 mb-4">👤 Quản lý người dùng</h2>
                 <UserTable />
             </div>
 
             <div className="mt-10">
-                <h2 className="text-xl font-semibold text-blue-800 mb-4">📝 Đăng ký nhập học</h2>
+                <h2 className="font-mali-bold text-xl font-semibold text-blue-800 mb-4">📝 Đăng ký nhập học</h2>
                 <RegisterTable />
             </div>
         </main>

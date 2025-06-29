@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import {notFound, useParams} from "next/navigation";
-import React, { use } from "react";
+import React, {use, useEffect} from "react";
 import { useState } from "react";
 import {MoreVertical} from "lucide-react";
 import {Menu} from "@headlessui/react";
@@ -12,32 +12,33 @@ import {useAuth} from "@/app/hooks/useAuth";
 import formatDateDisplay from "@/app/utils/formatDate";
 import RenderHTMLContent from "@/app/utils/getContent";
 import {deletePost} from "@/app/utils/deletePost";
+import {usePostComments} from "@/app/hooks/useComment";
+import {CreateCommentPayload} from "@/app/utils/comment";
+import CommentItem from "@/components/CommentItem";
 
 export default function HandbookDetail() {
     const params = useParams();
     const articalId = params?.handbookId as string;
 
     const { post, images, loading, error } = usePostById(articalId);
-    const { name, role } = useAuth();
+    const { name: loggedInUserName, role, id: userId } = useAuth();
+    const {
+        comments,
+        loading: commentsLoading,
+        error: commentsError,
+        createComment,
+        deleteComment,
+        updateComment,
+    } = usePostComments(articalId);
 
-    const [comments, setComments] = useState([
-        {
-            name: "Nguyễn Văn A",
-            email: "vana@example.com",
-            content: "Một sự kiện hay!",
-        },
-        {
-            name: "Trần Thị B",
-            email: "thib@example.com",
-            content: "Cảm ơn các cô vì những sự kiện tuyệt vời!",
-        },
-    ]);
-
-    const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        content: "",
-    });
+    const [commentAuthor, setCommentAuthor] = useState("");
+    const [commentContent, setCommentContent] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    useEffect(() => {
+        if (loggedInUserName) {
+            setCommentAuthor(loggedInUserName);
+        }
+    }, [loggedInUserName]);
     // const handbooks = [
     //     {
     //         id: "1",
@@ -53,6 +54,47 @@ export default function HandbookDetail() {
     //         image5: "",
     //     },
     // ];
+
+    const handleCommentSubmit = async () => {
+        if (!userId?.trim()) {
+            alert("Vui lòng đăng nhập để gửi bình luận.");
+            return;
+        }
+
+        if (!commentAuthor.trim() || !commentContent.trim()) {
+            alert("Vui lòng nhập tên và nội dung bình luận.");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        const payload: CreateCommentPayload = {
+            postId: articalId,
+            authorId: userId,
+            authorName: commentAuthor,
+            content: commentContent,
+        };
+
+        const success = await createComment(payload);
+
+        if (success) {
+            setCommentContent("");
+            if (!loggedInUserName) {
+                setCommentAuthor("");
+            }
+        } else {
+            alert("Gửi bình luận thất bại. Vui lòng thử lại.");
+        }
+
+        setIsSubmitting(false);
+    };
+
+    const handleCommentDelete = async (commentId: string) => {
+        if (window.confirm("Bạn có chắc muốn xóa bình luận này?")) {
+            await deleteComment(commentId);
+        }
+    };
+
     if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
     if (error && !post) {
         return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sổ tay.</p>;
@@ -98,7 +140,7 @@ export default function HandbookDetail() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Cẩm nang chăm trẻ
                 </h3>
                 <Image
@@ -110,8 +152,8 @@ export default function HandbookDetail() {
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{post.title}</h1>
+                        <p className="font-mali absolute top-10 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
+                        <h1 className="font-mali-bold absolute top-15 left-30 text-[#FFC107] text-xl font-bold uppercase mb-2">{post.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -119,7 +161,7 @@ export default function HandbookDetail() {
                                         <MoreVertical className="w-5 h-5 text-[#FFC107]" />
                                     </Menu.Button>
                                     <Menu.Items
-                                        className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
+                                        className="font-mali-semibold absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <Link
@@ -152,74 +194,61 @@ export default function HandbookDetail() {
                         <div
                             className="w-[70px] h-[70px] bg-[#FFD668] absolute top-5 left-7 rounded-xl flex items-center justify-center shadow-md">
                             <div
-                                className="bg-[#FDCED0] w-[50px] h-[50px] rounded flex flex-col items-center justify-center">
-                                <span className="text-white text-2xl font-bold leading-none">{day}</span>
-                                <span className="text-white text-xs leading-none">Tháng {month}</span>
+                                className="w-[50px] h-[50px] rounded flex flex-col items-center justify-center">
+                                <span className="font-mali-bold text-white text-2xl font-bold leading-none">{day}</span>
+                                <span className="font-mali-medium text-white text-xs leading-none">Tháng {month}</span>
                             </div>
                         </div>
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">
+                            <span className="font-mali bg-[#FDCED0]">
                                 <RenderHTMLContent content={post.content} images={images} />
                             </span>
                         </div>
 
                         <div className="w-full max-w-4xl mt-12 px-4 md:px-0">
-                            <h4 className="text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
+                            <h4 className="font-mali-semibold text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
 
                             {comments.length === 0 && (
-                                <p className="text-gray-500 italic">Chưa có bình luận nào.</p>
+                                <p className="font-mali-medium text-gray-500 italic">Chưa có bình luận nào.</p>
                             )}
 
-                            {comments.map((cmt, index) => (
-                                <div
-                                    key={index}
-                                    className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow"
-                                >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <p className="text-base font-semibold text-[#795548]">{cmt.name}</p>
-                                        <p className="text-sm text-[#A1887F] italic">{cmt.email}</p>
-                                    </div>
-                                    <p className="text-gray-800 text-sm leading-relaxed">{cmt.content}</p>
-                                </div>
+                            {!commentsLoading && !commentsError && comments.length > 0 && comments.map((cmt) => (
+                                <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt}
+                                    currentUser={{ id: userId, role }}
+                                    onDelete={deleteComment}
+                                    onUpdate={updateComment}
+                                />
                             ))}
                         </div>
 
                         <div className="w-full max-w-4xl mt-8 px-4 md:px-0">
-                            <h4 className="text-[#FFC107] mb-4">Viết bình luận của bạn:</h4>
+                            <h4 className="font-mali-bold text-[#FFC107] mb-4">Viết bình luận của bạn:</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <input
                                     type="text"
                                     placeholder="Họ và tên"
-                                    className="rounded-full border px-4 py-2 text-black"
-                                    value={formData.name}
-                                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                                />
-                                <input
-                                    type="email"
-                                    placeholder="Email"
-                                    className="rounded-full border px-4 py-2 text-black"
-                                    value={formData.email}
-                                    onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                    className="font-mali rounded-full border px-4 py-2 text-black"
+                                    value={commentAuthor}
+                                    onChange={(e) => setCommentAuthor(e.target.value)}
+                                    disabled={!!loggedInUserName}
                                 />
                             </div>
                             <textarea
                                 placeholder="Viết bình luận"
-                                className="w-full mt-4 border rounded-2xl px-4 py-2 text-black"
+                                className="font-mali w-full mt-4 border rounded-2xl px-4 py-2 text-black"
                                 rows={4}
-                                value={formData.content}
-                                onChange={(e) => setFormData({...formData, content: e.target.value})}
+                                value={commentContent}
+                                onChange={(e) => setCommentContent(e.target.value)}
                             ></textarea>
                             <img
                                 src="/buttons/btn_comment.png"
                                 alt="Gửi bình luận"
                                 className="mt-4 w-40 cursor-pointer"
-                                onClick={() => {
-                                    if (!formData.name || !formData.email || !formData.content) return;
-                                    setComments([...comments, formData]);
-                                    setFormData({name: "", email: "", content: ""});
-                                }}
+                                onClick={!isSubmitting ? handleCommentSubmit : undefined}
                             />
                         </div>
                     </div>
