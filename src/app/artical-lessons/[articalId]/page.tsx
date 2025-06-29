@@ -14,20 +14,21 @@ import {useAuth} from "@/app/hooks/useAuth";
 import {deletePost} from "@/app/utils/deletePost";
 import {CreateCommentPayload} from "@/app/utils/comment";
 import {usePostComments} from "@/app/hooks/useComment";
+import CommentItem from "@/components/CommentItem";
 
 export default function LessonDetail() {
     const params = useParams();
     const articalId = params?.articalId as string;
 
     const { post, images, loading, error } = usePostById(articalId);
-
     const { name: loggedInUserName, role, id: userId } = useAuth();
     const {
         comments,
         loading: commentsLoading,
         error: commentsError,
         createComment,
-        deleteComment
+        deleteComment,
+        updateComment,
     } = usePostComments(articalId);
 
     const [commentAuthor, setCommentAuthor] = useState("");
@@ -142,11 +143,10 @@ export default function LessonDetail() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Tiết học của con
                 </h3>
                 <Image
-                    // src={`${process.env.NEXT_PUBLIC_BASE_URL}${post.header_image.replace('./', '/')}`}
                     src={post.header_image}
                     alt={post.title}
                     width={600}
@@ -155,8 +155,8 @@ export default function LessonDetail() {
                 />
                 <div className="w-full p-6 md:p-12 relative">
                     <div className="max-w-4xl mx-auto">
-                        <p className="absolute top-5 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
-                        <h1 className="absolute top-12 left-30 text-[#FFC107] text-xl font-bold uppercase">{post.title}</h1>
+                        <p className="font-mali absolute top-10 left-30 text-sm text-black mb-2">Đăng bởi: {post.author}</p>
+                        <h1 className="font-mali-bold absolute top-15 left-30 text-[#FFC107] text-xl font-bold uppercase mb-2">{post.title}</h1>
                         {(role === "admin" || role === "teacher") && (
                             <div className="absolute top-4 right-4">
                                 <Menu>
@@ -164,7 +164,7 @@ export default function LessonDetail() {
                                         <MoreVertical className="w-5 h-5 text-[#FFC107]" />
                                     </Menu.Button>
                                     <Menu.Items
-                                        className="absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
+                                        className="font-mali-semibold absolute right-0 mt-2 w-36 bg-white border rounded-lg shadow-lg z-30">
                                         <Menu.Item>
                                             {({ active }) => (
                                                 <Link
@@ -197,61 +197,44 @@ export default function LessonDetail() {
                         <div
                             className="w-[70px] h-[70px] bg-[#FFD668] absolute top-5 left-7 rounded-xl flex items-center justify-center shadow-md">
                             <div
-                                className="bg-[#FDCED0] w-[50px] h-[50px] rounded flex flex-col items-center justify-center">
-                                <span className="text-white text-2xl font-bold leading-none">{day}</span>
-                                <span className="text-white text-xs leading-none">Tháng {month}</span>
+                                className="w-[50px] h-[50px] rounded flex flex-col items-center justify-center">
+                                <span className="font-mali-bold text-white text-2xl font-bold leading-none">{day}</span>
+                                <span className="font-mali-medium text-white text-xs leading-none">Tháng {month}</span>
                             </div>
                         </div>
 
                         {/* Main content */}
                         <div className="text-[15px] leading-loose text-gray-800 whitespace-pre-line pt-40">
-                            <span className="bg-[#FDCED0]">
+                            <span className="font-mali bg-[#FDCED0]">
                                 <RenderHTMLContent content={post.content} images={images} />
                             </span>
                         </div>
 
-                        {/* Optional images */}
-                        {/*{[post.image1, post.image2, post.image3, post.image4, post.image5]*/}
-                        {/*    .filter(Boolean)*/}
-                        {/*    .map((img, i) => (*/}
-                        {/*        <Image*/}
-                        {/*            key={i}*/}
-                        {/*            src={img}*/}
-                        {/*            alt={`Lesson image ${i + 1}`}*/}
-                        {/*            width={800}*/}
-                        {/*            height={400}*/}
-                        {/*            className="w-full h-auto rounded-lg shadow mt-6"*/}
-                        {/*        />*/}
-                        {/*    ))}*/}
-
                         <div className="w-full max-w-4xl mt-12 px-4 md:px-0">
-                            <h4 className="text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
+                            <h4 className="font-mali-semibold text-xl font-bold text-[#FFB300] mb-6">Bình luận</h4>
 
                             {comments.length === 0 && (
-                                <p className="text-gray-500 italic">Chưa có bình luận nào.</p>
+                                <p className="font-mali-medium text-gray-500 italic">Chưa có bình luận nào.</p>
                             )}
 
-                            {comments.map((cmt, index) => (
-                                <div
-                                    key={index}
-                                    className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow"
-                                >
-                                    <div className="flex items-center justify-between mb-2">
-                                        <p className="text-base font-semibold text-[#795548]">{cmt.authorName}</p>
-                                        <p className="text-sm text-[#A1887F] italic">{new Date(cmt.createdAt).toLocaleString()}</p>
-                                    </div>
-                                    <p className="text-gray-800 text-sm leading-relaxed">{cmt.content}</p>
-                                </div>
+                            {!commentsLoading && !commentsError && comments.length > 0 && comments.map((cmt) => (
+                                <CommentItem
+                                    key={cmt._id}
+                                    comment={cmt}
+                                    currentUser={{ id: userId, role }}
+                                    onDelete={deleteComment}
+                                    onUpdate={updateComment}
+                                />
                             ))}
                         </div>
 
                         <div className="w-full max-w-4xl mt-8 px-4 md:px-0">
-                            <h4 className="text-[#FFC107] mb-4">Viết bình luận của bạn:</h4>
+                            <h4 className="font-mali-bold text-[#FFC107] mb-4">Viết bình luận của bạn:</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <input
                                     type="text"
                                     placeholder="Họ và tên"
-                                    className="rounded-full border px-4 py-2 text-black"
+                                    className="font-mali rounded-full border px-4 py-2 text-black"
                                     value={commentAuthor}
                                     onChange={(e) => setCommentAuthor(e.target.value)}
                                     disabled={!!loggedInUserName}
@@ -259,7 +242,7 @@ export default function LessonDetail() {
                             </div>
                             <textarea
                                 placeholder="Viết bình luận"
-                                className="w-full mt-4 border rounded-2xl px-4 py-2 text-black"
+                                className="font-mali w-full mt-4 border rounded-2xl px-4 py-2 text-black"
                                 rows={4}
                                 value={commentContent}
                                 onChange={(e) => setCommentContent(e.target.value)}

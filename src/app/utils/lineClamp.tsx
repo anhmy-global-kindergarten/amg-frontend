@@ -16,10 +16,10 @@ function truncateText(text: string, maxLength: number): string {
 
 export default function LineClampContent({ content }: { content: string }) {
     const text = stripHtml(content);
-    const shortText = truncateText(text, 100);
+    const shortText = truncateText(text, 84);
 
     return (
-        <p className="text-sm text-black line-clamp-3">
+        <p className="font-mali text-sm text-black line-clamp-3">
             {shortText}
         </p>
     );

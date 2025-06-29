@@ -57,7 +57,7 @@ export default function ValuePage() {
                     )}
 
                     {post && (
-                        <div className="prose prose-lg max-w-none text-black">
+                        <div className="font-mali prose prose-lg max-w-none text-black">
                             <h1 className="text-2xl font-bold text-center mb-8 text-[#FFD668]">
                                 {post.title}
                             </h1>

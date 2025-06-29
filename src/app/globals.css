@@ -12,6 +12,26 @@
   padding: 2px 4px;
 }
 
+.font-cadena {
+  font-family: 'iCielCadena', sans-serif;
+}
+
+.font-mali {
+  font-family: 'Mali Regular', sans-serif;
+}
+
+.font-mali-medium {
+  font-family: 'Mali Medium', sans-serif;
+}
+
+.font-mali-semibold {
+  font-family: 'Mali Semibold', sans-serif;
+}
+
+.font-mali-bold {
+  font-family: 'Mali Bold', sans-serif;
+}
+
 @font-face {
   font-family: 'Mali Regular';
   src: url('/fonts/Mali-Regular.ttf') format('truetype');
@@ -29,6 +49,13 @@
 @font-face {
   font-family: 'Mali Semibold';
   src: url('/fonts/Mali-Semibold.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Mali Bold';
+  src: url('/fonts/Mali-Bold.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }

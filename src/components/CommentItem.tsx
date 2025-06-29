@@ -71,8 +71,8 @@ export default function CommentItem({ comment, currentUser, onDelete, onUpdate }
         <div className="mb-6 bg-[#FFF9E5] p-5 rounded-xl shadow-md border border-[#FFE082] hover:shadow-lg transition-shadow group">
             <div className="flex items-start justify-between">
                 <div>
-                    <p className="text-base font-semibold text-[#795548]">{comment.authorName}</p>
-                    <p className="text-xs text-[#A1887F] italic">{new Date(comment.updatedAt).toLocaleString()}</p>
+                    <p className="font-mali text-base font-semibold text-[#795548]">{comment.authorName}</p>
+                    <p className="font-mali text-xs text-[#A1887F] italic">{new Date(comment.updatedAt).toLocaleString()}</p>
                 </div>
                 {hasPermissionDelete && !isEditing && (
                     <div className="relative flex-shrink-0">
@@ -85,14 +85,14 @@ export default function CommentItem({ comment, currentUser, onDelete, onUpdate }
                                     hasPermissionEdit && (
                                         <Menu.Item>
                                             {({ active }) => (
-                                                <button onClick={() => setIsEditing(true)} className={`block w-full text-left px-3 py-1.5 text-sm text-yellow-600 ${active ? 'bg-yellow-100' : ''}`}>Sửa</button>
+                                                <button onClick={() => setIsEditing(true)} className={`font-mali block w-full text-left px-3 py-1.5 text-sm text-yellow-600 ${active ? 'bg-yellow-100' : ''}`}>Sửa</button>
                                             )}
                                         </Menu.Item>
                                     )
                                 }
                                 <Menu.Item>
                                     {({ active }) => (
-                                        <button onClick={handleDelete} className={`block w-full text-left px-3 py-1.5 text-sm text-red-600 ${active ? 'bg-red-50' : ''}`}>Xóa</button>
+                                        <button onClick={handleDelete} className={`font-mali block w-full text-left px-3 py-1.5 text-sm text-red-600 ${active ? 'bg-red-50' : ''}`}>Xóa</button>
                                     )}
                                 </Menu.Item>
                             </Menu.Items>
@@ -107,19 +107,19 @@ export default function CommentItem({ comment, currentUser, onDelete, onUpdate }
                         <textarea
                             value={editedContent}
                             onChange={(e) => setEditedContent(e.target.value)}
-                            className="w-full p-2 border rounded text-black bg-white"
+                            className="font-mali w-full p-2 border rounded text-black bg-white"
                             rows={3}
                             autoFocus
                         />
                         <div className="flex justify-end gap-2 mt-2">
-                            <button onClick={handleCancelEdit} className="px-3 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300">Hủy</button>
-                            <button onClick={handleUpdate} disabled={isUpdating} className="px-3 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300">
+                            <button onClick={handleCancelEdit} className="font-mali px-3 py-1 text-sm rounded bg-gray-200 hover:bg-gray-300">Hủy</button>
+                            <button onClick={handleUpdate} disabled={isUpdating} className="font-mali px-3 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-600 disabled:bg-blue-300">
                                 {isUpdating ? 'Đang lưu...' : 'Lưu'}
                             </button>
                         </div>
                     </div>
                 ) : (
-                    <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-line">{comment.content}</p>
+                    <p className="font-mali text-gray-800 text-sm leading-relaxed whitespace-pre-line">{comment.content}</p>
                 )}
             </div>
         </div>

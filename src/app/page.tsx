@@ -139,7 +139,7 @@ const initialPageContent: PageContent = {
     galleryImage8Src: "/gallery/photo8.png",
     aboutAmgSectionTitle: "VỀ AMG",
     aboutAmgIntroHeading: "GIỚI THIỆU CHUNG",
-    aboutAmgParagraph: `<span class="bg-[#FACBCC]">mầm non AMG Kindergarten là ngôi trường được hình thành từ </span><span class="bg-[#FACBCC] text-[#EF924D]">tình yêu của người mẹ dành cho con</span><span class="bg-[#FACBCC]">. Chúng tôi mong muốn lan toả tình </span><span class="bg-[#FACBCC] text-[#EF924D]">yêu thương</span><span class="bg-[#FACBCC]">và </span><span class="bg-[#FACBCC] text-[#EF924D]">năng lượng tích cực</span><span class="bg-[#FACBCC]">đến con trẻ trên cơ sở tình yêu thương của người làm mẹ. Bằng việc lựa chọn, chắt lọc các chương trình, </span><span class="bg-[#FACBCC] text-[#EF924D]">giáo án tiên tiến từ Tây Âu và kết hợp cùng nhiều chuyên gia giáo dục có chuyên môn cao</span><span class="bg-[#FACBCC]">, chúng tôi xây dựng nên </span><span class="bg-[#FACBCC] text-[#EF924D]">giáo án giáo dục mầm non độc quyền của AMG Kindergaten</span><span class="bg-[#FACBCC]">. Với mục tiêu: </span><span class="bg-[#FACBCC] text-[#EF924D]">Lấy trẻ làm trung tâm</span><span class="bg-[#FACBCC]">, quan tâm phát triển tới từng cá thể, thúc đẩy </span><span class="bg-[#FACBCC] text-[#EF924D]">năng lượng tích cực và tính sáng tạo</span><span class="bg-[#FACBCC]">. Chúng tôi lựa chọn </span><span class="bg-[#FACBCC] text-[#EF924D]">Phương pháp Phần Lan </span><span class="bg-[#FACBCC]">.là nền tảng để triển khai giảng dạy tại nhà trường. Với cấu tạo bài học trải nghiệm đầy cuốn hút, thú vị cùng lịch trình di chuyển linh hoạt giúp thay đổi không gian học, AMG chắc chắn rằng mỗi ngày đến trường sẽ là </span><span class="bg-[#FACBCC] text-[#EF924D]">một hành trình đầy thú vị và ấn tượng với con trẻ</span><span class="bg-[#FACBCC]">. AMG có </span><span class="bg-[#FACBCC] text-[#EF924D]">đội ngũ chuyên gia tư vấn toàn diện </span><span class="bg-[#FACBCC]">không chỉ về học thuật mà còn cả phương diện chăm sóc và dinh dưỡng dành cho trẻ. AMG Kindergarten luôn nỗ lực mang lại một môi trường </span><span class="bg-[#FACBCC] text-[#EF924D]">giáo dục an toàn, trải nghiệm thú vị, hữu ích và sự chăm sóc chu đáo, toàn diện.</span>`,
+    aboutAmgParagraph: ` mầm non AMG Kindergarten là ngôi trường được hình thành từ <span class="text-[#EF924D]">tình yêu của người mẹ dành cho con</span>. Chúng tôi mong muốn lan toả tình <span class="text-[#EF924D]">yêu thương</span> và <span class="text-[#EF924D]">năng lượng tích cực</span> đến con trẻ trên cơ sở tình yêu thương của người làm mẹ. Bằng việc lựa chọn, chắt lọc các chương trình, <span class="text-[#EF924D]">giáo án tiên tiến từ Tây Âu và kết hợp cùng nhiều chuyên gia giáo dục có chuyên môn cao</span>, chúng tôi xây dựng nên <span class="text-[#EF924D]">giáo án giáo dục mầm non độc quyền của AMG Kindergaten</span>. Với mục tiêu: <span class="text-[#EF924D]">Lấy trẻ làm trung tâm</span>, quan tâm phát triển tới từng cá thể, thúc đẩy <span class="text-[#EF924D]">năng lượng tích cực và tính sáng tạo</span>. Chúng tôi lựa chọn <span class="text-[#EF924D]">Phương pháp Phần Lan </span>.là nền tảng để triển khai giảng dạy tại nhà trường. Với cấu tạo bài học trải nghiệm đầy cuốn hút, thú vị cùng lịch trình di chuyển linh hoạt giúp thay đổi không gian học, AMG chắc chắn rằng mỗi ngày đến trường sẽ là <span class="text-[#EF924D]">một hành trình đầy thú vị và ấn tượng với con trẻ</span>. AMG có <span class="text-[#EF924D]">đội ngũ chuyên gia tư vấn toàn diện </span>không chỉ về học thuật mà còn cả phương diện chăm sóc và dinh dưỡng dành cho trẻ. AMG Kindergarten luôn nỗ lực mang lại một môi trường <span class="text-[#EF924D]">giáo dục an toàn, trải nghiệm thú vị, hữu ích và sự chăm sóc chu đáo, toàn diện.</span>`,
     aboutAmgIcon1Src: "/icons/icon_about1.png",
     aboutAmgIcon2Src: "/icons/icon_about2.png",
     aboutAmgIcon3Src: "/icons/icon_about3.png",
@@ -591,7 +591,7 @@ export default function LandingPage() {
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
             {/* EDIT MODE TOGGLE AND SAVE BUTTON - Only for admin/teacher */}
             {canEdit && (
-                <div className="fixed top-20 right-2 z-[99999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
+                <div className="font-mali-semibold fixed top-20 right-2 z-[99999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
                     <button
                         onClick={handleToggleEditMode}
                         className={`px-3 py-1.5 text-sm rounded ${isEditMode ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white flex items-center gap-1.5`}
@@ -624,7 +624,7 @@ export default function LandingPage() {
                 <div
                     className="w-full bg-[#FFF6C7] text-[#FFC107] text-sm py-4 px-4 lg:px-8 flex flex-col lg:flex-row justify-between items-center gap-4 ">
                     <div className="flex flex-col sm:flex-row items-center sm:space-x-6 gap-2 sm:gap-0">
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 font-mali-bold ">
                             <Image src="/icons/icon_phone.png" alt="icon phone" height={15} width={15}/>
                             <EditableText
                                 id="topNavPhone"
@@ -632,13 +632,13 @@ export default function LandingPage() {
                                 onSave={handleContentUpdate}
                                 isEditMode={isEditMode}
                                 tag="a"
-                                className="hover:underline"
+                                className="font-mali-bold hover:underline"
                                 style={{color: '#FFC107'}}
                                 // @ts-ignore
                                 href={`tel:${pageContent.topNavPhone.replace(/<[^>]*>?/gm, '')}`}
                             />
                         </div>
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 font-mali-bold ">
                             <Image src="/icons/icon_email.png" alt="icon email" height={20} width={20}/>
                             <EditableText
                                 id="topNavEmail"
@@ -646,7 +646,7 @@ export default function LandingPage() {
                                 onSave={handleContentUpdate}
                                 isEditMode={isEditMode}
                                 tag="a"
-                                className="hover:underline"
+                                className="font-mali-bold hover:underline"
                                 style={{color: '#FFC107'}}
                                 // @ts-ignore
                                 href={`mailto:${pageContent.topNavEmail.replace(/<[^>]*>?/gm, '')}`}
@@ -682,13 +682,13 @@ export default function LandingPage() {
                                     <div className="flex gap-x-2">
                                         <a
                                             href="/admin-dashboard"
-                                            className="bg-[#4CAF50] text-white px-4 py-1 rounded hover:bg-[#449d48] transition"
+                                            className="font-mali-bold bg-[#4CAF50] text-white px-4 py-1 rounded hover:bg-[#449d48] transition"
                                         >
                                             Dashboard
                                         </a>
                                         <a
                                             href="/post/create"
-                                            className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                                            className="font-mali-bold bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
                                         >
                                             Tạo bài viết
                                         </a>
@@ -696,7 +696,7 @@ export default function LandingPage() {
                                 )}
                                 <button
                                     onClick={() => handleLogout()}
-                                    className="bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
+                                    className="font-mali-bold bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
                                 >
                                     Đăng xuất
                                 </button>
@@ -704,7 +704,7 @@ export default function LandingPage() {
                         ) : (
                             <a
                                 href="/login"
-                                className="bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                                className="font-mali-bold bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
                             >
                                 Đăng nhập
                             </a>
@@ -758,57 +758,57 @@ export default function LandingPage() {
                     <div className="relative w-full max-w-xl z-20 top-60 pb-2">
                         <EditableText id="bannerMobileTitle" initialHtml={pageContent.bannerMobileTitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h1"
-                                      className="text-4xl sm:text-5xl text-[#EA570A] leading-tight"
+                                      className="font-cadena text-4xl sm:text-5xl text-[#EA570A] leading-tight"
                                       style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                         <EditableText id="bannerMobileSubtitle" initialHtml={pageContent.bannerMobileSubtitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="text-3xl text-[#FFD105] mb-1"/>
+                                      className="font-cadena text-3xl text-[#FFD105] mb-1"/>
                         <EditableText id="bannerMobileDescription" initialHtml={pageContent.bannerMobileDescription}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="mb-4 text-[#EA570A] text-xs leading-relaxed"/>
+                                      className="font-mali-medium mb-4 text-[#EA570A] text-xs leading-relaxed"/>
                         <div className="relative w-fit mx-auto">
                             <button onClick={openModal} className="relative">
                                 <Image alt="bannerMobileRegisterButtonImageSrc"
                                     src="/banner/button_register.png"
                                                width={200} height={60} className="hover:opacity-90 transition"/>
-                                <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
+                                {/*<div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
                                     <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill
                                                    objectFit="contain"
                                                    className="w-full h-full"/>
-                                </div>
+                                </div>*/}
                             </button>
                         </div>
                     </div>
                 </section>
             ) : (
                 <section
-                    className="relative px-4 sm:px-6 pt-10 pb-20 z-10 max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
-                    <div className="w-full lg:w-auto max-w-xl z-20 lg:pr-10 text-center lg:text-left">
+                    className="relative px-4 sm:px-6 pb-20 z-10 max-w-8xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
+                    <div className="ml-50 w-full lg:w-auto max-w-xl z-20 text-center lg:text-left">
                         <EditableText id="bannerDesktopTitle" initialHtml={pageContent.bannerDesktopTitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h1"
-                                      className="text-4xl sm:text-5xl text-[#EA570A] leading-tight mb-3"
+                                      className="font-cadena text-7xl text-[#EA570A] leading-tight mb-3"
                                       style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                         <EditableText id="bannerDesktopSubtitle" initialHtml={pageContent.bannerDesktopSubtitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="text-3xl sm:text-3xl text-[#FFD105] mb-4"/>
+                                      className="font-cadena text-3xl sm:text-3xl text-[#FFD105] mb-4"/>
                         <EditableText id="bannerDesktopDescription" initialHtml={pageContent.bannerDesktopDescription}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="mb-2 text-[#EA570A]"/>
+                                      className="font-mali-medium mb-2 text-[#EA570A]"/>
                         <div className="relative w-fit mx-auto lg:mx-0">
                             <button onClick={openModal} className="relative">
                                 <Image alt="bannerMobileRegisterButtonImageSrc"
                                        src="/banner/button_register.png"
-                                               width={200} height={60} className="hover:opacity-90 transition"/>
-                                <div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                                    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill
-                                                   objectFit="contain"
-                                                   className="w-full h-full"/>
-                                </div>
+                                               width={350} height={100} className="hover:opacity-90 transition"/>
+                                {/*<div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">*/}
+                                {/*    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill*/}
+                                {/*                   objectFit="contain"*/}
+                                {/*                   className="w-full h-full"/>*/}
+                                {/*</div>*/}
                             </button>
                         </div>
                     </div>
                     <div
-                        className={`absolute w-full right-8 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0 ${isMobile ? 'top-50' : ''}`}>
+                        className={`absolute w-full right-90 max-w-[600px] h-[400px] sm:h-[600px] lg:h-[800px] z-10 mb-10 lg:mb-0 lg:mt-0 ${isMobile ? 'top-50' : ''}`}>
                         <EditableImage id="bannerDesktopKidsImageSrc" initialSrc={pageContent.bannerDesktopKidsImageSrc}
                                        isUploading={isUploading && uploadingImageId === 'bannerDesktopKidsImageSrc'}
                                        altText="Kids" onFileSelect={handleImageUpload} isEditMode={isEditMode} fill
@@ -816,15 +816,15 @@ export default function LandingPage() {
                     </div>
                     {/* Decorative */}
                     <div
-                        className="absolute sm:block right-20 sm:right-10 top-70 lg:top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-9">
+                        className="absolute sm:block right-100 top-70 lg:top-0 w-[250px] sm:w-[350px] md:w-[400px] h-[300px] sm:h-[450px] md:h-[500px] z-9">
                         <Image src="/banner/triangle_shade.png" alt="Triangle" fill className="object-contain"/></div>
-                    <Image src="/banner/big_cloud.png" alt="" width={1920} height={80}
+                    <Image src="/banner/big_cloud.png" alt="" width={2100} height={80}
                            className="w-full absolute top-[970px] lg:top-[400px] z-10"/>
                 </section>
             )}
 
             {/* Gallery Section - All images now editable */}
-            <section className="relative w-full mt-40 mb-20 z-20 px-4">
+            <section className="relative w-full mt-40 z-20 px-4">
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
                     <div className="flex flex-col gap-2">
@@ -887,24 +887,24 @@ export default function LandingPage() {
             </section>
 
             {/* About & Class Gallery Section */}
-            <section className="w-full bg-[#FFF6C7] py-10 relative z-10">
+            <section className="w-full bg-[#FFF6C7] py-10 relative z-20">
                 <div className={`${isMobile ? 'w-[100%]' : 'w-[90%]'} mx-auto flex flex-col items-center gap-6`}>
                     {/* Decorative elephant */}
                     <div><Image src="/icons/icon_elephant0.png" alt="" width={isMobile ? 60 : 100}
-                                height={isMobile ? 40 : 70} className="absolute left-[10%] -top-[70px] z-99"/></div>
+                                height={isMobile ? 40 : 70} className={`absolute z-99 ${isMobile ? '-top-[20px] left-[5%]' : '-top-[70px] left-[10%]'}`}/></div>
                     <div className="w-full px-4 py-8">
                         <EditableText id="aboutAmgSectionTitle" initialHtml={pageContent.aboutAmgSectionTitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                                      className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
+                                      className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
                                       style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                         <EditableText id="aboutAmgIntroHeading" initialHtml={pageContent.aboutAmgIntroHeading}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                      className="text-lg md:text-xl font-semibold text-[#7ED3F7]"/>
+                                      className="font-mali-semibold text-lg md:text-xl font-semibold text-[#7ED3F7]"/>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                             <div className="rounded-xl text-base leading-7 text-black space-y-4 text-justify">
                                 <EditableText id="aboutAmgParagraph" initialHtml={pageContent.aboutAmgParagraph}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="rounded-xl"
+                                              className="font-mali rounded-xl"
                                               textEditorStyle={{lineHeight: '1.75rem', color: 'black'}}/>
                             </div>
                             {/* Decorative cloud */}
@@ -947,12 +947,12 @@ export default function LandingPage() {
             </section>
 
             {/* Meal Section - All images now editable */}
-            <section className="relative w-full mt-10 mb-5 z-50 px-4  text-center">
+            <section className="relative w-full mt-10 z-50 px-4  text-center">
                 <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                        className="absolute right-5 -top-[60px] lg:right-50 lg:top-[4700px]  z-99"/>
                 <EditableText id="mealSectionTitle" initialHtml={pageContent.mealSectionTitle}
                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                              className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
+                              className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
                               style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
@@ -1016,17 +1016,17 @@ export default function LandingPage() {
             </section>
 
             {/* Reasons Section - All content is editable */}
-            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-2 relative z-10">
+            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 relative z-10">
                 <Image src="/icons/icon_elephant2.png" alt="" width={isMobile ? 75 : 150} height={isMobile ? 50 : 100}
                        className="left-5 lg:left-30 top-[8800px] lg:top-[4550px] z-99"/>
                 <div className="w-full max-w-7xl mx-auto">
                     <EditableText id="reasonsSectionTitle1" initialHtml={pageContent.reasonsSectionTitle1}
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                                  className="text-4xl md:text-4xl text-center text-[#F7B052] mb-2"
+                                  className={`font-cadena text-center text-[#F7B052] mb-2 ${isMobile ? 'text-3xl' : 'text-7xl'}`}
                                   style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                     <EditableText id="reasonsSectionTitle2" initialHtml={pageContent.reasonsSectionTitle2}
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                                  className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
+                                  className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-3xl' : 'text-7xl'}`}
                                   style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                         <div className="space-y-6">
@@ -1036,32 +1036,32 @@ export default function LandingPage() {
                                         <EditableText id="reasonsCol1Heading1"
                                                       initialHtml={pageContent.reasonsCol1Heading1}
                                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                      className="text-[#7ED3F7] font-semibold text-lg"/>
+                                                      className="font-mali-semibold text-[#7ED3F7] font-semibold text-base"/>
                                         <EditableText id="reasonsCol1Heading2"
                                                       initialHtml={pageContent.reasonsCol1Heading2}
                                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                      className="text-[#7ED3F7] font-semibold text-lg mb-3"/>
+                                                      className="font-mali-semibold text-[#7ED3F7] font-semibold text-base mb-3"/>
                                     </div>
                                     <Image src="/banner/icon_cloud.png" alt="cloud" width={100} height={50}
                                            className="right-2 z-10 ml-10"/>
                                 </div>
                                 <EditableText id="reasonsCol1Para1" initialHtml={pageContent.reasonsCol1Para1}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="text-black leading-relaxed text-sm text-justify"/>
+                                              className="font-mali text-black leading-relaxed text-sm text-justify"/>
                             </div>
                             <div className="flex gap-4 items-start">
-                                <Image src="/icons/icon_fork.png" alt="fork" width={50} height={100}
+                                <Image src="/icons/icon_fork.png" alt="fork" width={50} height={150}
                                        className="object-contain"/>
-                                <div className="space-y-10 text-sm text-black">
+                                <div className="space-y-5 text-sm text-black">
                                     <EditableText id="reasonsCol1ForkPara1"
                                                   initialHtml={pageContent.reasonsCol1ForkPara1}
-                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p" className="font-mali"/>
                                     <EditableText id="reasonsCol1ForkPara2"
                                                   initialHtml={pageContent.reasonsCol1ForkPara2}
-                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p" className="font-mali"/>
                                     <EditableText id="reasonsCol1ForkPara3"
                                                   initialHtml={pageContent.reasonsCol1ForkPara3}
-                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                                  onSave={handleContentUpdate} isEditMode={isEditMode} tag="p" className="font-mali"/>
                                 </div>
                             </div>
                         </div>
@@ -1073,15 +1073,15 @@ export default function LandingPage() {
                                                    altText={pageContent[item.titleKey as keyof PageContent] as string}
                                                    onFileSelect={handleImageUpload} isEditMode={isEditMode} width={400}
                                                    isUploading={isUploading && uploadingImageId === item.iconKey}
-                                                   height={150} className="mx-auto text-justify"/>
+                                                   height={150} className="mx-auto"/>
                                     <EditableText id={item.titleKey}
                                                   initialHtml={pageContent[item.titleKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                                  className="font-bold text-xl text-justify" style={{color: item.ttColor}}/>
+                                                  className="font-mali-medium font-bold text-xl text-justify" style={{color: item.ttColor}}/>
                                     <EditableText id={item.descKey}
                                                   initialHtml={pageContent[item.descKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                                  className="text-xs text-black text-justify"/>
+                                                  className="font-mali text-xs text-black text-justify"/>
                                 </div>
                             ))}
                         </div>
@@ -1090,7 +1090,7 @@ export default function LandingPage() {
             </section>
 
             {/* Testimonials & Footer Section */}
-            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 py-2 relative z-10 text-[#4D4D4D]">
+            <section className="w-full bg-[#FFF6C7] px-4 md:px-6 relative z-10 text-[#4D4D4D]">
                 <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                        className="right-10 top-[6350px] lg:right-75 lg:top-[6100px]  z-99"/>
                 <div className="w-full max-w-7xl mx-auto flex flex-col items-center gap-12">
@@ -1107,43 +1107,51 @@ export default function LandingPage() {
                         />
                     </div>
                     <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
-                           className="absolute left-5 top-[450px]  z-99"/>
+                           className="absolute -left-5 top-[570px] z-99"/>
 
                     {isMobile ? (
                         <div className="flex flex-col gap-10 w-full">
                             <div className="space-y-1">
                                 <EditableText id="footerSystemTitle" initialHtml={pageContent.footerSystemTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-bold text-base"/>
+                                              className="font-mali-medium font-bold text-base"/>
                                 <EditableText id="footerSystemName" initialHtml={pageContent.footerSystemName}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-semibold"/>
+                                              className="font-mali-medium font-semibold"/>
                                 <EditableText id="footerAddress1" initialHtml={pageContent.footerAddress1}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerAddress2" initialHtml={pageContent.footerAddress2}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerAddress3" initialHtml={pageContent.footerAddress3}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerAddress4" initialHtml={pageContent.footerAddress4}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerHotline" initialHtml={pageContent.footerHotline}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerEmail" initialHtml={pageContent.footerEmail}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerYoutubeName" initialHtml={pageContent.footerYoutubeName}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                             </div>
                             <div className="flex flex-row flex-wrap gap-x-10 gap-y-4">
                                 <div>
                                     <EditableText id="footerLinkTitle" initialHtml={pageContent.footerLinkTitle}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                  className="font-bold text-sm mb-2"/>
+                                                  className="font-mali-medium font-bold text-sm mb-2"/>
                                     <ul className="space-y-1 text-sm">
                                         {pageContent.footerLinks.map((link, index) => (
                                             <li key={index}><EditableText id={`footerLink_${index}_text`}
                                                                           initialHtml={link.text}
                                                                           onSave={handleContentUpdate}
                                                                           isEditMode={isEditMode} tag="a"
+                                                                          className="font-mali"
                                                                           href={link.href}/></li>
                                         ))}
                                     </ul>
@@ -1151,13 +1159,14 @@ export default function LandingPage() {
                                 <div>
                                     <EditableText id="footerSupportTitle" initialHtml={pageContent.footerSupportTitle}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                  className="font-bold text-sm mb-2"/>
+                                                  className="font-mali-medium font-bold text-sm mb-2"/>
                                     <ul className="space-y-1 text-sm">
                                         {pageContent.footerSupportLinks.map((link, index) => (
                                             <li key={index}><EditableText id={`footerSupportLink_${index}_text`}
                                                                           initialHtml={link.text}
                                                                           onSave={handleContentUpdate}
                                                                           isEditMode={isEditMode} tag="a"
+                                                                          className="font-mali"
                                                                           href={link.href}/></li>
                                         ))}
                                     </ul>
@@ -1165,31 +1174,33 @@ export default function LandingPage() {
                             </div>
                             <div className="flex flex-wrap gap-6 mt-4 items-start relative w-full">
                                 <div className="flex flex-col items-start">
-                                    <h3 className="font-bold">FANPAGE</h3>
+                                    <h3 className="font-mali-bold font-bold">FANPAGE</h3>
                                     <a href="https://www.youtube.com/watch?v=wR0SAVlV8xM" target="_blank"
                                        rel="noopener noreferrer">
                                         <EditableImage id="footerFanpageImageSrc"
                                                        initialSrc={pageContent.footerFanpageImageSrc}
                                                        altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
                                                        isUploading={isUploading && uploadingImageId === 'footerFanpageImageSrc'}
-                                                       isEditMode={isEditMode} width={200} height={100}
+                                                       isEditMode={isEditMode} width={145} height={80}
                                                        className="rounded-lg mt-2"/>
                                     </a>
                                 </div>
+                                <br/>
+                                <div></div>
                                 <div className="flex flex-col items-start">
-                                    <h3 className="font-bold">YOUTUBE</h3>
+                                    <h3 className="font-mali-bold font-bold">YOUTUBE</h3>
                                     <a href="https://www.youtube.com/watch?v=LKDxvXi21GI" target="_blank"
                                        rel="noopener noreferrer">
                                         <EditableImage id="footerYoutubeImageSrc"
                                                        initialSrc={pageContent.footerYoutubeImageSrc}
                                                        altText="YouTube Thumbnail" onFileSelect={handleImageUpload}
                                                        isUploading={isUploading && uploadingImageId === 'footerYoutubeImageSrc'}
-                                                       isEditMode={isEditMode} width={200} height={100}
+                                                       isEditMode={isEditMode} width={145} height={80}
                                                        className="rounded-lg mt-2"/>
                                     </a>
                                 </div>
                                 <div
-                                    className="flex items-start absolute right-0 top-[calc(100%+20px)] sm:top-auto sm:relative mt-4 sm:mt-0">
+                                    className="flex items-start absolute -right-2 sm:top-auto sm:relative mt-4 sm:mt-0">
                                     <Image src="/icons/icon_elephant_footer.png" alt="" width={isMobile ? 190 : 300}
                                            height={isMobile ? 75 : 150} className="mt-4"/>
                                 </div>
@@ -1201,27 +1212,34 @@ export default function LandingPage() {
                             <div className="space-y-1">
                                 <EditableText id="footerSystemTitle" initialHtml={pageContent.footerSystemTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-bold text-base"/>
+                                              className="font-mali-medium font-bold text-base"/>
                                 <EditableText id="footerSystemName" initialHtml={pageContent.footerSystemName}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-semibold"/>
+                                              className="font-mali-medium font-semibold"/>
                                 <EditableText id="footerAddress1" initialHtml={pageContent.footerAddress1}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerAddress2" initialHtml={pageContent.footerAddress2}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerAddress3" initialHtml={pageContent.footerAddress3}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerAddress4" initialHtml={pageContent.footerAddress4}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerHotline" initialHtml={pageContent.footerHotline}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerEmail" initialHtml={pageContent.footerEmail}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <EditableText id="footerYoutubeName" initialHtml={pageContent.footerYoutubeName}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"/>
+                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                              className="font-mali"/>
                                 <div className="flex flex-wrap sm:flex-nowrap gap-6 mt-4">
                                     <div className="flex flex-col items-start">
-                                        <h3 className="font-bold">FANPAGE</h3>
+                                        <h3 className="font-mali-bold font-bold">FANPAGE</h3>
                                         <a href="https://www.youtube.com/watch?v=wR0SAVlV8xM" target="_blank"
                                            rel="noopener noreferrer">
                                             <EditableImage id="footerFanpageImageSrc"
@@ -1233,7 +1251,7 @@ export default function LandingPage() {
                                         </a>
                                     </div>
                                     <div className="flex flex-col items-start">
-                                        <h3 className="font-bold">YOUTUBE</h3>
+                                        <h3 className="font-mali-bold font-bold">YOUTUBE</h3>
                                         <a href="https://www.youtube.com/watch?v=LKDxvXi21GI" target="_blank"
                                            rel="noopener noreferrer">
                                             <EditableImage id="footerYoutubeImageSrc"
@@ -1249,12 +1267,13 @@ export default function LandingPage() {
                             <div>
                                 <EditableText id="footerLinkTitle" initialHtml={pageContent.footerLinkTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-bold text-base mb-2"/>
+                                              className="font-mali-medium font-bold text-base mb-2"/>
                                 <ul className="space-y-1">
                                     {pageContent.footerLinks.map((link, index) => (
                                         <li key={index}><EditableText id={`footerLink_${index}_text`}
                                                                       initialHtml={link.text}
                                                                       onSave={handleContentUpdate}
+                                                                      className="font-mali"
                                                                       isEditMode={isEditMode} tag="a" href={link.href}/>
                                         </li>
                                     ))}
@@ -1263,12 +1282,13 @@ export default function LandingPage() {
                             <div>
                                 <EditableText id="footerSupportTitle" initialHtml={pageContent.footerSupportTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-bold text-base mb-2"/>
+                                              className="font-mali-medium font-bold text-base mb-2"/>
                                 <ul className="space-y-1">
                                     {pageContent.footerSupportLinks.map((link, index) => (
                                         <li key={index}><EditableText id={`footerSupportLink_${index}_text`}
                                                                       initialHtml={link.text}
                                                                       onSave={handleContentUpdate}
+                                                                      className="font-mali"
                                                                       isEditMode={isEditMode} tag="a" href={link.href}/>
                                         </li>
                                     ))}

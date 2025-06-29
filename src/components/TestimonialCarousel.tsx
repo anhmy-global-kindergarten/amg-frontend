@@ -90,7 +90,7 @@ export default function TestimonialCarousel({ testimonials, isEditMode, onSave, 
                         onSave={onSave}
                         isEditMode={isEditMode}
                         tag="p"
-                        className="text-[#4D4D4D] text-base md:text-lg lg:text-xl leading-7 md:leading-8 font-medium mb-4 md:mb-6 px-2 md:px-6"
+                        className="font-mali-semibold text-[#26ADD7] text-base md:text-lg lg:text-xl leading-7 md:leading-8 font-medium mb-4 md:mb-6 px-2 md:px-6"
                     />
                     <EditableText
                         id={`testimonial_${currentIndex}_name`}
@@ -98,7 +98,7 @@ export default function TestimonialCarousel({ testimonials, isEditMode, onSave, 
                         onSave={onSave}
                         isEditMode={isEditMode}
                         tag="p"
-                        className="text-[#F86161] text-lg md:text-xl lg:text-2xl font-bold mb-1"
+                        className="font-mali-semibold text-[#FF8282] text-lg md:text-xl lg:text-2xl font-bold mb-1"
                     />
                     <EditableText
                         id={`testimonial_${currentIndex}_desc`}
@@ -106,7 +106,7 @@ export default function TestimonialCarousel({ testimonials, isEditMode, onSave, 
                         onSave={onSave}
                         isEditMode={isEditMode}
                         tag="p"
-                        className="text-sm md:text-base italic text-[#777]"
+                        className="font-mali text-sm md:text-base text-[#FF8282]"
                     />
                 </div>
 

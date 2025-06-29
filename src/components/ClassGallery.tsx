@@ -73,7 +73,7 @@ export default function ClassGallery({
                 onSave={onSave}
                 isEditMode={isEditMode}
                 tag="h2"
-                className="text-4xl md:text-4xl text-center text-[#F7B052] mb-6"
+                className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
                 style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}
             />
 

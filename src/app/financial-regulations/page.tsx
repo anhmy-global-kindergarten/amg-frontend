@@ -41,8 +41,9 @@ export default function FinancialRegulations() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
-                    QUY ĐỊNH TÀI CHÍNH AMG KINDERGARTEN
+                <h3 className="font-mali-bold text-[#FFD668] text-2xl md:text-2xl text-center mt-8 uppercase">
+                    {/*QUY ĐỊNH TÀI CHÍNH AMG KINDERGARTEN*/}
+                    {post?.title}
                 </h3>
 
                 {/* Content */}
@@ -81,7 +82,7 @@ export default function FinancialRegulations() {
                                     </Menu>
                                 </div>
                             )}
-                            <div className="prose prose-lg max-w-none text-black">
+                            <div className="font-mali prose prose-lg max-w-none text-black">
                                 <RenderStaticHTMLContent content={post.content} />
                             </div>
                         </>

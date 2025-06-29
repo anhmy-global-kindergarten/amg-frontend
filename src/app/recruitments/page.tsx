@@ -61,7 +61,7 @@ export default function RecruitmentPage() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Tuyển dụng
                 </h3>
                 {/* Grid Lessons */}
@@ -80,7 +80,7 @@ export default function RecruitmentPage() {
                                         alt={recruitment.title}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute bottom-0">
+                                    <div className="absolute bottom-0 font-mali-bold">
                                         <div
                                             className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
                                             style={{
@@ -95,10 +95,10 @@ export default function RecruitmentPage() {
 
                                 {/* Text content */}
                                 <div className="p-4 flex flex-col flex-1">
-                                    <h4 className="text-[#FFD668] font-semibold text-base mb-1">
+                                    <h4 className="font-mali-bold text-[#FFD668] font-semibold text-base mb-1">
                                         {recruitment.title}
                                     </h4>
-                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {recruitment.author}</p>
+                                    <p className="font-mali text-xs text-black line-clamp-3">Đăng bởi: {recruitment.author}</p>
                                     <LineClampContent content={recruitment.content} />
                                 </div>
                             </div>

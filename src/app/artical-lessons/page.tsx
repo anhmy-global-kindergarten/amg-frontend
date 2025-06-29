@@ -117,11 +117,11 @@ export default function ArticalLessons() {
                 </div>
 
                 {/* Title */}
-                <h3 className="text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
+                <h3 className="font-mali-bold text-[#FFD668] text-xl md:text-2xl text-center mt-8 uppercase">
                     Tiết học của con
                 </h3>
                 {/* Grid Lessons */}
-                <div className="min-h-[800px]">
+                <div className="min-h-[830px]">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
                         {pagedLessons.map((lesson) => (
                             <div
@@ -132,12 +132,11 @@ export default function ArticalLessons() {
                                 {/* Image container with overlay date */}
                                 <div className="relative w-full h-48">
                                     <img
-                                        // src={`${process.env.NEXT_PUBLIC_BASE_URL}${lesson.header_image.replace('./', '/')}`}
                                         src={lesson.header_image}
                                         alt={lesson.title}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute bottom-0">
+                                    <div className="absolute bottom-0 font-mali-bold">
                                         <div
                                             className="text-white text-xs px-3 py-1 bg-no-repeat bg-contain bg-left h-6 flex items-center"
                                             style={{
@@ -152,10 +151,10 @@ export default function ArticalLessons() {
 
                                 {/* Text content */}
                                 <div className="p-4 flex flex-col flex-1">
-                                    <h4 className="text-[#FFD668] font-semibold text-base mb-1">
+                                    <h4 className="font-mali-bold text-[#FFD668] font-semibold text-base mb-1">
                                         {lesson.title}
                                     </h4>
-                                    <p className="text-xs text-black line-clamp-3">Đăng bởi: {lesson.author}</p>
+                                    <p className="font-mali text-xs text-black line-clamp-3">Đăng bởi: {lesson.author}</p>
                                     <LineClampContent content={lesson.content} />
                                 </div>
                             </div>

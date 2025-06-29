@@ -129,17 +129,17 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
             {/* Các nút chỉ hiển thị cho admin hoặc teacher */}
             {(userRole === 'admin' || userRole === 'teacher') && (
                 <>
-                    <Link href="/post/create" className="px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
+                    <Link href="/post/create" className="font-mali-bold px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
                         Tạo bài viết
                     </Link>
-                    <Link href="/admin-dashboard" className="px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
+                    <Link href="/admin-dashboard" className="font-mali-bold px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
                         Dashboard
                     </Link>
                 </>
             )}
             <button
                 onClick={() => handleLogout()}
-                className="w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-semibold"
+                className="font-mali-bold w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-semibold"
             >
                 Đăng xuất
             </button>
@@ -150,7 +150,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     const GuestButtons = ({ isMobile = false }) => (
         <Link
             href="/login"
-            className="block px-3 py-2 bg-[#FFC107] text-white rounded hover:bg-[#e5a906] font-semibold text-center"
+            className="font-mali-bold block px-3 py-2 bg-[#FFC107] text-white rounded hover:bg-[#e5a906] font-semibold text-center"
             onClick={isMobile ? handleToggleMenu : undefined}
         >
             Đăng nhập
@@ -216,7 +216,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                     {item.href && !hasSubmenu ? (
                                                         <Link
                                                             href={item.href}
-                                                            className="block px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold"
+                                                            className="font-mali-semibold block px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold"
                                                             onClick={handleToggleMenu}
                                                         >
                                                             {item.title}
@@ -225,7 +225,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                         <>
                                                             <button
                                                                 onClick={() => handleOpen(index)}
-                                                                className="flex items-center justify-between w-full px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold"
+                                                                className="font-mali-semibold flex items-center justify-between w-full px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold"
                                                             >
                                                                 {item.title}
                                                                 <ChevronDownIcon
@@ -247,7 +247,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                                 {'submenu' in sub ? (
                                                                                     <>
                                                                                         <span
-                                                                                            className="block px-2 py-1 text-sm font-normal text-gray-700">
+                                                                                            className="font-mali-semibold block px-2 py-1 text-sm font-normal text-gray-700">
                                                                                           {sub.title}
                                                                                         </span>
                                                                                         <ul className="pl-4 space-y-1">
@@ -255,7 +255,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                                                 <li key={deepIdx}>
                                                                                                     <Link
                                                                                                         href={deep.href}
-                                                                                                        className="block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
+                                                                                                        className="font-mali-semibold block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
                                                                                                         onClick={handleToggleMenu}
                                                                                                     >
                                                                                                         {deep.title}
@@ -267,7 +267,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                                 ) : (
                                                                                     <Link
                                                                                         href={sub.href}
-                                                                                        className="block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
+                                                                                        className="font-mali-semibold block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
                                                                                         onClick={handleToggleMenu}
                                                                                     >
                                                                                         {sub.title}
@@ -313,14 +313,14 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                 {item.href && !hasSubmenu ? (
                                     <Link
                                         href={item.href}
-                                        className="px-2 py-1 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] transition block"
+                                        className="font-mali-semibold px-2 py-1 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] transition block"
                                     >
                                         {item.title}
                                     </Link>
                                 ) : (
                                     <>
                                         <button
-                                            className="px-2 py-1 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] flex transition items-center"
+                                            className="font-mali-semibold px-2 py-1 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] flex transition items-center"
                                         >
                                             {item.title}
                                             {hasSubmenu && (
@@ -350,20 +350,20 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                             >
                                                                 {'submenu' in sub ? (
                                                                     <>
-                                                                        <span className="block px-4 py-2 hover:bg-[#FFE5E5] transition cursor-pointer flex items-center justify-between">
+                                                                        <span className="font-mali-semibold block px-4 py-2 hover:bg-[#FFE5E5] transition cursor-pointer flex items-center justify-between">
                                                                           {sub.title}
                                                                             <ChevronRightIcon className="ml-auto h-4 w-4 text-gray-600" />
                                                                         </span>
                                                                         <ul
                                                                             ref={el => {deepSubmenuRefs.current[`${index}-${subIdx}`] = el;}}
-                                                                            className={`absolute top-0 mt-0 w-64 bg-white shadow-lg rounded-xl border z-50 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-0 transition duration-200 pointer-events-none group-hover:pointer-events-auto
+                                                                            className={`font-mali-semibold absolute top-0 mt-0 w-64 bg-white shadow-lg rounded-xl border z-50 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-0 transition duration-200 pointer-events-none group-hover:pointer-events-auto
                                                                                 ${deepSubmenuPositions[`${index}-${subIdx}`] === 'left' ? 'right-full mr-1' : 'left-full ml-1'} 
                                                                             `}>
                                                                             {sub.submenu?.map((deep, deepIdx) => (
                                                                                 <li key={deepIdx}>
                                                                                     <Link
                                                                                         href={deep.href}
-                                                                                        className="block px-4 py-2 hover:bg-[#FFE5E5] transition"
+                                                                                        className="font-mali-semibold block px-4 py-2 hover:bg-[#FFE5E5] transition"
                                                                                         onClick={() => setOpenIndex(null)}
                                                                                     >
                                                                                         {deep.title.split('\n').map((line, i) => <React.Fragment key={i}>{line}<br/></React.Fragment>)}
@@ -375,7 +375,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                 ) : (
                                                                     <Link
                                                                         href={sub.href}
-                                                                        className="block px-4 py-2 hover:bg-[#FFE5E5] transition"
+                                                                        className="font-mali-semibold block px-4 py-2 hover:bg-[#FFE5E5] transition"
                                                                         onClick={() => setOpenIndex(null)}
                                                                     >
                                                                         {sub.title.split('\n').map((line, i) => <React.Fragment key={i}>{line}<br/></React.Fragment>)}
