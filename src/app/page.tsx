@@ -5,7 +5,7 @@ import ClassGallery from '@/components/ClassGallery';
 import TestimonialCarousel from "@/components/TestimonialCarousel";
 import HeaderMenu from "@/components/HeaderMenu";
 import RegisterClassModal from "@/modals/RegisterClassModal";
-import {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {FaArrowUp, FaEdit, FaSave} from "react-icons/fa";
 
 import EditableText from "@/components/landing-page/EditableText";
@@ -171,9 +171,9 @@ const initialPageContent: PageContent = {
     reasonsCol1Heading1: "CHƯƠNG TRÌNH HỌC",
     reasonsCol1Heading2: "CHUẨN QUỐC TẾ",
     reasonsCol1Para1: `AMG Kindergarten với hệ thống lớp học cho <span class="text-[#EF924D]">trẻ từ 6 tháng đến 6 tuổi</span>, hệ thống phòng học đầy đủ <span class="text-[#EF924D]">ánh sáng tự nhiên</span>, trang bị đầy đủ <span class="text-[#EF924D]"> cơ sở vật chất hạ tầng hiện đại</span>, an toàn cho trẻ cùng <span class="text-[#EF924D]"> sân chơi nội bộ riêng biệt</span>. Nguồn <span class="text-[#EF924D]"> thực phẩm an toàn</span> được phục vụ trong tất cả các bữa ăn, <span class="text-[#EF924D]"> mang lại một môi trường hạnh phúc, thân thiện, an toàn</span>.`,
-    reasonsCol1ForkPara1: "Lấy trẻ làm trung tâm,<br/>tôn trọng tính riêng biệt của trẻ.",
-    reasonsCol1ForkPara2: "Tạo môi trường cho trẻ phát huy tính tự lập<br/>và khả năng tự học.",
-    reasonsCol1ForkPara3: "Trẻ được phát triển toàn diện<br/>tất cả các giác quan: thị giác, thính giác, vận động...",
+    reasonsCol1ForkPara1: "Lấy trẻ làm trung tâm, tôn trọng tính riêng biệt của trẻ.",
+    reasonsCol1ForkPara2: "Tạo môi trường cho trẻ phát huy tính tự lập và khả năng tự học.",
+    reasonsCol1ForkPara3: "Trẻ được phát triển toàn diện tất cả các giác quan: thị giác, thính giác, vận động...",
     reasonsFeature1IconSrc: "/icons/icon_environment.png",
     reasonsFeature1Title: "Môi trường học tập lý tưởng",
     reasonsFeature1Desc: "Hệ thống phòng học đầy đủ ánh sáng tự nhiên, trang bị đầy đủ cơ sở vật chất hạ tầng hiện đại, an toàn. Nguồn thực phẩm an toàn được phục vụ trong tất cả các bữa ăn của cả cô và trò, mang lại một môi trường hạnh phúc, thân thiện, an toàn.",
@@ -333,6 +333,52 @@ export default function LandingPage() {
         };
         loadContent();
     }, []);
+
+    const listContainerRef = useRef<HTMLUListElement>(null);
+    const verticalBarRef = useRef<HTMLDivElement>(null);
+    const ListItem = ({ children }: { children: React.ReactNode }) => (
+        <li className="relative pl-16">
+            <div className="absolute top-1/2 -translate-y-1/2 left-2 w-8 h-0.5 bg-[#FFD06E]"></div>
+            <div
+                className="absolute top-1/2 -translate-y-1/2 left-8 -translate-x-1/2 w-5 h-5 bg-[#FFD06E] rounded-full"></div>
+            {children}
+        </li>
+    );
+
+    useEffect(() => {
+        const listContainer = listContainerRef.current;
+        const verticalBar = verticalBarRef.current;
+
+        if (!listContainer || !verticalBar) return;
+
+        const calculateBarPosition = () => {
+            const listItems = listContainer.children;
+            if (listItems.length < 1) return;
+
+            const firstItem = listItems[0] as HTMLElement;
+            const lastItem = listItems[listItems.length - 1] as HTMLElement;
+
+            // Tính vị trí tâm theo chiều dọc của mục đầu tiên
+            const startY = firstItem.offsetTop + (firstItem.offsetHeight / 2);
+
+            // Tính vị trí tâm theo chiều dọc của mục cuối cùng
+            const endY = lastItem.offsetTop + (lastItem.offsetHeight / 2);
+
+            // Áp dụng style cho thanh dọc
+            verticalBar.style.top = `${startY}px`;
+            verticalBar.style.height = `${endY - startY}px`;
+        };
+
+        // Chạy lần đầu
+        calculateBarPosition();
+
+        // Chạy lại mỗi khi thay đổi kích thước cửa sổ (quan trọng cho responsive)
+        window.addEventListener('resize', calculateBarPosition);
+
+        // Dọn dẹp event listener khi component bị unmount
+        return () => window.removeEventListener('resize', calculateBarPosition);
+
+    }, [pageContent]);
 
     const [isUploading, setIsUploading] = useState(false);
     const [uploadingImageId, setUploadingImageId] = useState<string | null>(null);
@@ -769,7 +815,7 @@ export default function LandingPage() {
                         <div className="relative w-fit mx-auto">
                             <button onClick={openModal} className="relative">
                                 <Image alt="bannerMobileRegisterButtonImageSrc"
-                                    src="/banner/button_register.png"
+                                    src="/banner/button_register_mobile.png"
                                                width={200} height={60} className="hover:opacity-90 transition"/>
                                 {/*<div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
                                     <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill
@@ -784,30 +830,27 @@ export default function LandingPage() {
                 <section
                     className="relative px-4 sm:px-6 pb-20 z-10 max-w-8xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
                     <div className="ml-50 w-full lg:w-auto max-w-xl z-20 text-center lg:text-left">
-                        <EditableText id="bannerDesktopTitle" initialHtml={pageContent.bannerDesktopTitle}
-                                      onSave={handleContentUpdate} isEditMode={isEditMode} tag="h1"
-                                      className="font-cadena text-7xl text-[#EA570A] leading-tight mb-3"
-                                      style={{
-                                          textShadow: `
-                                          -4px -4px 0 white,
-                                          4px -4px 0 white,
-                                          -4px 4px 0 white,
-                                          4px 4px 0 white,
-                                          -6px 2px 0 white,
-                                          6px 2px 0 white,
-                                          2px -6px 0 white,
-                                          2px 6px 0 white,
-                                          -3px -6px 0 white,
-                                          3px -6px 0 white,
-                                          -6px -3px 0 white,
-                                          6px -3px 0 white,
-                                          -3px 6px 0 white,
-                                          3px 6px 0 white,
-                                          -6px 3px 0 white,
-                                          6px 3px 0 white
-                                        `
-                                      }}
-                        />
+                        <div className="relative mb-3">
+
+                            {/*<h1*/}
+                            {/*    aria-hidden="true"*/}
+                            {/*    className="absolute top-0 left-0 w-full font-cadena text-7xl text-white leading-tight select-none z-10"*/}
+                            {/*    style={{*/}
+                            {/*        transform: 'scale(1.1)',*/}
+                            {/*    }}*/}
+                            {/*    dangerouslySetInnerHTML={{__html: pageContent.bannerDesktopTitle}}*/}
+                            {/*/>*/}
+
+                            <EditableText
+                                id="bannerDesktopTitle"
+                                initialHtml={pageContent.bannerDesktopTitle}
+                                onSave={handleContentUpdate}
+                                isEditMode={isEditMode}
+                                tag="h1"
+                                className="relative font-cadena text-7xl text-[#EA570A] leading-tight z-20 [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]"
+                            />
+
+                        </div>
                         <EditableText id="bannerDesktopSubtitle" initialHtml={pageContent.bannerDesktopSubtitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                       className="font-cadena text-3xl sm:text-3xl text-[#FFD105] mb-4"/>
@@ -817,8 +860,8 @@ export default function LandingPage() {
                         <div className="relative w-fit mx-auto lg:mx-0">
                             <button onClick={openModal} className="relative">
                                 <Image alt="bannerMobileRegisterButtonImageSrc"
-                                       src="/banner/button_register.png"
-                                               width={300} height={100} className="hover:opacity-90 transition"/>
+                                       src="/banner/button_register_desktop.png"
+                                       width={300} height={100} className="hover:opacity-90 transition"/>
                                 {/*<div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">*/}
                                 {/*    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill*/}
                                 {/*                   objectFit="contain"*/}
@@ -915,27 +958,8 @@ export default function LandingPage() {
                     <div className="w-full px-4 py-8">
                         <EditableText id="aboutAmgSectionTitle" initialHtml={pageContent.aboutAmgSectionTitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                                      className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
-                                      style={{
-                                          textShadow: `
-                                          -4px -4px 0 white,
-                                          4px -4px 0 white,
-                                          -4px 4px 0 white,
-                                          4px 4px 0 white,
-                                          -6px 2px 0 white,
-                                          6px 2px 0 white,
-                                          2px -6px 0 white,
-                                          2px 6px 0 white,
-                                          -3px -6px 0 white,
-                                          3px -6px 0 white,
-                                          -6px -3px 0 white,
-                                          6px -3px 0 white,
-                                          -3px 6px 0 white,
-                                          3px 6px 0 white,
-                                          -6px 3px 0 white,
-                                          6px 3px 0 white
-                                        `
-                                      }}
+                                      className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}
+                                       [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
                         />
                         <EditableText id="aboutAmgIntroHeading" initialHtml={pageContent.aboutAmgIntroHeading}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
@@ -992,27 +1016,8 @@ export default function LandingPage() {
                        className="absolute right-5 -top-[60px] lg:right-50 lg:top-[4700px]  z-99"/>
                 <EditableText id="mealSectionTitle" initialHtml={pageContent.mealSectionTitle}
                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                              className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
-                              style={{
-                                  textShadow: `
-                                          -4px -4px 0 white,
-                                          4px -4px 0 white,
-                                          -4px 4px 0 white,
-                                          4px 4px 0 white,
-                                          -6px 2px 0 white,
-                                          6px 2px 0 white,
-                                          2px -6px 0 white,
-                                          2px 6px 0 white,
-                                          -3px -6px 0 white,
-                                          3px -6px 0 white,
-                                          -6px -3px 0 white,
-                                          6px -3px 0 white,
-                                          -3px 6px 0 white,
-                                          3px 6px 0 white,
-                                          -6px 3px 0 white,
-                                          6px 3px 0 white
-                                        `
-                              }}
+                              className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}
+                               [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
                 />
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
@@ -1082,51 +1087,13 @@ export default function LandingPage() {
                 <div className="w-full max-w-7xl mx-auto">
                     <EditableText id="reasonsSectionTitle1" initialHtml={pageContent.reasonsSectionTitle1}
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                                  className={`font-cadena text-center text-[#F7B052] mb-2 ${isMobile ? 'text-3xl' : 'text-7xl'}`}
-                                  style={{
-                                      textShadow: `
-                                          -4px -4px 0 white,
-                                          4px -4px 0 white,
-                                          -4px 4px 0 white,
-                                          4px 4px 0 white,
-                                          -6px 2px 0 white,
-                                          6px 2px 0 white,
-                                          2px -6px 0 white,
-                                          2px 6px 0 white,
-                                          -3px -6px 0 white,
-                                          3px -6px 0 white,
-                                          -6px -3px 0 white,
-                                          6px -3px 0 white,
-                                          -3px 6px 0 white,
-                                          3px 6px 0 white,
-                                          -6px 3px 0 white,
-                                          6px 3px 0 white
-                                        `
-                                  }}
+                                  className={`font-cadena text-center text-[#F7B052] mb-2 ${isMobile ? 'text-3xl' : 'text-7xl'}
+                                   [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
                     />
                     <EditableText id="reasonsSectionTitle2" initialHtml={pageContent.reasonsSectionTitle2}
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
-                                  className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-3xl' : 'text-7xl'}`}
-                                  style={{
-                                      textShadow: `
-                                          -4px -4px 0 white,
-                                          4px -4px 0 white,
-                                          -4px 4px 0 white,
-                                          4px 4px 0 white,
-                                          -6px 2px 0 white,
-                                          6px 2px 0 white,
-                                          2px -6px 0 white,
-                                          2px 6px 0 white,
-                                          -3px -6px 0 white,
-                                          3px -6px 0 white,
-                                          -6px -3px 0 white,
-                                          6px -3px 0 white,
-                                          -3px 6px 0 white,
-                                          3px 6px 0 white,
-                                          -6px 3px 0 white,
-                                          6px 3px 0 white
-                                        `
-                                  }}
+                                  className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-3xl' : 'text-7xl'}
+                                   [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
                     />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                         <div className="space-y-6">
@@ -1149,28 +1116,40 @@ export default function LandingPage() {
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="font-mali text-black leading-relaxed text-sm text-justify"/>
                             </div>
-                            <div className="grid grid-cols-[auto_1fr] gap-x-4 items-center">
-                                <Image
-                                    src="/icons/icon_fork.png"
-                                    alt="fork"
-                                    width={50}
-                                    height={150}
-                                    className="object-contain row-span-3"
-                                />
-                                <EditableText id="reasonsCol1ForkPara1"
-                                              initialHtml={pageContent.reasonsCol1ForkPara1}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali text-sm text-black"/>
+                            <div className="relative">
+                                <div
+                                    ref={verticalBarRef}
+                                    className="absolute left-2 w-0.5 bg-[#FFD06E] transition-all duration-300"
+                                ></div>
 
-                                <EditableText id="reasonsCol1ForkPara2"
-                                              initialHtml={pageContent.reasonsCol1ForkPara2}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali text-sm text-black"/>
+                                <ul ref={listContainerRef} className="flex flex-col gap-y-12">
+                                    <ListItem>
+                                        <EditableText
+                                            id="reasonsCol1ForkPara1"
+                                            initialHtml={pageContent.reasonsCol1ForkPara1}
+                                            onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                            className="font-mali text-sm text-black min-w-0 break-words"
+                                        />
+                                    </ListItem>
 
-                                <EditableText id="reasonsCol1ForkPara3"
-                                              initialHtml={pageContent.reasonsCol1ForkPara3}
-                                              onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali text-sm text-black"/>
+                                    <ListItem>
+                                        <EditableText
+                                            id="reasonsCol1ForkPara2"
+                                            initialHtml={pageContent.reasonsCol1ForkPara2}
+                                            onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                            className="font-mali text-sm text-black min-w-0 break-words"
+                                        />
+                                    </ListItem>
+
+                                    <ListItem>
+                                        <EditableText
+                                            id="reasonsCol1ForkPara3"
+                                            initialHtml={pageContent.reasonsCol1ForkPara3}
+                                            onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
+                                            className="font-mali text-sm text-black min-w-0 break-words"
+                                        />
+                                    </ListItem>
+                                </ul>
                             </div>
                         </div>
                         <div className="md:col-span-2 grid grid-cols-2 gap-2 transform scale-[0.95] md:scale-100">
@@ -1204,7 +1183,7 @@ export default function LandingPage() {
                 <div className="w-full max-w-7xl mx-auto flex flex-col items-center gap-12">
                     <div className="gap-0">
                         <div className="flex justify-end">
-                            <Image src="/icons/icon_elephant3.png" alt="elephant decorative" width={100} height={70}
+                        <Image src="/icons/icon_elephant3.png" alt="elephant decorative" width={100} height={70}
                                    className="right-10 -top-[20px] lg:right-150 lg:-top-[35px] z-99"/>
                         </div>
                         {/* TestimonialCarousel now receives editable content */}

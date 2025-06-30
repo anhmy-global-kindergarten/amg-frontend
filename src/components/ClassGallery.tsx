@@ -73,27 +73,8 @@ export default function ClassGallery({
                 onSave={onSave}
                 isEditMode={isEditMode}
                 tag="h2"
-                className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}`}
-                style={{
-                    textShadow: `
-                                          -4px -4px 0 white,
-                                          4px -4px 0 white,
-                                          -4px 4px 0 white,
-                                          4px 4px 0 white,
-                                          -6px 2px 0 white,
-                                          6px 2px 0 white,
-                                          2px -6px 0 white,
-                                          2px 6px 0 white,
-                                          -3px -6px 0 white,
-                                          3px -6px 0 white,
-                                          -6px -3px 0 white,
-                                          6px -3px 0 white,
-                                          -3px 6px 0 white,
-                                          3px 6px 0 white,
-                                          -6px 3px 0 white,
-                                          6px 3px 0 white
-                                        `
-                }}
+                className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}
+                 [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
             />
 
             <div className="w-full bg-[#fff7cc] py-4 px-2">

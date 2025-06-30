@@ -18,6 +18,8 @@ import Highlight from '@tiptap/extension-highlight';
 import Youtube from '@tiptap/extension-youtube';
 import { PasteRule } from '@tiptap/core';
 import {useAuth} from "@/app/hooks/useAuth";
+import {TextStyle} from "@tiptap/extension-text-style";
+import {Color} from "@tiptap/extension-color";
 
 const youtubeRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})(?:\S+)?/g;
 const CustomYoutube = Youtube.extend({
@@ -123,33 +125,20 @@ const CreatePostPage = () => {
 
     const editor = useEditor({
         extensions: [
-            StarterKit.configure({
-                paragraph: false,
-                heading: false,
-                codeBlock: false,
-                code: false,
-            }),
-
+            StarterKit.configure({ paragraph: false, heading: false, codeBlock: false, code: false }),
             CustomParagraph,
             CustomHeading.configure({ levels: [1, 2, 3, 4] }),
             CustomImage,
             ImageResize,
-            Link,
+            Link.configure({ openOnClick: false, autolink: true }),
             TextAlign.configure({ types: ["heading", "paragraph", "youtube"] }),
             Underline,
-            Highlight.configure({
-                multicolor: true,
+            Highlight.configure({ multicolor: true }),
+            TextStyle,
+            Color.configure({
             }),
-            FloatingMenu.configure({
-                shouldShow: ({ editor }) => {
-                    return editor.view.hasFocus() && editor.state.selection.content().size > 0;
-                },
-            }),
-            CustomYoutube.configure({
-                controls: true,
-                modestBranding: true,
-                rel: 0,
-            }),
+            FloatingMenu.configure({ shouldShow: ({ editor }) => editor.view.hasFocus() && editor.state.selection.content().size > 0 }),
+            CustomYoutube.configure({ controls: true, modestBranding: true, rel: 0 }),
         ],
         content: "",
         editorProps: {
@@ -348,6 +337,19 @@ const CreatePostPage = () => {
         { value: "learn-online", label: "Học online cùng AMG" },
         { value: "admissions", label: "Thông tin tuyển sinh" },
     ];
+
+    const TEXT_COLORS = [
+        { name: 'Mặc định', color: '' },
+        { name: 'Đỏ', color: '#E03131' },
+        { name: 'Hồng', color: '#F6ADCD' },
+        { name: 'Tím', color: '#9C36B5' },
+        { name: 'Xanh đậm', color: '#1971C2' },
+        { name: 'Xanh dương', color: '#7ED3F7' },
+        { name: 'Xanh lá', color: '#BFD730' },
+        { name: 'Vàng', color: '#FFD668' },
+        { name: 'Cam', color: '#F76707' },
+    ];
+
     return (
         <div>
             <header className="w-full py-4 px-4 lg:px-10 flex justify-between items-center bg-[#FFF6C7]">
@@ -530,6 +532,33 @@ const CreatePostPage = () => {
                             >
                                 Highlight
                             </button>
+                            {TEXT_COLORS.map((item) => (
+                                <button
+                                    key={item.name}
+                                    onClick={() => {
+                                        if (item.color === '') {
+                                            editor.chain().focus().unsetColor().run(); // Xóa màu
+                                        } else {
+                                            editor.chain().focus().setColor(item.color).run();
+                                        }
+                                    }}
+                                    // Kiểm tra xem màu hiện tại có đang được active không
+                                    className={editor.isActive('textStyle', { color: item.color }) ? 'p-1 border-2 border-black rounded' : 'p-1 border-2 border-transparent rounded'}
+                                    title={item.name}
+                                    disabled={!editor.can().setColor(item.color)}
+                                >
+                                    <div
+                                        style={{
+                                            width: '16px',
+                                            height: '16px',
+                                            backgroundColor: item.color || 'transparent',
+                                            border: item.color ? '1px solid #ccc' : '1px dashed #ccc',
+                                        }}
+                                    >
+                                        {item.color === '' && '✕'}
+                                    </div>
+                                </button>
+                            ))}
                         </div>
 
                         <EditorContent editor={editor} className="min-h-[200px] p-4 focus:outline-none"/>

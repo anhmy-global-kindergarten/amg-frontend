@@ -280,6 +280,18 @@ const EditPostPage = () => {
         { value: "admissions", label: "Thông tin tuyển sinh" },
     ];
 
+    const TEXT_COLORS = [
+        { name: 'Mặc định', color: '' },
+        { name: 'Đỏ', color: '#E03131' },
+        { name: 'Hồng', color: '#F6ADCD' },
+        { name: 'Tím', color: '#9C36B5' },
+        { name: 'Xanh đậm', color: '#1971C2' },
+        { name: 'Xanh dương', color: '#7ED3F7' },
+        { name: 'Xanh lá', color: '#BFD730' },
+        { name: 'Vàng', color: '#FFD668' },
+        { name: 'Cam', color: '#F76707' },
+    ];
+
     if (loading) return <div className="flex justify-center items-center h-screen">Đang tải dữ liệu bài viết...</div>;
     if (fetchError) return <div className="flex justify-center items-center h-screen text-red-500">Lỗi: {fetchError}</div>;
 
@@ -399,6 +411,33 @@ const EditPostPage = () => {
                                     <button onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active font-bold' : ''} title="Italic"><span className="italic text-xl">I</span></button>
                                     <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={editor.isActive('underline') ? 'is-active font-bold' : ''} title="Underline"><span className="underline text-xl">U</span></button>
                                     <button onClick={() => editor.chain().focus().toggleHighlight({ color: '#FACBCC' }).run()} className={editor.isActive('highlight', { color: '#FACBCC' }) ? 'is-active bg-[#FACBCC]' : ''} title="Highlight">Highlight</button>
+                                    {TEXT_COLORS.map((item) => (
+                                        <button
+                                            key={item.name}
+                                            onClick={() => {
+                                                if (item.color === '') {
+                                                    editor.chain().focus().unsetColor().run(); // Xóa màu
+                                                } else {
+                                                    editor.chain().focus().setColor(item.color).run();
+                                                }
+                                            }}
+                                            // Kiểm tra xem màu hiện tại có đang được active không
+                                            className={editor.isActive('textStyle', { color: item.color }) ? 'p-1 border-2 border-black rounded' : 'p-1 border-2 border-transparent rounded'}
+                                            title={item.name}
+                                            disabled={!editor.can().setColor(item.color)}
+                                        >
+                                            <div
+                                                style={{
+                                                    width: '16px',
+                                                    height: '16px',
+                                                    backgroundColor: item.color || 'transparent',
+                                                    border: item.color ? '1px solid #ccc' : '1px dashed #ccc',
+                                                }}
+                                            >
+                                                {item.color === '' && '✕'}
+                                            </div>
+                                        </button>
+                                    ))}
                                 </div>
                                 <EditorContent editor={editor} className="min-h-[200px] p-4 focus:outline-none"/>
                             </div>
