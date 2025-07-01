@@ -6,72 +6,20 @@ import Image from "next/image";
 import { Modal } from "@mantine/core";
 import { useParams, useRouter } from "next/navigation";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { PasteRule } from '@tiptap/core';
 import StarterKit from "@tiptap/starter-kit";
-import ImageExtension from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import { FloatingMenu } from "@tiptap/extension-floating-menu";
 import { ImageResize } from "tiptap-extension-resize-image";
 import { CropImageModal } from "@/modals/CropImageModal";
-import { Paragraph } from "@tiptap/extension-paragraph";
-import { Heading } from "@tiptap/extension-heading";
 import { Underline } from "@tiptap/extension-underline";
 import Highlight from '@tiptap/extension-highlight';
-import Youtube from '@tiptap/extension-youtube';
 import { usePostById } from "@/app/hooks/usePostById";
 import {useAuth} from "@/app/hooks/useAuth";
 import {TextStyle} from "@tiptap/extension-text-style";
-import {Color} from "@tiptap/extension-color"; // Giữ lại hook của bạn
+import {Color} from "@tiptap/extension-color";
+import {CustomHeading, CustomImage, CustomParagraph, CustomYoutube} from "@/app/utils/pasteYoutube";
 
-// ===================================================================
-// BỘ EXTENSIONS GIỐNG HỆT TRANG CREATE
-// ===================================================================
-
-const youtubeRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})(?:\S+)?/g;
-
-const CustomYoutube = Youtube.extend({
-    addAttributes() {
-        return { ...this.parent?.(), textAlign: { default: 'left' } };
-    },
-    renderHTML({ node, HTMLAttributes }) {
-        const textAlign = node.attrs.textAlign || 'left';
-        return ['div', { 'data-youtube-video': '', style: `text-align: ${textAlign}` }, ['iframe', HTMLAttributes]];
-    },
-    addPasteRules(): PasteRule[] {
-        return [{
-            find: youtubeRegex,
-            handler: ({ chain, range, match }) => {
-                const url = match[0];
-                if (!url) return;
-                chain().focus().deleteRange(range).setYoutubeVideo({ src: url }).setTextAlign('center').run();
-            },
-        }];
-    },
-});
-
-const CustomImage = ImageExtension.extend({
-    addAttributes() {
-        return { ...this.parent?.(), style: { default: null, parseHTML: e => e.getAttribute('style'), renderHTML: a => (a.style ? { style: a.style } : {}) } };
-    },
-});
-
-const CustomParagraph = Paragraph.extend({
-    addAttributes() {
-        return { ...this.parent?.(), style: { default: null, parseHTML: e => e.getAttribute('style'), renderHTML: a => (a.style ? { style: a.style } : {}) } };
-    },
-});
-
-const CustomHeading = Heading.extend({
-    addAttributes() {
-        return { ...this.parent?.(), style: { default: null, parseHTML: e => e.getAttribute('style'), renderHTML: a => (a.style ? { style: a.style } : {}) } };
-    },
-});
-
-
-// ===================================================================
-// COMPONENT EDIT POST
-// ===================================================================
 const EditPostPage = () => {
     const params = useParams();
     const router = useRouter();
@@ -87,12 +35,10 @@ const EditPostPage = () => {
     const [imagePreview, setImagePreview] = useState<string | null>(null); // Preview ảnh minh họa
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [error, setError] = useState("");
-    // State cho việc thêm ảnh vào content
     const [originalFileName, setOriginalFileName] = useState<string>("");
     const [showCropModal, setShowCropModal] = useState(false);
     const [imageToCrop, setImageToCrop] = useState<string | null>(null);
 
-    // ✅ 3. Editor với bộ extensions đầy đủ
     const editor = useEditor({
         extensions: [
             StarterKit.configure({ paragraph: false, heading: false, codeBlock: false, code: false }),
@@ -118,7 +64,6 @@ const EditPostPage = () => {
         },
     });
 
-    // ✅ 4. useEffect để điền dữ liệu vào form và editor khi có
     useEffect(() => {
         if (post && editor && !editor.isDestroyed) {
             setTitle(post.title);
@@ -128,6 +73,7 @@ const EditPostPage = () => {
                 setImagePreview(post.header_image);
             }
             if (editor.isEmpty) {
+                console.log("content", post.content)
                 editor.commands.setContent(post.content);
             }
         }
@@ -135,7 +81,6 @@ const EditPostPage = () => {
 
     const { name, role } = useAuth();
 
-    // ✅ 5. Các hàm helper giống hệt trang Create
     function dataURLtoFile(dataUrl: string, filename: string): File | null {
         const arr = dataUrl.split(',');
         if (arr.length < 2) return null;
@@ -189,7 +134,7 @@ const EditPostPage = () => {
                 if (src) {
                     imageInfo.push({
                         url: src,
-                        style: style || '', // Lấy style, nếu không có thì là chuỗi rỗng
+                        style: style || '',
                     });
                 }
             }
@@ -206,7 +151,6 @@ const EditPostPage = () => {
             setError("Vui lòng nhập nội dung.");
             return;
         }
-        // Ảnh minh họa không bắt buộc phải thay đổi khi edit
         setIsConfirmOpen(true);
     };
 
@@ -227,7 +171,6 @@ const EditPostPage = () => {
         }
 
         try {
-            // BƯỚC 1: Khởi tạo TẤT CẢ các promise MÀ KHÔNG AWAIT
             const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
                 method: "POST",
                 headers: { 'Content-Type': 'application/json' },
@@ -421,12 +364,11 @@ const EditPostPage = () => {
                                             key={item.name}
                                             onClick={() => {
                                                 if (item.color === '') {
-                                                    editor.chain().focus().unsetColor().run(); // Xóa màu
+                                                    editor.chain().focus().unsetColor().run();
                                                 } else {
                                                     editor.chain().focus().setColor(item.color).run();
                                                 }
                                             }}
-                                            // Kiểm tra xem màu hiện tại có đang được active không
                                             className={editor.isActive('textStyle', { color: item.color }) ? 'p-1 border-2 border-black rounded' : 'p-1 border-2 border-transparent rounded'}
                                             title={item.name}
                                             disabled={!editor.can().setColor(item.color)}

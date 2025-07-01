@@ -1,73 +1,25 @@
-/* eslint-disable */
 "use client";
+/* eslint-disable */
 
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Modal } from "@mantine/core";
 import { useParams, useRouter } from "next/navigation";
 import { EditorContent, useEditor } from "@tiptap/react";
-import { PasteRule } from '@tiptap/core';
 import StarterKit from "@tiptap/starter-kit";
-import ImageExtension from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import { FloatingMenu } from "@tiptap/extension-floating-menu";
 import { ImageResize } from "tiptap-extension-resize-image";
 import { CropImageModal } from "@/modals/CropImageModal";
-import { Paragraph } from "@tiptap/extension-paragraph";
-import { Heading } from "@tiptap/extension-heading";
 import { Underline } from "@tiptap/extension-underline";
 import Highlight from '@tiptap/extension-highlight';
-import Youtube from '@tiptap/extension-youtube';
 import { usePostById } from "@/app/hooks/usePostById";
 import {useAuth} from "@/app/hooks/useAuth";
 import {TextStyle} from "@tiptap/extension-text-style";
 import {Color} from "@tiptap/extension-color";
+import {CustomHeading, CustomImage, CustomParagraph, CustomYoutube} from "@/app/utils/pasteYoutube";
 
-const youtubeRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})(?:\S+)?/g;
-
-const CustomYoutube = Youtube.extend({
-    addAttributes() {
-        return { ...this.parent?.(), textAlign: { default: 'left' } };
-    },
-    renderHTML({ node, HTMLAttributes }) {
-        const textAlign = node.attrs.textAlign || 'left';
-        return ['div', { 'data-youtube-video': '', style: `text-align: ${textAlign}` }, ['iframe', HTMLAttributes]];
-    },
-    addPasteRules(): PasteRule[] {
-        return [{
-            find: youtubeRegex,
-            handler: ({ chain, range, match }) => {
-                const url = match[0];
-                if (!url) return;
-                chain().focus().deleteRange(range).setYoutubeVideo({ src: url }).setTextAlign('center').run();
-            },
-        }];
-    },
-});
-
-const CustomImage = ImageExtension.extend({
-    addAttributes() {
-        return { ...this.parent?.(), style: { default: null, parseHTML: e => e.getAttribute('style'), renderHTML: a => (a.style ? { style: a.style } : {}) } };
-    },
-});
-
-const CustomParagraph = Paragraph.extend({
-    addAttributes() {
-        return { ...this.parent?.(), style: { default: null, parseHTML: e => e.getAttribute('style'), renderHTML: a => (a.style ? { style: a.style } : {}) } };
-    },
-});
-
-const CustomHeading = Heading.extend({
-    addAttributes() {
-        return { ...this.parent?.(), style: { default: null, parseHTML: e => e.getAttribute('style'), renderHTML: a => (a.style ? { style: a.style } : {}) } };
-    },
-});
-
-
-// ===================================================================
-// COMPONENT EDIT POST
-// ===================================================================
 const EditPostPage = () => {
     const params = useParams();
     const router = useRouter();
@@ -77,8 +29,8 @@ const EditPostPage = () => {
 
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
-    const [selectedImage, setSelectedImage] = useState<File | null>(null); // Ảnh minh họa MỚI
-    const [imagePreview, setImagePreview] = useState<string | null>(null); // Preview ảnh minh họa
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [error, setError] = useState("");
     const [originalFileName, setOriginalFileName] = useState<string>("");
@@ -383,12 +335,11 @@ const EditPostPage = () => {
                                             key={item.name}
                                             onClick={() => {
                                                 if (item.color === '') {
-                                                    editor.chain().focus().unsetColor().run(); // Xóa màu
+                                                    editor.chain().focus().unsetColor().run();
                                                 } else {
                                                     editor.chain().focus().setColor(item.color).run();
                                                 }
                                             }}
-                                            // Kiểm tra xem màu hiện tại có đang được active không
                                             className={editor.isActive('textStyle', { color: item.color }) ? 'p-1 border-2 border-black rounded' : 'p-1 border-2 border-transparent rounded'}
                                             title={item.name}
                                             disabled={!editor.can().setColor(item.color)}

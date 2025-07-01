@@ -5,114 +5,15 @@ import Image from "next/image";
 import { Modal } from "@mantine/core";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import ImageExtension from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import TextAlign from "@tiptap/extension-text-align";
 import { FloatingMenu } from "@tiptap/extension-floating-menu";
 import {ImageResize} from "tiptap-extension-resize-image";
 import {CropImageModal} from "@/modals/CropImageModal";
-import {Paragraph} from "@tiptap/extension-paragraph";
-import { Heading } from "@tiptap/extension-heading";
 import {Underline} from "@tiptap/extension-underline";
 import Highlight from '@tiptap/extension-highlight';
-import Youtube from '@tiptap/extension-youtube';
-import { PasteRule } from '@tiptap/core';
 import {useAuth} from "@/app/hooks/useAuth";
-
-const youtubeRegex = /(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/(watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})(?:\S+)?/g;
-const CustomYoutube = Youtube.extend({
-    addAttributes() {
-        return {
-            ...this.parent?.(),
-            textAlign: {
-                default: 'left',
-            },
-        };
-    },
-    renderHTML({ node, HTMLAttributes }) {
-        const textAlign = node.attrs.textAlign || 'left';
-        return [
-            'div',
-            {
-                'data-youtube-video': '',
-                style: `display: flex; justify-content: center;`,
-            },
-            ['iframe', HTMLAttributes],
-        ];
-    },
-    addPasteRules(): PasteRule[] {
-        return [
-            {
-                find: youtubeRegex,
-                handler: ({ chain, range, match }) => {
-                    const youtubeIdRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com|youtu\.be)\/(?:watch\?v=|embed\/|v\/|.+\?v=)?([\w-]{11})/;
-                    const videoIdMatch = match[0].match(youtubeIdRegex);
-
-                    if (videoIdMatch && videoIdMatch[1]) {
-                        const videoId = videoIdMatch[1];
-
-                        const { controls, modestBranding, rel } = this.options;
-
-                        let embedUrl = `https://www.youtube.com/embed/${videoId}?`;
-                        const params = [];
-                        params.push(`modestbranding=${modestBranding ? 1 : 0}`);
-                        params.push(`rel=${rel ? 1 : 0}`);
-                        params.push(`controls=${controls ? 1 : 0}`);
-                        embedUrl += params.join('&');
-
-                        chain()
-                            .focus()
-                            .deleteRange(range)
-                            .setYoutubeVideo({ src: embedUrl })
-                            .setTextAlign('center')
-                            .run();
-                    }
-                },
-            },
-        ];
-    },
-});
-
-const CustomImage = ImageExtension.extend({
-    addAttributes() {
-        return {
-            ...this.parent?.(), // Giữ lại các thuộc tính gốc như src, alt
-            style: {
-                default: null,
-                parseHTML: element => element.getAttribute('style'),
-                renderHTML: attributes => (attributes.style ? { style: attributes.style } : {}),
-            },
-        };
-    },
-});
-
-// 2. Custom Paragraph để lưu text-align
-const CustomParagraph = Paragraph.extend({
-    addAttributes() {
-        return {
-            ...this.parent?.(), // Giữ lại thuộc tính gốc
-            style: {
-                default: null,
-                parseHTML: element => element.getAttribute('style'),
-                renderHTML: attributes => (attributes.style ? { style: attributes.style } : {}),
-            },
-        };
-    },
-});
-
-// 3. Custom Heading để lưu text-align
-const CustomHeading = Heading.extend({
-    addAttributes() {
-        return {
-            ...this.parent?.(), // Giữ lại thuộc tính gốc
-            style: {
-                default: null,
-                parseHTML: element => element.getAttribute('style'),
-                renderHTML: attributes => (attributes.style ? { style: attributes.style } : {}),
-            },
-        };
-    },
-});
+import {CustomHeading, CustomImage, CustomParagraph, CustomYoutube} from "@/app/utils/pasteYoutube";
 
 const CreatePostPage = () => {
     const [title, setTitle] = useState("");
@@ -246,7 +147,6 @@ const CreatePostPage = () => {
             return false;
         }
 
-        // Nếu mọi thứ hợp lệ, mới mở modal
         setIsConfirmOpen(true);
     };
     const { name, role } = useAuth();
@@ -264,7 +164,7 @@ const CreatePostPage = () => {
                 if (src) {
                     imageInfo.push({
                         url: src,
-                        style: style || '', // Lấy style, nếu không có thì là chuỗi rỗng
+                        style: style || '',
                     });
                 }
             }
@@ -277,17 +177,14 @@ const CreatePostPage = () => {
         setIsConfirmOpen(false);
         setError("");
 
-        // 1. Trích xuất thông tin ảnh (URL và Style)
         const imagesToUpdate = extractImageInfo();
 
-        // 2. Lấy HTML content và làm sạch nó (tùy chọn, nhưng khớp với backend)
         const rawContent = editor?.getHTML() || "";
 
 
-        // 3. Chuẩn bị dữ liệu cho việc tạo bài viết
         const postFormData = new FormData();
         postFormData.append("title", title);
-        postFormData.append("content", rawContent); // Gửi content đã làm sạch
+        postFormData.append("content", rawContent);
         if (selectedImage) {
             postFormData.append("header_image", selectedImage);
         }
@@ -295,7 +192,6 @@ const CreatePostPage = () => {
         postFormData.append("author", name || "");
 
         try {
-            // 4. Gửi đồng thời 2 request
             const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
                 method: "POST",
                 headers: {
@@ -309,13 +205,10 @@ const CreatePostPage = () => {
                 body: postFormData,
             });
 
-            // Chờ cả hai hoàn thành
             const [updateResponse, createResponse] = await Promise.all([updateImagesPromise, createPostPromise]);
 
-            // 5. Xử lý kết quả
             if (!updateResponse.ok) {
                 console.error("Lỗi cập nhật trạng thái ảnh!");
-                // Có thể không cần báo lỗi này cho người dùng
             }
 
             if (!createResponse.ok) {
@@ -326,7 +219,6 @@ const CreatePostPage = () => {
 
             const result = await createResponse.json();
             alert("Bài viết đã được tạo thành công!");
-            // Chuyển hướng hoặc reset form ở đây
             window.location.href = `/`;
         } catch (error) {
             console.error("Error creating post:", error);
@@ -394,19 +286,6 @@ const CreatePostPage = () => {
             </div>
             <div>
                 <label className="font-mali-semibold block font-semibold mb-1">Ảnh minh họa:</label>
-                {/*<input className="bg-[#FFB74D] text-white px-4 py-2 rounded-md hover:bg-[#FFA726]" type="file"*/}
-                {/*       accept="image/*" onChange={handleImageChange}/>*/}
-                {/*{imagePreview && (*/}
-                {/*    <div className="mt-4">*/}
-                {/*        <Image*/}
-                {/*            src={imagePreview}*/}
-                {/*            alt="Preview"*/}
-                {/*            width={400}*/}
-                {/*            height={250}*/}
-                {/*            className="rounded-lg shadow border border-gray-200"*/}
-                {/*        />*/}
-                {/*    </div>*/}
-                {/*)}*/}
                 <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
                     <label
                         htmlFor="header-image-upload"
@@ -419,7 +298,7 @@ const CreatePostPage = () => {
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
-                        className="hidden" // Ẩn input gốc đi
+                        className="hidden"
                     />
                     {imagePreview && (
                         <div className="mt-4">
@@ -447,7 +326,7 @@ const CreatePostPage = () => {
                         id="content-image-upload"
                         type="file"
                         accept="image/*"
-                        className="hidden" // Ẩn input gốc đi
+                        className="hidden"
                         onChange={(e) => {
                             const file = e.target.files?.[0];
                             if (file) {
@@ -459,7 +338,7 @@ const CreatePostPage = () => {
                                 };
                                 reader.readAsDataURL(file);
                             }
-                            e.target.value = ''; // Reset input để có thể chọn lại cùng 1 file
+                            e.target.value = '';
                         }}
                     />
                 </div>
@@ -493,7 +372,6 @@ const CreatePostPage = () => {
                 <label className="font-mali-semibold block font-semibold mb-2">Nội dung bài viết:</label>
                 {editor && (
                     <div className="font-mali border border-[#FFA552] rounded-lg">
-                        {/* TOOLBAR CỐ ĐỊNH */}
                         <div className="flex gap-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
 
                             <button
