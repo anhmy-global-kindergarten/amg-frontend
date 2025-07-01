@@ -217,10 +217,10 @@ const initialPageContent: PageContent = {
     footerLinkTitle: "LIÊN KẾT",
     footerSupportTitle: "HỖ TRỢ",
     footerLinks: [
-        { text: "Trang chủ", href: "#" }, { text: "Giới thiệu", href: "#" }, { text: "Hệ thống lớp học", href: "#" }, { text: "Tin tức sự kiện", href: "#" }, { text: "Thư viện AMG", href: "#" }, { text: "Tuyển sinh", href: "#" }, { text: "Liên hệ", href: "#" },
+        { text: "Trang chủ", href: "/" }, { text: "Giới thiệu", href: "/" }, { text: "Hệ thống lớp học", href: "/" }, { text: "Tin tức sự kiện", href: "/" }, { text: "Thư viện AMG", href: "/" }, { text: "Tuyển sinh", href: "/" }, { text: "Liên hệ", href: "/" },
     ],
     footerSupportLinks: [
-        { text: "Trang chủ", href: "#" }, { text: "Giới thiệu", href: "#" }, { text: "Hệ thống lớp học", href: "#" }, { text: "Tin tức sự kiện", href: "#" }, { text: "Thư viện AMG", href: "#" }, { text: "Tuyển sinh", href: "#" }, { text: "Liên hệ", href: "#" },
+        { text: "Trang chủ", href: "/" }, { text: "Giới thiệu", href: "/" }, { text: "Hệ thống lớp học", href: "/" }, { text: "Tin tức sự kiện", href: "/" }, { text: "Thư viện AMG", href: "/" }, { text: "Tuyển sinh", href: "/" }, { text: "Liên hệ", href: "/" },
     ]
 };
 
@@ -320,6 +320,19 @@ export default function LandingPage() {
     const [pageContent, setPageContent] = useState<PageContent | null>(null);
     const [originalContent, setOriginalContent] = useState<PageContent | null>(null);
     const [isEditMode, setIsEditMode] = useState(false);
+
+    const [currentlyEditingId, setCurrentlyEditingId] = useState<string | null>(null);
+    const handleStartEditing = (id: string) => {
+        if (currentlyEditingId === null) {
+            setCurrentlyEditingId(id);
+        } else {
+            alert("Vui lòng lưu hoặc hủy thay đổi hiện tại trước khi sửa mục khác.");
+        }
+    };
+
+    const handleStopEditing = () => {
+        setCurrentlyEditingId(null);
+    };
 
     const hasUnsavedChanges = JSON.stringify(pageContent) !== JSON.stringify(originalContent);
 
@@ -460,7 +473,6 @@ export default function LandingPage() {
         }
     };
 
-    // --- Logic cập nhật, thêm, xóa nội dung ---
     const handleContentUpdate = (id: string, value: string) => {
         setPageContent(prev => {
             if (!prev) return null;
@@ -498,6 +510,7 @@ export default function LandingPage() {
             (newContent as any)[id] = value;
             return newContent;
         });
+        handleStopEditing();
     };
 
     const handleAddItem = (arrayKey: keyof PageContent, newItemTemplate: any) => {
@@ -682,6 +695,9 @@ export default function LandingPage() {
                                 style={{color: '#FFC107'}}
                                 // @ts-ignore
                                 href={`tel:${pageContent.topNavPhone.replace(/<[^>]*>?/gm, '')}`}
+                                isCurrentlyEditing={currentlyEditingId === 'topNavPhone'}
+                                onStartEditing={handleStartEditing}
+                                onCancelEditing={handleStopEditing}
                             />
                         </div>
                         <div className="flex items-center space-x-2 font-mali-bold ">
@@ -696,6 +712,9 @@ export default function LandingPage() {
                                 style={{color: '#FFC107'}}
                                 // @ts-ignore
                                 href={`mailto:${pageContent.topNavEmail.replace(/<[^>]*>?/gm, '')}`}
+                                isCurrentlyEditing={currentlyEditingId === 'topNavEmail'}
+                                onStartEditing={handleStartEditing}
+                                onCancelEditing={handleStopEditing}
                             />
                         </div>
                     </div>
@@ -805,23 +824,30 @@ export default function LandingPage() {
                         <EditableText id="bannerMobileTitle" initialHtml={pageContent.bannerMobileTitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h1"
                                       className="font-cadena text-4xl sm:text-5xl text-[#EA570A] leading-tight"
-                                      style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}/>
+                                      style={{textShadow: '0 0 8px white, 0 0 8px white, 4px 4px 0 white, -4px -4px 0 white'}}
+                                      isCurrentlyEditing={currentlyEditingId === 'bannerMobileTitle'}
+                                      onStartEditing={handleStartEditing}
+                                      onCancelEditing={handleStopEditing}
+                        />
                         <EditableText id="bannerMobileSubtitle" initialHtml={pageContent.bannerMobileSubtitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="font-cadena text-3xl text-[#FFD105] mb-1"/>
+                                      className="font-cadena text-3xl text-[#FFD105] mb-1"
+                                      isCurrentlyEditing={currentlyEditingId === 'bannerMobileSubtitle'}
+                                      onStartEditing={handleStartEditing}
+                                      onCancelEditing={handleStopEditing}
+                        />
                         <EditableText id="bannerMobileDescription" initialHtml={pageContent.bannerMobileDescription}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="font-mali-medium mb-4 text-[#EA570A] text-xs leading-relaxed"/>
+                                      className="font-mali-medium mb-4 text-[#EA570A] text-xs leading-relaxed"
+                                      isCurrentlyEditing={currentlyEditingId === 'bannerMobileDescription'}
+                                      onStartEditing={handleStartEditing}
+                                      onCancelEditing={handleStopEditing}
+                        />
                         <div className="relative w-fit mx-auto">
                             <button onClick={openModal} className="relative">
                                 <Image alt="bannerMobileRegisterButtonImageSrc"
                                     src="/banner/button_register_mobile.png"
                                                width={200} height={60} className="hover:opacity-90 transition"/>
-                                {/*<div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">
-                                    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill
-                                                   objectFit="contain"
-                                                   className="w-full h-full"/>
-                                </div>*/}
                             </button>
                         </div>
                     </div>
@@ -831,16 +857,6 @@ export default function LandingPage() {
                     className="relative px-4 sm:px-6 pb-20 z-10 max-w-8xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between">
                     <div className="ml-50 w-full lg:w-auto max-w-xl z-20 text-center lg:text-left">
                         <div className="relative mb-3">
-
-                            {/*<h1*/}
-                            {/*    aria-hidden="true"*/}
-                            {/*    className="absolute top-0 left-0 w-full font-cadena text-7xl text-white leading-tight select-none z-10"*/}
-                            {/*    style={{*/}
-                            {/*        transform: 'scale(1.1)',*/}
-                            {/*    }}*/}
-                            {/*    dangerouslySetInnerHTML={{__html: pageContent.bannerDesktopTitle}}*/}
-                            {/*/>*/}
-
                             <EditableText
                                 id="bannerDesktopTitle"
                                 initialHtml={pageContent.bannerDesktopTitle}
@@ -848,25 +864,31 @@ export default function LandingPage() {
                                 isEditMode={isEditMode}
                                 tag="h1"
                                 className="relative font-cadena text-7xl text-[#EA570A] leading-tight z-20 [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]"
+                                isCurrentlyEditing={currentlyEditingId === 'bannerDesktopTitle'}
+                                onStartEditing={handleStartEditing}
+                                onCancelEditing={handleStopEditing}
                             />
 
                         </div>
                         <EditableText id="bannerDesktopSubtitle" initialHtml={pageContent.bannerDesktopSubtitle}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="font-cadena text-3xl sm:text-3xl text-[#FFD105] mb-4"/>
+                                      className="font-cadena text-3xl sm:text-3xl text-[#FFD105] mb-4"
+                                      isCurrentlyEditing={currentlyEditingId === 'bannerDesktopSubtitle'}
+                                      onStartEditing={handleStartEditing}
+                                      onCancelEditing={handleStopEditing}
+                        />
                         <EditableText id="bannerDesktopDescription" initialHtml={pageContent.bannerDesktopDescription}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                      className="font-mali-medium mb-2 text-[#EA570A]"/>
+                                      className="font-mali-medium mb-2 text-[#EA570A]"
+                                      isCurrentlyEditing={currentlyEditingId === 'bannerDesktopDescription'}
+                                      onStartEditing={handleStartEditing}
+                                      onCancelEditing={handleStopEditing}
+                        />
                         <div className="relative w-fit mx-auto lg:mx-0">
                             <button onClick={openModal} className="relative">
                                 <Image alt="bannerMobileRegisterButtonImageSrc"
                                        src="/banner/button_register_desktop.png"
                                        width={300} height={100} className="hover:opacity-90 transition"/>
-                                {/*<div className="absolute -right-6 top-1/2 -translate-y-1/2 w-10 h-10">*/}
-                                {/*    <Image alt="bannerDesktopPlayIconSrc" src='/banner/icon_play.png' fill*/}
-                                {/*                   objectFit="contain"*/}
-                                {/*                   className="w-full h-full"/>*/}
-                                {/*</div>*/}
                             </button>
                         </div>
                     </div>
@@ -960,16 +982,27 @@ export default function LandingPage() {
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                       className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}
                                        [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
+                                      isCurrentlyEditing={currentlyEditingId === 'aboutAmgSectionTitle'}
+                                      onStartEditing={handleStartEditing}
+                                      onCancelEditing={handleStopEditing}
                         />
                         <EditableText id="aboutAmgIntroHeading" initialHtml={pageContent.aboutAmgIntroHeading}
                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                      className="font-mali-semibold text-lg md:text-xl font-semibold text-[#7ED3F7]"/>
+                                      className="font-mali-semibold text-lg md:text-xl font-semibold text-[#7ED3F7]"
+                                      isCurrentlyEditing={currentlyEditingId === 'aboutAmgIntroHeading'}
+                                      onStartEditing={handleStartEditing}
+                                      onCancelEditing={handleStopEditing}
+                        />
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                             <div className="rounded-xl text-base leading-7 text-black space-y-4 text-justify">
                                 <EditableText id="aboutAmgParagraph" initialHtml={pageContent.aboutAmgParagraph}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                               className="font-mali rounded-xl"
-                                              textEditorStyle={{lineHeight: '1.75rem', color: 'black'}}/>
+                                              textEditorStyle={{lineHeight: '1.75rem', color: 'black'}}
+                                              isCurrentlyEditing={currentlyEditingId === 'aboutAmgParagraph'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                             </div>
                             {/* Decorative cloud */}
                             <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
@@ -1006,6 +1039,9 @@ export default function LandingPage() {
                         onDeleteItemClass={(index) => handleDeleteItem('classGalleryItems', index)}
                         onAddBox={() => handleAddItem('classGalleryBoxes', newClassGalleryBoxTemplate)}
                         onDeleteBox={(index) => handleDeleteItem('classGalleryBoxes', index)}
+                        currentlyEditingId={currentlyEditingId}
+                        handleStartEditing={handleStartEditing}
+                        handleStopEditing={handleStopEditing}
                     />
                 </div>
             </section>
@@ -1018,6 +1054,9 @@ export default function LandingPage() {
                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                               className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}
                                [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
+                              isCurrentlyEditing={currentlyEditingId === 'mealSectionTitle'}
+                              onStartEditing={handleStartEditing}
+                              onCancelEditing={handleStopEditing}
                 />
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
@@ -1089,11 +1128,17 @@ export default function LandingPage() {
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                   className={`font-cadena text-center text-[#F7B052] mb-2 ${isMobile ? 'text-3xl' : 'text-7xl'}
                                    [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
+                                  isCurrentlyEditing={currentlyEditingId === 'reasonsSectionTitle1'}
+                                  onStartEditing={handleStartEditing}
+                                  onCancelEditing={handleStopEditing}
                     />
                     <EditableText id="reasonsSectionTitle2" initialHtml={pageContent.reasonsSectionTitle2}
                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2"
                                   className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-3xl' : 'text-7xl'}
                                    [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
+                                  isCurrentlyEditing={currentlyEditingId === 'reasonsSectionTitle2'}
+                                  onStartEditing={handleStartEditing}
+                                  onCancelEditing={handleStopEditing}
                     />
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
                         <div className="space-y-6">
@@ -1103,18 +1148,30 @@ export default function LandingPage() {
                                         <EditableText id="reasonsCol1Heading1"
                                                       initialHtml={pageContent.reasonsCol1Heading1}
                                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                      className="font-mali-semibold text-[#7ED3F7] font-semibold text-base"/>
+                                                      className="font-mali-semibold text-[#7ED3F7] font-semibold text-base"
+                                                      isCurrentlyEditing={currentlyEditingId === 'reasonsCol1Heading1'}
+                                                      onStartEditing={handleStartEditing}
+                                                      onCancelEditing={handleStopEditing}
+                                        />
                                         <EditableText id="reasonsCol1Heading2"
                                                       initialHtml={pageContent.reasonsCol1Heading2}
                                                       onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                      className="font-mali-semibold text-[#7ED3F7] font-semibold text-base mb-3"/>
+                                                      className="font-mali-semibold text-[#7ED3F7] font-semibold text-base mb-3"
+                                                      isCurrentlyEditing={currentlyEditingId === 'reasonsCol1Heading2'}
+                                                      onStartEditing={handleStartEditing}
+                                                      onCancelEditing={handleStopEditing}
+                                        />
                                     </div>
                                     <Image src="/banner/icon_cloud.png" alt="cloud" width={100} height={50}
                                            className="right-2 z-10 ml-10"/>
                                 </div>
                                 <EditableText id="reasonsCol1Para1" initialHtml={pageContent.reasonsCol1Para1}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali text-black leading-relaxed text-sm text-justify"/>
+                                              className="font-mali text-black leading-relaxed text-sm text-justify"
+                                              isCurrentlyEditing={currentlyEditingId === 'reasonsCol1Para1'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                             </div>
                             <div className="relative">
                                 <div
@@ -1129,6 +1186,9 @@ export default function LandingPage() {
                                             initialHtml={pageContent.reasonsCol1ForkPara1}
                                             onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                             className="font-mali text-sm text-black min-w-0 break-words"
+                                            isCurrentlyEditing={currentlyEditingId === 'reasonsCol1ForkPara1'}
+                                            onStartEditing={handleStartEditing}
+                                            onCancelEditing={handleStopEditing}
                                         />
                                     </ListItem>
 
@@ -1138,6 +1198,9 @@ export default function LandingPage() {
                                             initialHtml={pageContent.reasonsCol1ForkPara2}
                                             onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                             className="font-mali text-sm text-black min-w-0 break-words"
+                                            isCurrentlyEditing={currentlyEditingId === 'reasonsCol1ForkPara2'}
+                                            onStartEditing={handleStartEditing}
+                                            onCancelEditing={handleStopEditing}
                                         />
                                     </ListItem>
 
@@ -1147,6 +1210,9 @@ export default function LandingPage() {
                                             initialHtml={pageContent.reasonsCol1ForkPara3}
                                             onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
                                             className="font-mali text-sm text-black min-w-0 break-words"
+                                            isCurrentlyEditing={currentlyEditingId === 'reasonsCol1ForkPara3'}
+                                            onStartEditing={handleStartEditing}
+                                            onCancelEditing={handleStopEditing}
                                         />
                                     </ListItem>
                                 </ul>
@@ -1164,11 +1230,19 @@ export default function LandingPage() {
                                     <EditableText id={item.titleKey}
                                                   initialHtml={pageContent[item.titleKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                                  className="font-mali-medium font-bold text-xl" style={{color: item.ttColor}}/>
+                                                  className="font-mali-medium font-bold text-xl" style={{color: item.ttColor}}
+                                                  isCurrentlyEditing={currentlyEditingId === item.titleKey}
+                                                  onStartEditing={handleStartEditing}
+                                                  onCancelEditing={handleStopEditing}
+                                    />
                                     <EditableText id={item.descKey}
                                                   initialHtml={pageContent[item.descKey as keyof PageContent] as string}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                                  className="font-mali text-xs text-black text-justify"/>
+                                                  className="font-mali text-xs text-black text-justify"
+                                                  isCurrentlyEditing={currentlyEditingId === item.descKey}
+                                                  onStartEditing={handleStartEditing}
+                                                  onCancelEditing={handleStopEditing}
+                                    />
                                 </div>
                             ))}
                         </div>
@@ -1191,6 +1265,9 @@ export default function LandingPage() {
                                              onSave={handleContentUpdate}
                                              onAddItem={() => handleAddItem('testimonials', newTestimonialTemplate)}
                                              onDeleteItem={(index) => handleDeleteItem('testimonials', index)}
+                                             currentlyEditingId={currentlyEditingId}
+                                             handleStartEditing={handleStartEditing}
+                                             handleStopEditing={handleStopEditing}
                         />
                     </div>
                     <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
@@ -1201,60 +1278,116 @@ export default function LandingPage() {
                             <div className="space-y-1">
                                 <EditableText id="footerSystemTitle" initialHtml={pageContent.footerSystemTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-mali-medium font-bold text-base"/>
+                                              className="font-mali-medium font-bold text-base"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerSystemTitle'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerSystemName" initialHtml={pageContent.footerSystemName}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali-medium font-semibold"/>
+                                              className="font-mali-medium font-semibold"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerSystemName'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress1" initialHtml={pageContent.footerAddress1}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress1'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress2" initialHtml={pageContent.footerAddress2}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress2'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress3" initialHtml={pageContent.footerAddress3}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress3'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress4" initialHtml={pageContent.footerAddress4}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress4'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerHotline" initialHtml={pageContent.footerHotline}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerHotline'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerEmail" initialHtml={pageContent.footerEmail}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerEmail'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerYoutubeName" initialHtml={pageContent.footerYoutubeName}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerYoutubeName'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                             </div>
                             <div className="flex flex-row flex-wrap gap-x-10 gap-y-4">
                                 <div>
                                     <EditableText id="footerLinkTitle" initialHtml={pageContent.footerLinkTitle}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                  className="font-mali-medium font-bold text-sm mb-2"/>
+                                                  className="font-mali-medium font-bold text-sm mb-2"
+                                                  isCurrentlyEditing={currentlyEditingId === 'footerLinkTitle'}
+                                                  onStartEditing={handleStartEditing}
+                                                  onCancelEditing={handleStopEditing}
+                                    />
                                     <ul className="space-y-1 text-sm">
                                         {pageContent.footerLinks.map((link, index) => (
-                                            <li key={index}><EditableText id={`footerLink_${index}_text`}
-                                                                          initialHtml={link.text}
-                                                                          onSave={handleContentUpdate}
-                                                                          isEditMode={isEditMode} tag="a"
-                                                                          className="font-mali"
-                                                                          href={link.href}/></li>
+                                            <li key={index}>
+                                                <EditableText id={`footerLink_${index}_text`}
+                                                              initialHtml={link.text}
+                                                              onSave={handleContentUpdate}
+                                                              isEditMode={isEditMode} tag="a"
+                                                              className="font-mali"
+                                                              href={link.href}
+                                                              isCurrentlyEditing={currentlyEditingId === `footerLink_${index}_text`}
+                                                              onStartEditing={handleStartEditing}
+                                                              onCancelEditing={handleStopEditing}
+                                                />
+                                            </li>
                                         ))}
                                     </ul>
                                 </div>
                                 <div>
                                     <EditableText id="footerSupportTitle" initialHtml={pageContent.footerSupportTitle}
                                                   onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                                  className="font-mali-medium font-bold text-sm mb-2"/>
+                                                  className="font-mali-medium font-bold text-sm mb-2"
+                                                  isCurrentlyEditing={currentlyEditingId === 'footerSupportTitle'}
+                                                  onStartEditing={handleStartEditing}
+                                                  onCancelEditing={handleStopEditing}
+                                    />
                                     <ul className="space-y-1 text-sm">
                                         {pageContent.footerSupportLinks.map((link, index) => (
-                                            <li key={index}><EditableText id={`footerSupportLink_${index}_text`}
-                                                                          initialHtml={link.text}
-                                                                          onSave={handleContentUpdate}
-                                                                          isEditMode={isEditMode} tag="a"
-                                                                          className="font-mali"
-                                                                          href={link.href}/></li>
+                                            <li key={index}>
+                                                <EditableText id={`footerSupportLink_${index}_text`}
+                                                              initialHtml={link.text}
+                                                              onSave={handleContentUpdate}
+                                                              isEditMode={isEditMode} tag="a"
+                                                              className="font-mali"
+                                                              href={link.href}
+                                                              isCurrentlyEditing={currentlyEditingId === `footerSupportLink_${index}_text`}
+                                                              onStartEditing={handleStartEditing}
+                                                              onCancelEditing={handleStopEditing}
+                                                />
+                                            </li>
                                         ))}
                                     </ul>
                                 </div>
@@ -1309,31 +1442,67 @@ export default function LandingPage() {
                             <div className="space-y-1">
                                 <EditableText id="footerSystemTitle" initialHtml={pageContent.footerSystemTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-mali-medium font-bold text-base"/>
+                                              className="font-mali-medium font-bold text-base"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerSystemTitle'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerSystemName" initialHtml={pageContent.footerSystemName}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali-medium font-semibold"/>
+                                              className="font-mali-medium font-semibold"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerSystemName'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress1" initialHtml={pageContent.footerAddress1}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress1'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress2" initialHtml={pageContent.footerAddress2}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress2'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress3" initialHtml={pageContent.footerAddress3}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress3'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerAddress4" initialHtml={pageContent.footerAddress4}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerAddress4'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerHotline" initialHtml={pageContent.footerHotline}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerHotline'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerEmail" initialHtml={pageContent.footerEmail}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerEmail'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <EditableText id="footerYoutubeName" initialHtml={pageContent.footerYoutubeName}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="p"
-                                              className="font-mali"/>
+                                              className="font-mali"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerYoutubeName'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <div className="flex flex-wrap sm:flex-nowrap gap-6 mt-4">
                                     <div className="flex flex-col items-start">
                                         <h3 className="font-mali-bold font-bold">FANPAGE</h3>
@@ -1364,14 +1533,23 @@ export default function LandingPage() {
                             <div>
                                 <EditableText id="footerLinkTitle" initialHtml={pageContent.footerLinkTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-mali-medium font-bold text-base mb-2"/>
+                                              className="font-mali-medium font-bold text-base mb-2"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerLinkTitle'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <ul className="space-y-1">
                                     {pageContent.footerLinks.map((link, index) => (
-                                        <li key={index}><EditableText id={`footerLink_${index}_text`}
-                                                                      initialHtml={link.text}
-                                                                      onSave={handleContentUpdate}
-                                                                      className="font-mali"
-                                                                      isEditMode={isEditMode} tag="a" href={link.href}/>
+                                        <li key={index}>
+                                            <EditableText id={`footerLink_${index}_text`}
+                                                          initialHtml={link.text}
+                                                          onSave={handleContentUpdate}
+                                                          className="font-mali"
+                                                          isEditMode={isEditMode} tag="a" href={link.href}
+                                                          isCurrentlyEditing={currentlyEditingId === `footerLink_${index}_text`}
+                                                          onStartEditing={handleStartEditing}
+                                                          onCancelEditing={handleStopEditing}
+                                            />
                                         </li>
                                     ))}
                                 </ul>
@@ -1379,14 +1557,23 @@ export default function LandingPage() {
                             <div>
                                 <EditableText id="footerSupportTitle" initialHtml={pageContent.footerSupportTitle}
                                               onSave={handleContentUpdate} isEditMode={isEditMode} tag="h3"
-                                              className="font-mali-medium font-bold text-base mb-2"/>
+                                              className="font-mali-medium font-bold text-base mb-2"
+                                              isCurrentlyEditing={currentlyEditingId === 'footerSupportTitle'}
+                                              onStartEditing={handleStartEditing}
+                                              onCancelEditing={handleStopEditing}
+                                />
                                 <ul className="space-y-1">
                                     {pageContent.footerSupportLinks.map((link, index) => (
-                                        <li key={index}><EditableText id={`footerSupportLink_${index}_text`}
-                                                                      initialHtml={link.text}
-                                                                      onSave={handleContentUpdate}
-                                                                      className="font-mali"
-                                                                      isEditMode={isEditMode} tag="a" href={link.href}/>
+                                        <li key={index}>
+                                            <EditableText id={`footerSupportLink_${index}_text`}
+                                                          initialHtml={link.text}
+                                                          onSave={handleContentUpdate}
+                                                          className="font-mali"
+                                                          isEditMode={isEditMode} tag="a" href={link.href}
+                                                          isCurrentlyEditing={currentlyEditingId === `footerSupportLink_${index}_text`}
+                                                          onStartEditing={handleStartEditing}
+                                                          onCancelEditing={handleStopEditing}
+                                            />
                                         </li>
                                     ))}
                                     <Image src="/icons/icon_elephant_footer.png" alt="" width={isMobile ? 150 : 300}

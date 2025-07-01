@@ -11,6 +11,9 @@ type EditableTextProps<T extends keyof JSX.IntrinsicElements = 'div'> = {
     isEditMode: boolean;
     tag?: T;
     textEditorStyle?: React.CSSProperties;
+    isCurrentlyEditing: boolean;
+    onStartEditing: (id: string) => void;
+    onCancelEditing: () => void;
 } & Omit<React.ComponentProps<T>, 'id' | 'onInput' | 'dangerouslySetInnerHTML' | 'children'>;
 
 const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
@@ -22,17 +25,21 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
                                                                          className,
                                                                          style,
                                                                          textEditorStyle,
+                                                                         isCurrentlyEditing,
+                                                                         onStartEditing,
+                                                                         onCancelEditing,
                                                                          ...rest // Capture any other props like href, target, etc.
                                                                      }: EditableTextProps<T>) => {
     const Tag = tag || ('div' as T);
     const [html, setHtml] = useState(initialHtml);
-    const [isEditing, setIsEditing] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(false);
     const contentEditableRef = useRef<HTMLElement>(null);
 
     useEffect(() => {
-        setHtml(initialHtml);
-    }, [initialHtml]);
+        if (!isEditMode) {
+            setHtml(initialHtml);
+        }
+    }, [isEditMode, initialHtml]);
 
     const handleContentChange = (event: React.FormEvent<HTMLDivElement>) => {
         setHtml(event.currentTarget.innerHTML);
@@ -45,13 +52,30 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
 
     const handleSave = () => {
         onSave(id, html);
-        setIsEditing(false);
     };
 
     const handleCancel = () => {
         setHtml(initialHtml);
-        setIsEditing(false);
+        onCancelEditing();
     }
+
+    const editorClassName = `
+        editable-content 
+        min-h-[50px] 
+        p-2 
+        border 
+        border-gray-300 
+        rounded 
+        focus:outline-none 
+        focus:ring-2 
+        focus:ring-blue-500 
+        ${className || ''} 
+    `;
+
+    const editorFinalStyle = {
+        ...style,
+        ...textEditorStyle,
+    };
 
     const commonProps = {
         className,
@@ -59,16 +83,16 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
         dangerouslySetInnerHTML: { __html: html },
         ...(rest as any)
     };
-    if (!isEditMode && !isEditing) {
+    if (!isEditMode) {
         return <Tag {...commonProps} />;
     }
 
-    if (!isEditing) {
+    if (!isCurrentlyEditing) {
         return (
             <div
                 className="relative border border-dashed border-blue-400 p-1 cursor-pointer hover:bg-blue-50 transition-all"
-                onClick={() => setIsEditing(true)}
-                title="Click to edit"
+                onClick={() => onStartEditing(id)}
+                title="Click để sửa"
             >
                 <Tag {...commonProps} />
             </div>
@@ -102,8 +126,8 @@ const EditableText = <T extends keyof JSX.IntrinsicElements = 'div'>({
                 disabled={false}
                 onChange={handleContentChange}
                 tagName="div"
-                className={`editable-content min-h-[50px] p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 ${className}`}
-                style={textEditorStyle || { color: '#4D4D4D' }}
+                className={editorClassName}
+                style={editorFinalStyle}
             />
         </div>
     );

@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import EditableText from './landing-page/EditableText';
 import EditableImage from './landing-page/EditableImage';
@@ -17,6 +16,9 @@ interface ClassGalleryProps {
     onDeleteItemClass: (index: number) => void;
     onAddBox: () => void;
     onDeleteBox: (index: number) => void;
+    currentlyEditingId: string | null;
+    handleStartEditing: (id: string) => void;
+    handleStopEditing: () => void;
 }
 
 export default function ClassGallery({
@@ -29,7 +31,10 @@ export default function ClassGallery({
                                          onAddItemClass,
                                          onDeleteItemClass,
                                          onAddBox,
-                                         onDeleteBox
+                                         onDeleteBox,
+                                         currentlyEditingId,
+                                         handleStartEditing,
+                                         handleStopEditing
                                      }: ClassGalleryProps) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [isDragging, setIsDragging] = useState(false);
@@ -75,6 +80,9 @@ export default function ClassGallery({
                 tag="h2"
                 className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'}
                  [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`}
+                isCurrentlyEditing={currentlyEditingId === 'classGalleryTitle'}
+                onStartEditing={handleStartEditing}
+                onCancelEditing={handleStopEditing}
             />
 
             <div className="w-full bg-[#fff7cc] py-4 px-2">

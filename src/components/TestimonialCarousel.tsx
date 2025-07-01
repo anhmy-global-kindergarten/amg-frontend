@@ -18,9 +18,12 @@ interface TestimonialCarouselProps {
     onSave: (id: string, value: string) => void;
     onAddItem: () => void;
     onDeleteItem: (index: number) => void;
+    currentlyEditingId: string | null;
+    handleStartEditing: (id: string) => void;
+    handleStopEditing: () => void;
 }
 
-export default function TestimonialCarousel({ testimonials, isEditMode, onSave, onAddItem, onDeleteItem }: TestimonialCarouselProps) {
+export default function TestimonialCarousel({ testimonials, isEditMode, onSave, onAddItem, onDeleteItem, currentlyEditingId, handleStartEditing, handleStopEditing }: TestimonialCarouselProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
@@ -91,6 +94,9 @@ export default function TestimonialCarousel({ testimonials, isEditMode, onSave, 
                         isEditMode={isEditMode}
                         tag="p"
                         className="font-mali-semibold text-[#26ADD7] text-base md:text-lg lg:text-xl leading-7 md:leading-8 font-medium mb-4 md:mb-6 px-2 md:px-6"
+                        isCurrentlyEditing={currentlyEditingId === `testimonial_${currentIndex}_content`}
+                        onStartEditing={handleStartEditing}
+                        onCancelEditing={handleStopEditing}
                     />
                     <EditableText
                         id={`testimonial_${currentIndex}_name`}
@@ -99,6 +105,9 @@ export default function TestimonialCarousel({ testimonials, isEditMode, onSave, 
                         isEditMode={isEditMode}
                         tag="p"
                         className="font-mali-semibold text-[#FF8282] text-lg md:text-xl lg:text-2xl font-bold mb-1"
+                        isCurrentlyEditing={currentlyEditingId === `testimonial_${currentIndex}_name`}
+                        onStartEditing={handleStartEditing}
+                        onCancelEditing={handleStopEditing}
                     />
                     <EditableText
                         id={`testimonial_${currentIndex}_desc`}
@@ -107,6 +116,9 @@ export default function TestimonialCarousel({ testimonials, isEditMode, onSave, 
                         isEditMode={isEditMode}
                         tag="p"
                         className="font-mali text-sm md:text-base text-[#FF8282]"
+                        isCurrentlyEditing={currentlyEditingId === `testimonial_${currentIndex}_desc`}
+                        onStartEditing={handleStartEditing}
+                        onCancelEditing={handleStopEditing}
                     />
                 </div>
 
