@@ -10,6 +10,9 @@ import {FaArrowUp, FaEdit, FaSave} from "react-icons/fa";
 
 import EditableText from "@/components/landing-page/EditableText";
 import EditableImage from "@/components/landing-page/EditableImage";
+import {useTranslations} from "next-intl";
+
+const t = useTranslations('HomePage');
 
 // INTERFACE ĐÃ ĐƯỢC MỞ RỘNG
 interface PageContent {
@@ -763,7 +766,7 @@ export default function LandingPage() {
                                     onClick={() => handleLogout()}
                                     className="font-mali-bold bg-red-500 text-white px-4 py-1 rounded hover:bg-red-600 transition"
                                 >
-                                    Đăng xuất
+                                    {t('logout')}
                                 </button>
                             </div>
                         ) : (

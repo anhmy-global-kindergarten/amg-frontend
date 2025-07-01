@@ -21,11 +21,13 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+  params: { locale }
+}: {
+    children: React.ReactNode;
+    params: { locale: string };
+}) {
   return (
-      <html lang="vi">
+      <html lang={locale}>
       <body>
       <Providers>
           <Toaster position="top-right" richColors />
