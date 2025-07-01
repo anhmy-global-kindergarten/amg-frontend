@@ -20,7 +20,9 @@ import { Underline } from "@tiptap/extension-underline";
 import Highlight from '@tiptap/extension-highlight';
 import Youtube from '@tiptap/extension-youtube';
 import { usePostById } from "@/app/hooks/usePostById";
-import {useAuth} from "@/app/hooks/useAuth"; // Giữ lại hook của bạn
+import {useAuth} from "@/app/hooks/useAuth";
+import {TextStyle} from "@tiptap/extension-text-style";
+import {Color} from "@tiptap/extension-color"; // Giữ lại hook của bạn
 
 // ===================================================================
 // BỘ EXTENSIONS GIỐNG HỆT TRANG CREATE
@@ -102,10 +104,13 @@ const EditPostPage = () => {
             TextAlign.configure({ types: ["heading", "paragraph", "youtube"] }),
             Underline,
             Highlight.configure({ multicolor: true }),
+            TextStyle,
+            Color.configure({
+            }),
             FloatingMenu.configure({ shouldShow: ({ editor }) => editor.view.hasFocus() && editor.state.selection.content().size > 0 }),
             CustomYoutube.configure({ controls: true, modestBranding: true, rel: 0 }),
         ],
-        content: "", // Sẽ được fill bằng useEffect
+        content: "",
         editorProps: {
             attributes: {
                 class: "min-h-[200px] rounded-lg border border-[#FFA552] p-4 focus:outline-none",
