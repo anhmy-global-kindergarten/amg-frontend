@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
-import {useAuth} from "@/app/hooks/useAuth";
+import {useAuth} from "@/hooks/useAuth";
 import React from 'react';
 import {router} from "next/client";
 

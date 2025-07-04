@@ -1,39 +1,34 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
-import Providers from "@/app/providers";
-import {Toaster} from "sonner";
+import {NextIntlClientProvider} from 'next-intl';
+import {Metadata} from "next";
+import {getMessages} from "next-intl/server";
+import {locales} from "@/config";
+import {notFound} from "next/navigation";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+type Props = {
+    children: React.ReactNode;
+    params: {locale: string};
+}
 
 export const metadata: Metadata = {
   title: "AMG Kindergarten",
   description: "Trường Mầm Non Anh Mỹ - Nơi Khởi Đầu Tương Lai",
 };
 
-export default function RootLayout({
-  children,
-  params: { locale }
-}: {
-    children: React.ReactNode;
-    params: { locale: string };
-}) {
-  return (
-      <html lang={locale}>
-      <body>
-      <Providers>
-          <Toaster position="top-right" richColors />
-          {children}
-      </Providers>
-      </body>
-      </html>
-  );
+export default async function LocaleLayout({ children, params: { locale }} : Props){
+    if (!locales.includes(locale as any)) {
+        notFound();
+    }
+
+    // 2. Lấy messages và TRUYỀN LOCALE VÀO
+    const messages = await getMessages({ locale: locale });
+
+    return (
+        <html lang={locale}>
+        <body>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+            {children}
+        </NextIntlClientProvider>
+        </body>
+        </html>
+    );
 }

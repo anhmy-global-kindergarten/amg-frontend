@@ -1,7 +1,7 @@
 // /hooks/usePostComments.ts
 /* eslint-disable */
 import { useEffect, useState, useCallback } from "react";
-import { Comment, CreateCommentPayload } from "@/app/utils/comment";
+import { Comment, CreateCommentPayload } from "@/utils/comment";
 
 export function usePostComments(postId: string | undefined) {
     const [comments, setComments] = useState<Comment[]>([]);

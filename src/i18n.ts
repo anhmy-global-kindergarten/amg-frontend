@@ -1,14 +1,15 @@
-/* eslint-disable */
-import {getRequestConfig} from 'next-intl/server';
-export const locales = ['en', 'vi'];
-export default getRequestConfig(async (params: { locale?: string }) => {
-    if (!locales.includes(params as any)) {
-        // Bạn có thể xử lý lỗi ở đây, ví dụ redirect về ngôn ngữ mặc định
-        // Hoặc đơn giản là để Next.js hiển thị trang 404
+import {getRequestConfig} from "next-intl/server";
+import {locales} from "@/config";
+import {notFound} from "next/navigation";
+
+export default getRequestConfig(async ({locale}) => {
+    if (!locales.includes(locale as any)) {
+        console.log(`Locale ${locale} is not supported.`);
+        notFound();
     }
 
     return {
-        locale: params.locale || 'vi',
-        messages: (await import(`./messages/${params.locale}.json`)).default
-    };
-});
+        locale: locale as string,
+        messages: (await import(`./messages/${locale}.json`)).default
+    }
+})

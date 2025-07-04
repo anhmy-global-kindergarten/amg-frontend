@@ -5,7 +5,7 @@
 import { useState } from "react";
 import { Menu } from "@headlessui/react";
 import { MoreVertical, Send, X } from "lucide-react";
-import { Comment } from "@/app/utils/comment"; // Đảm bảo đường dẫn đúng
+import { Comment } from "@/utils/comment"; // Đảm bảo đường dẫn đúng
 
 interface CommentItemProps {
     comment: Comment;

@@ -1,0 +1,15 @@
+{
+  "Hero": {
+    "title": "Logout",
+    "login": "Login",
+    "create-post": "Create Post",
+    "home": "Home",
+    "introduce": "Introduce",
+    "story": "Story",
+    "msg-value": "Message and core values",
+    "method": "Educational method",
+    "facilities": "Facilities",
+    "rules": "Safety rules of AMG",
+    "classroom-system": "Classroom system"
+  }
+}

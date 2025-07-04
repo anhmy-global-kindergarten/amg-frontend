@@ -1,16 +1,19 @@
 import createMiddleware from 'next-intl/middleware';
+import {locales} from '@/config';
+import { NextRequest } from 'next/server';
 
-export default createMiddleware({
-    // Một danh sách tất cả các ngôn ngữ được hỗ trợ bởi trang web của bạn
-    locales: ['en', 'vi'],
+export default function middleware(request: NextRequest) {
+    // DÒNG DEBUG: In ra đường dẫn mỗi khi middleware chạy
+    console.log('Middleware is running for path src:', request.nextUrl.pathname);
 
-    // Ngôn ngữ mặc định sẽ được sử dụng khi không có ngôn ngữ nào khớp
-    // ví dụ: khi người dùng truy cập `/`
-    defaultLocale: 'vi'
-});
+    const handleI18nRouting = createMiddleware({
+        locales: locales,
+        defaultLocale: 'vi'
+    });
+
+    return handleI18nRouting(request);
+}
 
 export const config = {
-    // Chỉ chạy middleware trên các đường dẫn cần dịch
-    // Bỏ qua các đường dẫn không cần thiết như /api, /_next/static, ...
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)']
+    matcher: ["/", "/(vi|en)/:path*"],
 };

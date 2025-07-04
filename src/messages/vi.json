@@ -1,15 +1,5 @@
 {
-  "HomePage": {
-    "logout": "Đăng xuất",
-    "login": "Đăng nhập",
-    "create-post": "Tạo bài đăng",
-    "home": "Trang chủ",
-    "introduce": "Giới thiệu",
-    "story": "Câu chuyện",
-    "msg-value": "Thông điệp và giá trị cốt lõi",
-    "method": "Phương pháp giáo dục",
-    "facilities": "Cơ sở vật chất",
-    "rules": "Nội quy An toàn trường học AMG",
-    "classroom-system": "Hệ thống lớp học"
+  "Hero": {
+    "title": "Hello"
   }
-},
+}
