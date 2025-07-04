@@ -2,82 +2,13 @@
 /* eslint-disable */
 import {useEffect, useRef, useState} from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
 import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid';
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
 import {useAuth} from "@/hooks/useAuth";
 import React from 'react';
-import {router} from "next/client";
+import { useTranslations} from 'next-intl';
+import {Link} from '@/navigation';
 
-const menuItems = [
-    {
-        title: 'Trang chủ',
-        href: '/',
-    },
-    {
-        title: 'Giới thiệu',
-        submenu: [
-            { title: 'Câu chuyện', href: '/story' },
-            { title: 'Thông điệp và giá trị cốt lõi', href: '/value' },
-            { title: 'Phương pháp giáo dục', href: '/method' },
-            { title: 'Cơ sở vật chất', href: '/facilities' },
-            { title: 'Nội quy An toàn trường học AMG', href: '/rules' },
-        ],
-    },
-    {
-        title: 'Hệ thống lớp học',
-        submenu: [
-            { title: 'Blueberry', href: '/schedule/blueberry' },
-            { title: 'Cherry', href: '/schedule/cherry' },
-            { title: 'Lemon', href: '/schedule/lemon' },
-            { title: 'Mango', href: '/schedule/mango' },
-            { title: 'International', href: '/schedule/international' },
-        ],
-    },
-    {
-        title: 'Tin tức sự kiện',
-        submenu: [
-            { title: 'Tiết học của con', href: '/artical-lessons' },
-            { title: 'Sự kiện AMG', href: '/events' },
-            { title: 'Tuyển dụng', href: '/recruitments' },
-            {
-                title: 'Privacy policy',
-                submenu: [
-                    { title: 'Privacy policy 1', href: '/privacy/1' },
-                    { title: 'Privacy policy 2', href: '/privacy/2' },
-                    { title: 'AMG Management - Privacy policy', href: '/privacy/all' },
-                ],
-            },
-        ],
-    },
-    {
-        title: 'Thư viện AMG',
-        submenu: [
-            { title: 'Bé khéo tay', href: '/handy-baby' },
-            { title: 'Cẩm nang chăm trẻ', href: '/handbooks' },
-            { title: 'Học online cùng AMG', href: '/learn-online' },
-        ],
-    },
-    {
-        title: 'Tuyển sinh',
-        submenu: [
-            { title: 'Thông tin tuyển sinh', href: '/admissions' },
-            {
-                title: 'Quy định tài chính',
-                submenu: [
-                    { title: 'Quy định tài chính \nAMG Kindergarten', href: '/financial-regulations' },
-                    { title: 'Biểu phí AMG cơ sở \nHàm Nghi', href: '/financial-regulations/ham-nghi' },
-                    { title: 'Biểu phí AMG cơ sở \nDuy Tân', href: '/financial-regulations/duy-tan' },
-                    { title: 'Biểu phí AMG cơ sở \nEcopark', href: '/financial-regulations/ecopark' },
-                ],
-            },
-        ],
-    },
-    {
-        title: 'Liên hệ',
-        href: '/contact',
-    }
-];
 
 type HeaderMenuProps = {
     isAuthenticated: boolean;
@@ -86,6 +17,10 @@ type HeaderMenuProps = {
 type SubmenuPosition = 'left' | 'right';
 
 export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
+
+    const t = useTranslations('LandingPage');
+    const tNav = useTranslations('Navigation');
+
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -122,7 +57,6 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     const handleOpen = (index: number) => {
         setOpenIndex(openIndex === index ? null : index);
     };
-
     const { name: userName, role: userRole } = useAuth();
     const AuthButtons = ({ isMobile = false }) => (
         <div className={isMobile ? "flex flex-col gap-2" : "flex items-center gap-4"}>
@@ -130,7 +64,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
             {(userRole === 'admin' || userRole === 'teacher') && (
                 <>
                     <Link href="/post/create" className="font-mali-bold px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
-                        Tạo bài viết
+                        {t('btnCreatePost')}
                     </Link>
                     <Link href="/admin-dashboard" className="font-mali-bold px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
                         Dashboard
@@ -141,7 +75,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                 onClick={() => handleLogout()}
                 className="font-mali-bold w-full px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 font-semibold"
             >
-                Đăng xuất
+                {t('btnLogout')}
             </button>
         </div>
     );
@@ -153,7 +87,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
             className="font-mali-bold block px-3 py-2 bg-[#FFC107] text-white rounded hover:bg-[#e5a906] font-semibold text-center"
             onClick={isMobile ? handleToggleMenu : undefined}
         >
-            Đăng nhập
+            {t('btnLogin')}
         </Link>
     );
 
@@ -176,6 +110,77 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
             }
         }
     };
+
+
+    const menuItems = [
+        {
+            title: tNav('home'),
+            href: '/',
+        },
+        {
+            title: tNav('about'),
+            submenu: [
+                { title: tNav('story'), href: '/story' },
+                { title: tNav('values'), href: '/value' },
+                { title: tNav('method'), href: '/method' },
+                { title: tNav('facilities'), href: '/facilities' },
+                { title: tNav('rules'), href: '/rules' },
+            ],
+        },
+        {
+            title: tNav('classes'),
+            submenu: [
+                { title: tNav('blueberry'), href: '/schedule/blueberry' },
+                { title: tNav('cherry'), href: '/schedule/cherry' },
+                { title: tNav('lemon'), href: '/schedule/lemon' },
+                { title: tNav('mango'), href: '/schedule/mango' },
+                { title: tNav('international'), href: '/schedule/international' },
+            ],
+        },
+        {
+            title: tNav('news'),
+            submenu: [
+                { title: tNav('lessons'), href: '/artical-lessons' },
+                { title: tNav('events'), href: '/events' },
+                { title: tNav('recruitment'), href: '/recruitments' },
+                {
+                    title: tNav('privacy'),
+                    submenu: [
+                        { title: tNav('privacy1'), href: '/privacy/1' },
+                        { title: tNav('privacy2'), href: '/privacy/2' },
+                        { title: tNav('privacy_all'), href: '/privacy/all' },
+                    ],
+                },
+            ],
+        },
+        {
+            title: tNav('library'),
+            submenu: [
+                { title: tNav('handy_baby'), href: '/handy-baby' },
+                { title: tNav('handbooks'), href: '/handbooks' },
+                { title: tNav('learn_online'), href: '/learn-online' },
+            ],
+        },
+        {
+            title: tNav('admissions'),
+            submenu: [
+                { title: tNav('admissions_info'), href: '/admissions' },
+                {
+                    title: tNav('financial'),
+                    submenu: [
+                        { title: tNav('financial_main'), href: '/financial-regulations' },
+                        { title: tNav('financial_ham_nghi'), href: '/financial-regulations/ham-nghi' },
+                        { title: tNav('financial_duy_tan'), href: '/financial-regulations/duy-tan' },
+                        { title: tNav('financial_ecopark'), href: '/financial-regulations/ecopark' },
+                    ],
+                },
+            ],
+        },
+        {
+            title: tNav('contact'),
+            href: '/contact',
+        }
+    ];
 
     return (
         <div className="relative z-50">
@@ -285,7 +290,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                         })}
                                         <div className="mt-4 pt-4 border-t border-gray-300 flex flex-col gap-2">
                                             {status === 'loading' ? (
-                                                <div className="text-center text-sm text-gray-500">Đang tải...</div>
+                                                <div className="text-center text-sm text-gray-500">{t('txtLoading')}</div>
                                             ) : isAuthenticated ? (
                                                 <AuthButtons isMobile={true}/>
                                             ) : (
@@ -300,7 +305,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                 </>
             ) : (
                 <nav
-                    className="absolute top-10 left-1/2 -translate-x-100 flex justify-between w-[60%] gap-2 px-4 py-2 text-sm font-semibold whitespace-nowrap">
+                    className="absolute top-10 left-1/2 -translate-x-[50%] flex justify-between w-[60%] gap-2 px-4 py-2 text-sm font-semibold whitespace-nowrap">
                     {menuItems.map((item, index) => {
                         const hasSubmenu = Array.isArray(item.submenu);
                         return (

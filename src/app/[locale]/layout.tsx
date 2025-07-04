@@ -3,6 +3,9 @@ import {Metadata} from "next";
 import {getMessages} from "next-intl/server";
 import {locales} from "@/config";
 import {notFound} from "next/navigation";
+import "./globals.css";
+import Providers from "@/app/[locale]/providers";
+import {Toaster} from "sonner";
 
 type Props = {
     children: React.ReactNode;
@@ -19,14 +22,22 @@ export default async function LocaleLayout({ children, params: { locale }} : Pro
         notFound();
     }
 
-    // 2. Lấy messages và TRUYỀN LOCALE VÀO
-    const messages = await getMessages({ locale: locale });
+    let messages;
+    try {
+        messages = await getMessages({ locale: locale });
+    } catch (error) {
+        console.error("LỖI KHI LẤY MESSAGES TRONG LAYOUT:", error);
+        messages = {};
+    }
 
     return (
         <html lang={locale}>
         <body>
         <NextIntlClientProvider locale={locale} messages={messages}>
-            {children}
+            <Providers>
+                <Toaster position="top-right" richColors />
+                {children}
+            </Providers>
         </NextIntlClientProvider>
         </body>
         </html>

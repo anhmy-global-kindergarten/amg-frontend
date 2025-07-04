@@ -3,9 +3,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
+import {usePostsByCategory} from "@/hooks/usePostsByCategory";
 import {format} from "date-fns";
-import LineClampContent from "@/app/utils/lineClamp";
+import LineClampContent from "@/utils/lineClamp";
 
 // const articals = [
 //     {

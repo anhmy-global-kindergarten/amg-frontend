@@ -18,9 +18,9 @@ const nextConfig = {
             },
         ],
     },
-    experimental: {
-        allowedDevOrigins: ["*.ngrok-free.app"],
-    },
+    // experimental: {
+    //     allowedDevOrigins: ["*.ngrok-free.app"],
+    // },
 
     async rewrites() {
         return [
