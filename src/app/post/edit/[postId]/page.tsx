@@ -25,14 +25,12 @@ const EditPostPage = () => {
     const router = useRouter();
     const postId = params?.postId as string;
 
-    // ✅ 1. Lấy dữ liệu bài viết hiện tại
     const { post, loading, error: fetchError } = usePostById(postId);
 
-    // ✅ 2. State giống hệt trang Create
     const [title, setTitle] = useState("");
     const [category, setCategory] = useState("");
-    const [selectedImage, setSelectedImage] = useState<File | null>(null); // Ảnh minh họa MỚI
-    const [imagePreview, setImagePreview] = useState<string | null>(null); // Preview ảnh minh họa
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [isConfirmOpen, setIsConfirmOpen] = useState(false);
     const [error, setError] = useState("");
     const [originalFileName, setOriginalFileName] = useState<string>("");
@@ -121,28 +119,6 @@ const EditPostPage = () => {
             throw error;
         }
     }
-    const extractImageInfo = (): { url: string; style: string }[] => {
-        if (!editor) return [];
-
-        const imageInfo: { url: string; style: string }[] = [];
-        const { state } = editor;
-        const { doc } = state;
-
-        doc.descendants((node) => {
-            if (node.type.name === 'image') {
-                const { src, style } = node.attrs;
-                if (src) {
-                    imageInfo.push({
-                        url: src,
-                        style: style || '',
-                    });
-                }
-            }
-        });
-
-        return imageInfo;
-    };
-
     const handleValidateAndConfirm = () => {
         setError("");
         if (!category) { setError("Vui lòng chọn danh mục."); return; }
@@ -158,8 +134,6 @@ const EditPostPage = () => {
         setIsConfirmOpen(false);
         setError("");
 
-        const imagesToUpdate = extractImageInfo();
-
         const postFormData = new FormData();
         postFormData.append("title", title);
         postFormData.append("content", editor?.getHTML() || "");
@@ -171,39 +145,20 @@ const EditPostPage = () => {
         }
 
         try {
-            const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(imagesToUpdate),
-            });
-
-            const updatePostPromise = fetch(`/api-v1/posts/update-post/${postId}`, {
+            const updatePostResponse = await fetch(`/api-v1/posts/update-post/${postId}`, {
                 method: "POST",
                 body: postFormData,
             });
 
-            const [updateImagesResponse, updatePostResponse] = await Promise.all([
-                updateImagesPromise,
-                updatePostPromise
-            ]);
-
-            if (!updateImagesResponse.ok) {
-                console.error("Lỗi cập nhật trạng thái ảnh!");
-            }
-
             if (!updatePostResponse.ok) {
                 let errorMessage = 'Lỗi không xác định khi cập nhật bài viết.';
-                const contentType = updatePostResponse.headers.get('content-type');
-
-                if (contentType && contentType.includes('application/json')) {
+                try {
                     const errorData = await updatePostResponse.json();
                     errorMessage = errorData.error || JSON.stringify(errorData);
-                } else {
+                } catch {
                     errorMessage = await updatePostResponse.text();
                 }
-
                 alert(`Lỗi cập nhật bài viết: ${errorMessage}`);
-                console.error("Update Post Error:", errorMessage);
                 return;
             }
 

@@ -151,36 +151,11 @@ const CreatePostPage = () => {
     };
     const { name, role } = useAuth();
 
-    const extractImageInfo = (): { url: string; style: string }[] => {
-        if (!editor) return [];
-
-        const imageInfo: { url: string; style: string }[] = [];
-        const { state } = editor;
-        const { doc } = state;
-
-        doc.descendants((node) => {
-            if (node.type.name === 'image') {
-                const { src, style } = node.attrs;
-                if (src) {
-                    imageInfo.push({
-                        url: src,
-                        style: style || '',
-                    });
-                }
-            }
-        });
-
-        return imageInfo;
-    };
-
     const handlePostSubmit = async () => {
         setIsConfirmOpen(false);
         setError("");
 
-        const imagesToUpdate = extractImageInfo();
-
         const rawContent = editor?.getHTML() || "";
-
 
         const postFormData = new FormData();
         postFormData.append("title", title);
@@ -192,24 +167,10 @@ const CreatePostPage = () => {
         postFormData.append("author", name || "");
 
         try {
-            const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(imagesToUpdate),
-            });
-
-            const createPostPromise = fetch(`/api-v1/posts/create-post`, {
+            const createResponse = await fetch(`/api-v1/posts/create-post`, {
                 method: "POST",
                 body: postFormData,
             });
-
-            const [updateResponse, createResponse] = await Promise.all([updateImagesPromise, createPostPromise]);
-
-            if (!updateResponse.ok) {
-                console.error("Lỗi cập nhật trạng thái ảnh!");
-            }
 
             if (!createResponse.ok) {
                 const error = await createResponse.json();
@@ -217,7 +178,6 @@ const CreatePostPage = () => {
                 return;
             }
 
-            const result = await createResponse.json();
             alert("Bài viết đã được tạo thành công!");
             window.location.href = `/`;
         } catch (error) {

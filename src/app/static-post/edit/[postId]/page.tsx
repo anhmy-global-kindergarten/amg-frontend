@@ -129,28 +129,6 @@ const EditPostPage = () => {
             throw error;
         }
     }
-    const extractImageInfo = (): { url: string; style: string }[] => {
-        if (!editor) return [];
-
-        const imageInfo: { url: string; style: string }[] = [];
-        const { state } = editor;
-        const { doc } = state;
-
-        doc.descendants((node) => {
-            if (node.type.name === 'image') {
-                const { src, style } = node.attrs;
-                if (src) {
-                    imageInfo.push({
-                        url: src,
-                        style: style || '',
-                    });
-                }
-            }
-        });
-
-        return imageInfo;
-    };
-
     const handleValidateAndConfirm = () => {
         setError("");
         if (!editor?.getText().trim() && !editor?.getHTML().includes('<img') && !editor?.getHTML().includes('<iframe')) {
@@ -164,8 +142,6 @@ const EditPostPage = () => {
         setIsConfirmOpen(false);
         setError("");
 
-        const imagesToUpdate = extractImageInfo();
-
         const postFormData = new FormData();
         postFormData.append("title", title);
         postFormData.append("content", editor?.getHTML() || "");
@@ -177,39 +153,20 @@ const EditPostPage = () => {
         }
 
         try {
-            const updateImagesPromise = fetch(`/api-v1/images/update-status`, {
-                method: "POST",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(imagesToUpdate),
-            });
-
-            const updatePostPromise = fetch(`/api-v1/posts/update-post/${postId}`, {
+            const updatePostResponse = await fetch(`/api-v1/posts/update-post/${postId}`, {
                 method: "POST",
                 body: postFormData,
             });
 
-            const [updateImagesResponse, updatePostResponse] = await Promise.all([
-                updateImagesPromise,
-                updatePostPromise
-            ]);
-
-            if (!updateImagesResponse.ok) {
-                console.error("Lỗi cập nhật trạng thái ảnh!");
-            }
-
             if (!updatePostResponse.ok) {
                 let errorMessage = 'Lỗi không xác định khi cập nhật bài viết.';
-                const contentType = updatePostResponse.headers.get('content-type');
-
-                if (contentType && contentType.includes('application/json')) {
+                try {
                     const errorData = await updatePostResponse.json();
                     errorMessage = errorData.error || JSON.stringify(errorData);
-                } else {
+                } catch {
                     errorMessage = await updatePostResponse.text();
                 }
-
                 alert(`Lỗi cập nhật bài viết: ${errorMessage}`);
-                console.error("Update Post Error:", errorMessage);
                 return;
             }
 
@@ -223,7 +180,6 @@ const EditPostPage = () => {
         }
     };
 
-    // Danh sách danh mục
     const categories = [
         { value: "", label: "Chọn danh mục" },
         { value: "artical-lessons", label: "Tiết học của con" },
