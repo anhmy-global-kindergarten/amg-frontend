@@ -7,13 +7,13 @@ import React, {use, useEffect} from "react";
 import { useState } from "react";
 import {MoreVertical} from "lucide-react";
 import {Menu} from "@headlessui/react";
-import {usePostById} from "@/app/hooks/usePostById";
-import {useAuth} from "@/app/hooks/useAuth";
-import formatDateDisplay from "@/app/utils/formatDate";
-import RenderHTMLContent from "@/app/utils/getContent";
-import {deletePost} from "@/app/utils/deletePost";
-import {usePostComments} from "@/app/hooks/useComment";
-import {CreateCommentPayload} from "@/app/utils/comment";
+import {usePostById} from "@/hooks/usePostById";
+import {useAuth} from "@/hooks/useAuth";
+import formatDateDisplay from "@/utils/formatDate";
+import RenderHTMLContent from "@/utils/getContent";
+import {deletePost} from "@/utils/deletePost";
+import {usePostComments} from "@/hooks/useComment";
+import {CreateCommentPayload} from "@/utils/comment";
 import CommentItem from "@/components/CommentItem";
 
 export default function HandbookDetail() {

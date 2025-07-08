@@ -14,6 +14,7 @@ import {useLocale, useTranslations} from "next-intl";
 import {Link, usePathname, useRouter} from "@/navigation";
 import React from "react";
 
+// --- GIAO DIỆN NỘI DUNG (GIỮ NGUYÊN) ---
 interface PageContent {
     topNavPhone: string;
     topNavEmail: string;
@@ -95,56 +96,55 @@ interface PageContent {
     footerSupportLinks: { text: string; href: string }[];
 }
 
-const initialPageContent: Partial<PageContent> = {
-    topNavPhone: "0972556001",
-    topNavEmail: "anhmykindergarten@gmail.com",
-    headerLogoSrc: "/banner/logo.png",
-    bannerMobileKidsImageSrc: "/banner/banner_kids_1.png",
-    bannerMobileRegisterButtonImageSrc: "/banner/button_register.png",
-    bannerMobilePlayIconSrc: "/banner/icon_play.png",
-    bannerDesktopKidsImageSrc: "/banner/banner_kids_1.png",
-    bannerDesktopRegisterButtonImageSrc: "/banner/button_register.png",
-    bannerDesktopPlayIconSrc: "/banner/icon_play.png",
-    galleryImage1Src: "/gallery/photo1.png",
-    galleryImage2Src: "/gallery/photo2.png",
-    galleryImage3Src: "/gallery/photo3.png",
-    galleryImage4Src: "/gallery/photo4.png",
-    galleryImage5Src: "/gallery/photo5.png",
-    galleryImage6Src: "/gallery/photo6.png",
-    galleryImage7Src: "/gallery/photo7.png",
-    galleryImage8Src: "/gallery/photo8.png",
-    aboutAmgIcon1Src: "/icons/icon_about1.png",
-    aboutAmgIcon2Src: "/icons/icon_about2.png",
-    aboutAmgIcon3Src: "/icons/icon_about3.png",
-    aboutAmgIcon4Src: "/icons/icon_about4.png",
-    classGalleryItems: [
-        { name: 'BLUEBERRY', imageSrc: '/class/blueberry.png' },
-        { name: 'CHERRY', imageSrc: '/class/cherry.png' },
-        { name: 'LEMON', imageSrc: '/class/lemon.png' },
-        { name: 'MANGO', imageSrc: '/class/mango.png' },
-        { name: 'INTERNATIONAL', imageSrc: '/class/international.png' },
-    ],
-    mealImage1Src: "/meal/meal1.png",
-    mealImage2Src: "/meal/meal2.png",
-    mealImage3Src: "/meal/meal3.png",
-    mealImage4Src: "/meal/meal4.png",
-    mealImage5Src: "/meal/meal5.png",
-    mealImage6Src: "/meal/meal6.png",
-    mealImage7Src: "/meal/meal7.png",
-    mealImage8Src: "/meal/meal8.png",
-    reasonsFeature1IconSrc: "/icons/icon_environment.png",
-    reasonsFeature2IconSrc: "/icons/icon_sport.png",
-    reasonsFeature3IconSrc: "/icons/icon_culture.png",
-    reasonsFeature4IconSrc: "/icons/icon_english.png",
-    footerFanpageImageSrc: "https://img.youtube.com/vi/wR0SAVlV8xM/hqdefault.jpg",
-    footerYoutubeImageSrc: "https://img.youtube.com/vi/LKDxvXi21GI/hqdefault.jpg",
-};
-
+// --- HOOK TÁCH LOGIC DỊCH THUẬT, TẠO RA NỘI DUNG TĨNH MẶC ĐỊNH ---
 const useTranslatedContent = () => {
     const t = useTranslations('LandingPage');
     const tNav = useTranslations('Navigation');
 
+    // Dùng useMemo để chỉ tính toán lại khi ngôn ngữ thay đổi
     const staticContent = useMemo(() => ({
+        topNavPhone: "0972556001",
+        topNavEmail: "anhmykindergarten@gmail.com",
+        headerLogoSrc: "/banner/logo.png",
+        bannerMobileKidsImageSrc: "/banner/banner_kids_1.png",
+        bannerMobileRegisterButtonImageSrc: "/banner/button_register.png",
+        bannerMobilePlayIconSrc: "/banner/icon_play.png",
+        bannerDesktopKidsImageSrc: "/banner/banner_kids_1.png",
+        bannerDesktopRegisterButtonImageSrc: "/banner/button_register.png",
+        bannerDesktopPlayIconSrc: "/banner/icon_play.png",
+        galleryImage1Src: "/gallery/photo1.png",
+        galleryImage2Src: "/gallery/photo2.png",
+        galleryImage3Src: "/gallery/photo3.png",
+        galleryImage4Src: "/gallery/photo4.png",
+        galleryImage5Src: "/gallery/photo5.png",
+        galleryImage6Src: "/gallery/photo6.png",
+        galleryImage7Src: "/gallery/photo7.png",
+        galleryImage8Src: "/gallery/photo8.png",
+        aboutAmgIcon1Src: "/icons/icon_about1.png",
+        aboutAmgIcon2Src: "/icons/icon_about2.png",
+        aboutAmgIcon3Src: "/icons/icon_about3.png",
+        aboutAmgIcon4Src: "/icons/icon_about4.png",
+        classGalleryItems: [
+            { name: tNav('blueberry'), imageSrc: '/class/blueberry.png' },
+            { name: tNav('cherry'), imageSrc: '/class/cherry.png' },
+            { name: tNav('lemon'), imageSrc: '/class/lemon.png' },
+            { name: tNav('mango'), imageSrc: '/class/mango.png' },
+            { name: tNav('international'), imageSrc: '/class/international.png' },
+        ],
+        mealImage1Src: "/meal/meal1.png",
+        mealImage2Src: "/meal/meal2.png",
+        mealImage3Src: "/meal/meal3.png",
+        mealImage4Src: "/meal/meal4.png",
+        mealImage5Src: "/meal/meal5.png",
+        mealImage6Src: "/meal/meal6.png",
+        mealImage7Src: "/meal/meal7.png",
+        mealImage8Src: "/meal/meal8.png",
+        reasonsFeature1IconSrc: "/icons/icon_environment.png",
+        reasonsFeature2IconSrc: "/icons/icon_sport.png",
+        reasonsFeature3IconSrc: "/icons/icon_culture.png",
+        reasonsFeature4IconSrc: "/icons/icon_english.png",
+        footerFanpageImageSrc: "https://img.youtube.com/vi/wR0SAVlV8xM/hqdefault.jpg",
+        footerYoutubeImageSrc: "https://img.youtube.com/vi/LKDxvXi21GI/hqdefault.jpg",
         bannerMobileTitle: t.rich('txtBannerTitle', { br: () => <br /> }),
         bannerMobileSubtitle: t('txtBannerSubtitle'),
         bannerMobileDescription: t.rich('txtBannerMobileDescription', { br: () => <br /> }),
@@ -204,6 +204,7 @@ const useTranslatedContent = () => {
     return { staticContent };
 };
 
+// --- CÁC HÀM API (GIỮ NGUYÊN) ---
 async function fetchContentFromAPI(): Promise<Partial<PageContent>> {
     try {
         const response = await fetch(`/api-v1/landing-page/get-content`);
@@ -215,7 +216,6 @@ async function fetchContentFromAPI(): Promise<Partial<PageContent>> {
         return {};
     }
 }
-
 async function saveContentToAPI(content: Partial<PageContent>): Promise<{ success: boolean; message: string }> {
     try {
         const response = await fetch(`/api-v1/landing-page/update-content`, {
@@ -230,7 +230,6 @@ async function saveContentToAPI(content: Partial<PageContent>): Promise<{ succes
         return { success: false, message: "Có lỗi xảy ra khi lưu dữ liệu." };
     }
 }
-
 async function updateImagesStatusAPI(urls: string[]): Promise<boolean> {
     if (urls.length === 0) return true;
     try {
@@ -247,7 +246,6 @@ async function updateImagesStatusAPI(urls: string[]): Promise<boolean> {
         return false;
     }
 }
-
 function extractImageUrls(content: Partial<PageContent>): string[] {
     const urls = new Set<string>();
     const urlRegex = /\/uploads\/[a-f0-9-]+\.(png|jpg|jpeg|gif|webp)/gi;
@@ -259,7 +257,9 @@ function extractImageUrls(content: Partial<PageContent>): string[] {
     return Array.from(urls);
 }
 
+// --- COMPONENT CHÍNH ĐÃ ĐƯỢC CẤU TRÚC LẠI ---
 export default function LandingPage() {
+    // --- PHẦN 1: GỌI TẤT CẢ HOOKS Ở ĐẦU TIÊN ---
     const t = useTranslations('LandingPage');
     const { staticContent } = useTranslatedContent();
     const router = useRouter();
@@ -276,18 +276,13 @@ export default function LandingPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
 
+    // State chỉ lưu dữ liệu động (user overrides) từ API
     const [dynamicContent, setDynamicContent] = useState<Partial<PageContent>>({});
+    // State lưu lại trạng thái gốc để so sánh
     const [originalContent, setOriginalContent] = useState<Partial<PageContent>>({});
 
     const [isEditMode, setIsEditMode] = useState(false);
     const [currentlyEditingId, setCurrentlyEditingId] = useState<string | null>(null);
-
-    const handleLanguageChange = (nextLocale: 'vi' | 'en') => {
-        if (isPending || locale === nextLocale) return;
-        startTransition(() => {
-            router.replace(pathname, {locale: nextLocale});
-        });
-    };
 
     const newTestimonialTemplate = useMemo(() => ({
         content: t('txtNewTestimonialContent'),
@@ -305,6 +300,19 @@ export default function LandingPage() {
         altText: t('txtNewClassBoxAlt')
     }), [t]);
 
+    const features = useMemo(() => [
+        { idBase: "reasonsFeature1", titleKey: "reasonsFeature1Title", descKey: "reasonsFeature1Desc", iconKey: "reasonsFeature1IconSrc", ttColor: "#7ED3F7" },
+        { idBase: "reasonsFeature2", titleKey: "reasonsFeature2Title", descKey: "reasonsFeature2Desc", iconKey: "reasonsFeature2IconSrc", ttColor: "#BFD730" },
+        { idBase: "reasonsFeature3", titleKey: "reasonsFeature3Title", descKey: "reasonsFeature3Desc", iconKey: "reasonsFeature3IconSrc", ttColor: "#FFD668" },
+        { idBase: "reasonsFeature4", titleKey: "reasonsFeature4Title", descKey: "reasonsFeature4Desc", iconKey: "reasonsFeature4IconSrc", ttColor: "#F6ADCD" },
+    ], []);
+
+    const listContainerRef = useRef<HTMLUListElement>(null);
+    const verticalBarRef = useRef<HTMLDivElement>(null);
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadingImageId, setUploadingImageId] = useState<string | null>(null);
+
+    // useEffect chỉ tải dữ liệu động MỘT LẦN
     useEffect(() => {
         const loadContent = async () => {
             setIsLoading(true);
@@ -316,47 +324,15 @@ export default function LandingPage() {
         loadContent();
     }, []);
 
-    const handleStartEditing = (id: string) => {
-        if (currentlyEditingId === null) {
-            setCurrentlyEditingId(id);
-        } else {
-            alert(t('alertPleaseSaveFirst'));
-        }
-    };
-
-    const handleStopEditing = () => {
-        setCurrentlyEditingId(null);
-    };
-
-    const hasUnsavedChanges = JSON.stringify(dynamicContent) !== JSON.stringify(originalContent);
-
-    const features = useMemo(() => [
-        { idBase: "reasonsFeature1", titleKey: "reasonsFeature1Title", descKey: "reasonsFeature1Desc", iconKey: "reasonsFeature1IconSrc", ttColor: "#7ED3F7" },
-        { idBase: "reasonsFeature2", titleKey: "reasonsFeature2Title", descKey: "reasonsFeature2Desc", iconKey: "reasonsFeature2IconSrc", ttColor: "#BFD730" },
-        { idBase: "reasonsFeature3", titleKey: "reasonsFeature3Title", descKey: "reasonsFeature3Desc", iconKey: "reasonsFeature3IconSrc", ttColor: "#FFD668" },
-        { idBase: "reasonsFeature4", titleKey: "reasonsFeature4Title", descKey: "reasonsFeature4Desc", iconKey: "reasonsFeature4IconSrc", ttColor: "#F6ADCD" },
-    ], []);
-
-    const listContainerRef = useRef<HTMLUListElement>(null);
-    const verticalBarRef = useRef<HTMLDivElement>(null);
-    const ListItem = ({ children }: { children: React.ReactNode }) => (
-        <li className="relative pl-16">
-            <div className="absolute top-1/2 -translate-y-1/2 left-2 w-8 h-0.5 bg-[#FFD06E]"></div>
-            <div
-                className="absolute top-1/2 -translate-y-1/2 left-8 -translate-x-1/2 w-5 h-5 bg-[#FFD06E] rounded-full"></div>
-            {children}
-        </li>
-    );
-
+    // Các useEffect khác
     useEffect(() => {
         const listContainer = listContainerRef.current;
         const verticalBar = verticalBarRef.current;
         if (!listContainer || !verticalBar) return;
         const calculateBarPosition = () => {
-            const listItems = listContainer.children;
-            if (listItems.length < 1) return;
-            const firstItem = listItems[0] as HTMLElement;
-            const lastItem = listItems[listItems.length - 1] as HTMLElement;
+            if (listContainer.children.length < 1) return;
+            const firstItem = listContainer.children[0] as HTMLElement;
+            const lastItem = listContainer.children[listContainer.children.length - 1] as HTMLElement;
             const startY = firstItem.offsetTop + (firstItem.offsetHeight / 2);
             const endY = lastItem.offsetTop + (lastItem.offsetHeight / 2);
             verticalBar.style.top = `${startY}px`;
@@ -366,150 +342,17 @@ export default function LandingPage() {
         window.addEventListener('resize', calculateBarPosition);
         return () => window.removeEventListener('resize', calculateBarPosition);
     }, [dynamicContent]);
-
-    const [isUploading, setIsUploading] = useState(false);
-    const [uploadingImageId, setUploadingImageId] = useState<string | null>(null);
-
-    const handleImageUpload = async (id: string, file: File) => {
-        setIsUploading(true);
-        setUploadingImageId(id);
-        const formData = new FormData();
-        formData.append('image', file);
-        try {
-            const response = await fetch(`/api-v1/images/upload-image`, { method: 'POST', body: formData });
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Upload thất bại');
-            }
-            const result = await response.json();
-            const newUrl = result.url;
-            if (newUrl) {
-                handleContentUpdate(id, newUrl);
-            }
-        } catch (error) {
-            alert(`${t('alertUploadFailed')} ${error instanceof Error ? error.message : String(error)}`);
-        } finally {
-            setIsUploading(false);
-            setUploadingImageId(null);
-        }
-    };
-
-    const handleToggleEditMode = () => {
-        if (isEditMode) {
-            if (hasUnsavedChanges) {
-                if (window.confirm(t('alertUnsavedChanges'))) {
-                    setDynamicContent(originalContent);
-                    setIsEditMode(false);
-                }
-            } else {
-                setIsEditMode(false);
-            }
-        } else {
-            setOriginalContent(dynamicContent);
-            setIsEditMode(true);
-        }
-    };
-
-    const handleSaveChanges = async () => {
-        setIsSaving(true);
-        const usedImageUrls = extractImageUrls(dynamicContent);
-        const statusUpdateSuccess = await updateImagesStatusAPI(usedImageUrls);
-        if (!statusUpdateSuccess) {
-            alert(t('alertUpdateImageStatusFailed'));
-            setIsSaving(false);
-            return;
-        }
-        const result = await saveContentToAPI(dynamicContent);
-        setIsSaving(false);
-        alert(result.success ? t('alertSaveSuccess') : t('alertSaveError'));
-        if (result.success) {
-            setOriginalContent(dynamicContent);
-            setIsEditMode(false);
-        }
-    };
-
-    const handleResetToDefault = async () => {
-        if (window.confirm(t('alertResetConfirm'))) {
-            setIsSaving(true);
-            const result = await saveContentToAPI({});
-            setIsSaving(false);
-            alert(result.success ? t('alertSaveSuccess') : t('alertSaveError'));
-            if (result.success) {
-                setDynamicContent({});
-                setOriginalContent({});
-                setIsEditMode(false);
-            }
-        }
-    };
-
-    const handleContentUpdate = (id: string, value: string) => {
-        setDynamicContent(prev => {
-            if (!prev) return null;
-            const newContent = JSON.parse(JSON.stringify(prev));
-            if (id.startsWith('testimonial_')) {
-                const [, indexStr, key] = id.split('_');
-                const index = parseInt(indexStr, 10);
-                if (isNaN(index)) return newContent;
-                (newContent.testimonials[index] as any)[key] = value;
-            } else if (id.startsWith('classGalleryItem_')) {
-                const [, indexStr, key] = id.split('_');
-                const index = parseInt(indexStr, 10);
-                if (isNaN(index)) return newContent;
-                (newContent.classGalleryItems[index] as any)[key] = value;
-            } else if (id.startsWith('classGalleryBox_')) {
-                const [, indexStr, key] = id.split('_');
-                const index = parseInt(indexStr, 10);
-                if (isNaN(index)) return newContent;
-                (newContent.classGalleryBoxes[index] as any)[key] = value;
-            } else {
-                (newContent as any)[id] = value;
-            }
-            return newContent;
-        });
-        handleStopEditing();
-    };
-
-    const handleAddItem = (arrayKey: keyof PageContent, newItemTemplate: any) => {
-        setDynamicContent(prev => {
-            if (!prev) return null;
-            const currentArray = prev[arrayKey];
-            if (Array.isArray(currentArray)) {
-                return { ...prev, [arrayKey]: [...currentArray, { ...newItemTemplate }] };
-            }
-            return prev;
-        });
-    };
-
-    const handleDeleteItem = (arrayKey: keyof PageContent, indexToDelete: number) => {
-        if (!window.confirm(t('alertDeleteConfirm'))) return;
-        setDynamicContent(prev => {
-            if (!prev) return null;
-            const currentArray = prev[arrayKey];
-            if (Array.isArray(currentArray)) {
-                return { ...prev, [arrayKey]: currentArray.filter((_, index) => index !== indexToDelete) };
-            }
-            return prev;
-        });
-    };
-
-    const openModal = () => setShowModal(true);
-    const closeModal = () => setShowModal(false);
-
     useEffect(() => {
         const handleScroll = () => setShowScrollToTop(window.scrollY > 300);
         window.addEventListener("scroll", handleScroll);
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
-
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth < 1024);
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
-
-    const scrollToTop = () => window.scrollTo({top: 0, behavior: 'smooth'});
-
     useEffect(() => {
         try {
             const storedUser = localStorage.getItem("user");
@@ -518,21 +361,119 @@ export default function LandingPage() {
                 setRole(parsed?.user?.role || parsed?.role || null);
                 setIsAuthenticated(true);
             }
-        } catch (error) {
-            console.error("Lỗi đọc user từ localStorage:", error);
-        }
+        } catch (error) { console.error("Lỗi đọc user từ localStorage:", error); }
     }, []);
 
+
+    // --- PHẦN 2: CÁC HÀM XỬ LÝ SỰ KIỆN ---
+    const handleLanguageChange = (nextLocale: 'vi' | 'en') => {
+        if (isPending || locale === nextLocale) return;
+        startTransition(() => {
+            router.replace(pathname, {locale: nextLocale});
+        });
+    };
+    const handleStartEditing = (id: string) => {
+        if (currentlyEditingId === null) setCurrentlyEditingId(id);
+        else alert(t('alertPleaseSaveFirst'));
+    };
+    const handleStopEditing = () => setCurrentlyEditingId(null);
+    const hasUnsavedChanges = JSON.stringify(dynamicContent) !== JSON.stringify(originalContent);
+
+    const handleImageUpload = async (id: string, file: File) => {
+        setIsUploading(true);
+        setUploadingImageId(id);
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+            const response = await fetch(`/api-v1/images/upload-image`, { method: 'POST', body: formData });
+            if (!response.ok) throw new Error((await response.json()).error || 'Upload failed');
+            const { url: newUrl } = await response.json();
+            if (newUrl) handleContentUpdate(id, newUrl);
+        } catch (error) {
+            alert(`${t('alertUploadFailed')} ${error instanceof Error ? error.message : String(error)}`);
+        } finally {
+            setIsUploading(false);
+            setUploadingImageId(null);
+        }
+    };
+    const handleToggleEditMode = () => {
+        if (isEditMode) {
+            if (hasUnsavedChanges && window.confirm(t('alertUnsavedChanges'))) {
+                setDynamicContent(originalContent);
+            }
+            setIsEditMode(false);
+        } else {
+            setOriginalContent(dynamicContent);
+            setIsEditMode(true);
+        }
+    };
+    const handleSaveChanges = async () => {
+        setIsSaving(true);
+        const usedImageUrls = extractImageUrls(dynamicContent);
+        if (!(await updateImagesStatusAPI(usedImageUrls))) {
+            alert(t('alertUpdateImageStatusFailed'));
+            setIsSaving(false);
+            return;
+        }
+        const { success, message } = await saveContentToAPI(dynamicContent);
+        setIsSaving(false);
+        alert(success ? t('alertSaveSuccess') : message);
+        if (success) {
+            setOriginalContent(dynamicContent);
+            setIsEditMode(false);
+        }
+    };
+    const handleResetToDefault = async () => {
+        if (window.confirm(t('alertResetConfirm'))) {
+            setIsSaving(true);
+            const { success, message } = await saveContentToAPI({});
+            setIsSaving(false);
+            alert(success ? t('alertSaveSuccess') : message);
+            if (success) {
+                setDynamicContent({});
+                setOriginalContent({});
+                setIsEditMode(false);
+            }
+        }
+    };
+    const handleContentUpdate = (id: string, value: string) => {
+        setDynamicContent(prev => ({...prev, [id]: value }));
+        handleStopEditing();
+    };
+    const handleAddItem = (arrayKey: keyof PageContent, newItemTemplate: any) => {
+        setDynamicContent(prev => {
+            const currentArray = (prev[arrayKey] as any[]) || [];
+            return { ...prev, [arrayKey]: [...currentArray, { ...newItemTemplate }] };
+        });
+    };
+    const handleDeleteItem = (arrayKey: keyof PageContent, indexToDelete: number) => {
+        if (!window.confirm(t('alertDeleteConfirm'))) return;
+        setDynamicContent(prev => {
+            const currentArray = (prev[arrayKey] as any[]) || [];
+            return { ...prev, [arrayKey]: currentArray.filter((_, index) => index !== indexToDelete) };
+        });
+    };
+    const openModal = () => setShowModal(true);
+    const closeModal = () => setShowModal(false);
+    const scrollToTop = () => window.scrollTo({top: 0, behavior: 'smooth'});
     const handleLogout = () => {
         localStorage.removeItem("user");
         window.location.href = "/";
     };
 
-    const pageContent = useMemo(() => ({
-        ...staticContent,
-        ...dynamicContent
-    }), [staticContent, dynamicContent]);
+    // --- PHẦN 3: LOGIC RENDER ---
+    // Kết hợp nội dung tĩnh (đã dịch) và nội dung động (từ DB) để hiển thị
+    const pageContent = useMemo(() => {
+        const mergedContent = { ...staticContent };
+        for (const key in dynamicContent) {
+            if (Object.prototype.hasOwnProperty.call(dynamicContent, key)) {
+                (mergedContent as any)[key] = (dynamicContent as any)[key];
+            }
+        }
+        return mergedContent as PageContent;
+    }, [staticContent, dynamicContent]);
 
+    // Đặt Hook return sớm sau TẤT CẢ các hook khác
     if (isLoading || !pageContent) {
         return (
             <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
@@ -540,8 +481,10 @@ export default function LandingPage() {
             </div>
         );
     }
-    const canEdit = isAuthenticated && (role === "admin" || role === "teacher");
 
+    // Các biến thông thường đặt sau hook return sớm
+    const canEdit = isAuthenticated && (role === "admin" || role === "teacher");
+    const ListItem = ({ children }: { children: React.ReactNode }) => (<li className="relative pl-16"><div className="absolute top-1/2 -translate-y-1/2 left-2 w-8 h-0.5 bg-[#FFD06E]"></div><div className="absolute top-1/2 -translate-y-1/2 left-8 -translate-x-1/2 w-5 h-5 bg-[#FFD06E] rounded-full"></div>{children}</li>);
     const galleryImages1 = [ {id: "galleryImage5Src", src: pageContent.galleryImage5Src}, {id: "galleryImage6Src", src: pageContent.galleryImage6Src}, {id: "galleryImage7Src", src: pageContent.galleryImage7Src} ];
     const galleryImages2 = [ {id: "galleryImage1Src", src: pageContent.galleryImage1Src}, {id: "galleryImage8Src", src: pageContent.galleryImage8Src} ];
     const galleryImages3 = [ {id: "galleryImage2Src", src: pageContent.galleryImage2Src}, {id: "galleryImage3Src", src: pageContent.galleryImage3Src}, {id: "galleryImage4Src", src: pageContent.galleryImage4Src} ];
@@ -551,9 +494,6 @@ export default function LandingPage() {
 
     return (
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
-            {/* ... (Your JSX here, it remains the same but now uses translated content) */}
-            {/* The following is the full, unmodified JSX with translations applied */}
-
             {canEdit && (
                 <div className="font-mali-semibold fixed top-20 right-2 z-[99999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
                     <button onClick={handleToggleEditMode} className={`px-3 py-1.5 text-sm rounded ${isEditMode ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white flex items-center gap-1.5`}>
@@ -571,20 +511,18 @@ export default function LandingPage() {
                     )}
                 </div>
             )}
-
             {!isMobile && (
                 <div className="w-full bg-[#FFF6C7] text-[#FFC107] text-sm py-4 px-4 lg:px-8 flex flex-col lg:flex-row justify-between items-center gap-4 ">
                     <div className="flex flex-col sm:flex-row items-center sm:space-x-6 gap-2 sm:gap-0">
                         <div className="flex items-center space-x-2 font-mali-bold ">
                             <Image src="/icons/icon_phone.png" alt={t('altIconPhone')} height={15} width={15}/>
-                            <EditableText id="topNavPhone" initialHtml={pageContent.topNavPhone} onSave={handleContentUpdate} isEditMode={isEditMode} tag="a" className="font-mali-bold hover:underline" style={{color: '#FFC107'}} href={`tel:${pageContent.topNavPhone.replace(/<[^>]*>?/gm, '')}`} isCurrentlyEditing={currentlyEditingId === 'topNavPhone'} onStartEditing={handleStartEditing} onCancelEditing={handleStopEditing}/>
+                            <EditableText id="topNavPhone" initialHtml={pageContent.topNavPhone} onSave={handleContentUpdate} isEditMode={isEditMode} tag="a" className="font-mali-bold hover:underline" style={{color: '#FFC107'}} href={`tel:${(pageContent.topNavPhone || '').replace(/<[^>]*>?/gm, '')}`} isCurrentlyEditing={currentlyEditingId === 'topNavPhone'} onStartEditing={handleStartEditing} onCancelEditing={handleStopEditing}/>
                         </div>
                         <div className="flex items-center space-x-2 font-mali-bold ">
                             <Image src="/icons/icon_email.png" alt={t('altIconEmail')} height={20} width={20}/>
-                            <EditableText id="topNavEmail" initialHtml={pageContent.topNavEmail} onSave={handleContentUpdate} isEditMode={isEditMode} tag="a" className="font-mali-bold hover:underline" style={{color: '#FFC107'}} href={`mailto:${pageContent.topNavEmail.replace(/<[^>]*>?/gm, '')}`} isCurrentlyEditing={currentlyEditingId === 'topNavEmail'} onStartEditing={handleStartEditing} onCancelEditing={handleStopEditing}/>
+                            <EditableText id="topNavEmail" initialHtml={pageContent.topNavEmail} onSave={handleContentUpdate} isEditMode={isEditMode} tag="a" className="font-mali-bold hover:underline" style={{color: '#FFC107'}} href={`mailto:${(pageContent.topNavEmail || '').replace(/<[^>]*>?/gm, '')}`} isCurrentlyEditing={currentlyEditingId === 'topNavEmail'} onStartEditing={handleStartEditing} onCancelEditing={handleStopEditing}/>
                         </div>
                     </div>
-
                     <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-4">
                         <div className="flex space-x-2">
                             <button onClick={() => handleLanguageChange('vi')} disabled={isPending} className="cursor-pointer">
@@ -708,15 +646,9 @@ export default function LandingPage() {
                 <Image src="/banner/icon_cloud.png" alt={t('altBigCloud')} width={100} height={50} className="absolute right-5 -top-[60px] lg:right-50 lg:top-[4700px] z-99"/>
                 <EditableText id="mealSectionTitle" initialHtml={pageContent.mealSectionTitle} onSave={handleContentUpdate} isEditMode={isEditMode} tag="h2" className={`font-cadena text-center text-[#F7B052] mb-6 ${isMobile ? 'text-4xl' : 'text-7xl'} [paint-order:stroke] fill-current [-webkit-text-stroke:12px_white]`} isCurrentlyEditing={currentlyEditingId === 'mealSectionTitle'} onStartEditing={handleStartEditing} onCancelEditing={handleStopEditing} />
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
-                    <div className="flex flex-col gap-2">
-                        {mealImages1.map((img) => (<EditableImage key={img.id} id={img.id} initialSrc={img.src} altText={t('altMealImage')} onFileSelect={handleImageUpload} isUploading={isUploading && uploadingImageId === img.id} isEditMode={isEditMode} fill objectFit="cover" width={340} height={350} className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"/>))}
-                    </div>
-                    <div className="flex flex-col gap-2 justify-center">
-                        {mealImages2.map((img) => (<EditableImage key={img.id} id={img.id} initialSrc={img.src} altText={t('altMealImage')} onFileSelect={handleImageUpload} isUploading={isUploading && uploadingImageId === img.id} isEditMode={isEditMode} fill objectFit="cover" width={400} height={525} className="w-full h-[225px] sm:h-[300px] md:h-[400px] lg:h-[525px] rounded-2xl overflow-hidden"/>))}
-                    </div>
-                    <div className="flex flex-col gap-2">
-                        {mealImages3.map((img) => (<EditableImage key={img.id} id={img.id} initialSrc={img.src} altText={t('altMealImage')} onFileSelect={handleImageUpload} isUploading={isUploading && uploadingImageId === img.id} isEditMode={isEditMode} fill objectFit="cover" width={340} height={350} className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"/>))}
-                    </div>
+                    <div className="flex flex-col gap-2">{mealImages1.map((img) => (<EditableImage key={img.id} id={img.id} initialSrc={img.src} altText={t('altMealImage')} onFileSelect={handleImageUpload} isUploading={isUploading && uploadingImageId === img.id} isEditMode={isEditMode} fill objectFit="cover" width={340} height={350} className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"/>))}</div>
+                    <div className="flex flex-col gap-2 justify-center">{mealImages2.map((img) => (<EditableImage key={img.id} id={img.id} initialSrc={img.src} altText={t('altMealImage')} onFileSelect={handleImageUpload} isUploading={isUploading && uploadingImageId === img.id} isEditMode={isEditMode} fill objectFit="cover" width={400} height={525} className="w-full h-[225px] sm:h-[300px] md:h-[400px] lg:h-[525px] rounded-2xl overflow-hidden"/>))}</div>
+                    <div className="flex flex-col gap-2">{mealImages3.map((img) => (<EditableImage key={img.id} id={img.id} initialSrc={img.src} altText={t('altMealImage')} onFileSelect={handleImageUpload} isUploading={isUploading && uploadingImageId === img.id} isEditMode={isEditMode} fill objectFit="cover" width={340} height={350} className="w-full h-[150px] sm:h-[250px] md:h-[300px] lg:h-[350px] rounded-2xl overflow-hidden"/>))}</div>
                 </div>
             </section>
 
@@ -838,11 +770,9 @@ export default function LandingPage() {
                     )}
                 </div>
             </section>
-
             <Image src="/banner/icon_cloud.png" alt={t('altBigCloud')} width={100} height={70} className="absolute left-[5%] top-[50vh] -z-10"/>
             <Image src="/banner/icon_cloud.png" alt={t('altBigCloud')} width={100} height={50} className="absolute left-1/3 translate-x-[80px] top-[45vh] -z-10"/>
             <Image src="/banner/icon_star_empty.png" alt="" width={60} height={70} className="absolute left-1/3 top-[40vh] -z-10"/>
-
             {showModal && <RegisterClassModal onClose={closeModal}/>}
             {showScrollToTop && (
                 <button onClick={scrollToTop} className="fixed bottom-6 right-6 z-[9998] bg-[#FFC107] hover:bg-[#ffb300] text-white p-3 rounded-full shadow-lg transition-opacity duration-300" aria-label={t('altScrollToTop')}>
