@@ -54,7 +54,6 @@ export default function Contact() {
             }
 
             setStatus({ loading: false, success: true, error: "" });
-            // Reset form sau khi gửi thành công
             setFormData({ name: "", email: "", message: "" });
         } catch (error) {
             setStatus({
@@ -92,7 +91,6 @@ export default function Contact() {
                     </div>
                 </div>
 
-                {/* Cơ sở chọn map */}
                 <div className="w-full py-6 flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center">
                     <Image
                         src="/info/amg_box1.png"
@@ -133,14 +131,12 @@ export default function Contact() {
                     ></iframe>
                 </div>
 
-                {/* Tiêu đề liên hệ */}
                 <h3 className="font-mali-bold text-xl md:text-2xl text-center lg:translate-x-[130px] mt-8 text-black">
                     Liên hệ với chúng tôi
                 </h3>
 
                 {/* Info + Form */}
                 <div className="w-full max-w-5xl flex flex-col md:flex-row gap-8 rounded-xl p-4 md:p-6 z-10">
-                    {/* Thông tin liên hệ */}
                     <div className="font-mali-medium flex-1 space-y-4 text-sm text-[#FFD668]">
                         <div className="flex items-start gap-2">
                             <Image
@@ -206,7 +202,6 @@ export default function Contact() {
                         </div>
                     </div>
 
-                    {/* Form liên hệ */}
                     <form onSubmit={handleSubmit} className="flex-1 space-y-4">
                         <input
                             type="text"
@@ -254,7 +249,6 @@ export default function Contact() {
                 </div>
             </div>
 
-            {/* Các icon sao */}
             <Image
                 src="/icons/icon_elephant_star.png"
                 alt="Elephant Star"

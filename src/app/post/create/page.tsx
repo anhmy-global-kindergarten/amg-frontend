@@ -49,20 +49,6 @@ const CreatePostPage = () => {
         },
     });
 
-    const setLink = useCallback(() => {
-        if (!editor) return;
-        const previousUrl = editor.getAttributes('link').href;
-        const url = window.prompt('URL', previousUrl);
-        if (url === null) {
-            return;
-        }
-        if (url === '') {
-            editor.chain().focus().extendMarkRange('link').unsetLink().run();
-            return;
-        }
-        editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-    }, [editor]);
-
     function dataURLtoFile(dataUrl: string, filename: string): File | null {
         const arr = dataUrl.split(',');
         if (arr.length < 2) return null;
@@ -334,7 +320,7 @@ const CreatePostPage = () => {
                 <label className="block font-semibold mb-2">Nội dung bài viết:</label>
                 {editor && (
                     <div className="font-mali border border-[#FFA552] rounded-lg">
-                        <div className="flex gap-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
+                        <div className="flex flex-wrap items-center gap-2 px-4 py-2 bg-[#FFF6C7] border-b border-[#FFA552] rounded-t-lg">
 
                             <button
                                 onClick={() => editor.chain().focus().toggleBold().run()}

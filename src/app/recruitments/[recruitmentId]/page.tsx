@@ -20,24 +20,15 @@ export default function RecruitmentDetail() {
     const { post, images, loading, error } = usePostById(articalId);
     const { name, role } = useAuth();
 
-    /*const recruitments = [
-        {
-            id: "1",
-            title: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON",
-            date: "22/06/2021",
-            author: "admin",
-            content: `AMG trân trọng thông báo: Chúng tôi đang tuyển dụng giáo viên mầm non cho năm học mới! Nếu bạn là người yêu trẻ, giàu năng lượng và mong muốn làm việc trong một môi trường giáo dục hiện đại, thân thiện thì đây chính là cơ hội dành cho bạn. [highlight]Mức lương cạnh tranh, chế độ đãi ngộ hấp dẫn[/highlight] cùng nhiều cơ hội phát triển chuyên môn đang chờ đón bạn tại AMG. [highlight]Ứng viên có kinh nghiệm hoặc mới tốt nghiệp ngành Sư phạm mầm non đều được khuyến khích ứng tuyển[/highlight]. Hãy gia nhập đội ngũ của chúng tôi để cùng nhau nuôi dưỡng và phát triển thế hệ tương lai!`,
-            imageHeader: "/recruitments/recruitment1.png",
-            image1: "",
-            image2: "",
-            image3: "",
-            image4: "",
-            image5: "",
-        },
-    ];*/
-    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
     if (error && !post) {
-        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sổ tay.</p>;
+        return notFound();
     }
 
     if (!post) {

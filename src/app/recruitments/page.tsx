@@ -1,30 +1,27 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import {notFound, useRouter} from "next/navigation";
 import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
 import {format} from "date-fns";
 import LineClampContent from "@/app/utils/lineClamp";
-
-// const recruitments = [
-//     {
-//         id: 1,
-//         date: "22/06/2021",
-//         title: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON",
-//         author: "admin",
-//         content: "AMG TUYỂN DỤNG GIÁO VIÊN MẦM NON   Với Slogan “SCHOOL IS AMG - AMG IS HOME”, AMG không chỉ là một ngôi trường mà còn là một ngôi nhà thứ hai của các bạn học sinh. Chúng tôi luôn tìm kiếm những giáo viên có tâm huyết, yêu trẻ và mong muốn cống hiến cho sự nghiệp giáo dục. Nếu bạn là một trong số đó, hãy gia nhập đội ngũ của chúng tôi ngay hôm nay!",
-//         image: "/recruitments/recruitment1.png",
-//     },
-// ];
 
 export default function RecruitmentPage() {
     const { posts, loading, error } = usePostsByCategory("recruitments");
     const [page, setPage] = useState(0);
     const router = useRouter();
 
-    if (loading) return <div>Đang tải dữ liệu...</div>;
-    if (error) return <div>Lỗi: {error}</div>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
+    if (error) {
+        return notFound();
+    }
 
     const itemsPerPage = 6;
     const totalPages = Math.ceil(posts.length / itemsPerPage);

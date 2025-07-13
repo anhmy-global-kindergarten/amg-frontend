@@ -1,14 +1,12 @@
 import React from "react";
 
-// Hàm lấy text thuần từ HTML string
 function stripHtml(html: string): string {
-    if (typeof window === "undefined") return html; // SSR fallback
+    if (typeof window === "undefined") return html;
     const div = document.createElement("div");
     div.innerHTML = html;
     return div.textContent || div.innerText || "";
 }
 
-// Hàm cắt chuỗi có dấu ...
 function truncateText(text: string, maxLength: number): string {
     if (text.length <= maxLength) return text;
     return text.slice(0, maxLength) + "...";

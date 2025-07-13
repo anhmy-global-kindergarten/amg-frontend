@@ -163,13 +163,6 @@ export default function ClassGallery({
                 )}
             </div>
 
-            {/*/!* ICON CON VOI TRANG TRÍ *!/*/}
-            {/*<div className="flex justify-end">*/}
-            {/*    <Image src="/icons/icon_elephant1.png" alt="" width={isMobile ? 60 : 100} height={isMobile ? 30 : 50}*/}
-            {/*           className="right-0 top-[1200px]  lg:right-80 lg:top-[800px] z-99"/>*/}
-            {/*</div>*/}
-
-            {/* NÚT THÊM LỚP HỌC MỚI */}
             {isEditMode && (
                 <button
                     onClick={onAddItemClass}
@@ -179,7 +172,6 @@ export default function ClassGallery({
                 </button>
             )}
 
-            {/* PHẦN DANH SÁCH LỚP HỌC */}
             <div className="mt-4 overflow-hidden">
                 <div
                     ref={containerRef}

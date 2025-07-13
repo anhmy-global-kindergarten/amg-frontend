@@ -24,7 +24,6 @@ export const getCroppedImg = async (imageSrc: string, crop: any): Promise<string
         crop.height
     );
 
-    // Trả về một DataURL (base64)
     return canvas.toDataURL("image/jpeg");
 };
 

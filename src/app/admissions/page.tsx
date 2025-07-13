@@ -1,30 +1,27 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import {notFound, useRouter} from "next/navigation";
 import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
 import {format} from "date-fns";
 import LineClampContent from "@/app/utils/lineClamp";
-
-// const admissions = [
-//     {
-//         id: 1,
-//         date: "27/06/2022",
-//         title: "TUYỂN SINH LỚP HỌC AMG TẠI NHÀ SAU KỲ NGHỈ TẾT",
-//         author: "admin",
-//         content: "Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ phía phụ huynh và các em học sinh. Để đáp ứng nhu cầu học tập của các em học sinh, nhà trường quyết định mở lớp học tại nhà cho các em học sinh có nhu cầu.",
-//         image: "/admissions/admission1.png",
-//     },
-// ];
 
 export default function AdmissionPage() {
     const { posts, loading, error } = usePostsByCategory("admissions");
     const [page, setPage] = useState(0);
     const router = useRouter();
 
-    if (loading) return <div>Đang tải dữ liệu...</div>;
-    if (error) return <div>Lỗi: {error}</div>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
+    if (error) {
+        return notFound();
+    }
 
     const itemsPerPage = 6;
     const totalPages = Math.ceil(posts.length / itemsPerPage);

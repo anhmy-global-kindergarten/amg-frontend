@@ -74,33 +74,15 @@ export default function LessonDetail() {
         setIsSubmitting(false);
     };
 
-    const handleCommentDelete = async (commentId: string) => {
-        if (window.confirm("Bạn có chắc muốn xóa bình luận này?")) {
-            await deleteComment(commentId);
-        }
-    };
-
-//     const lessons = [
-//         {
-//             id: "1",
-//             title: "Chiếc bể bơi chứa đầy nước và niềm vui",
-//             date: "27/06/2022",
-//             author: "admin",
-//             content: `Mùa hè lại đến rồi và chắc hẳn 1 trong những hoạt động các bạn nhỏ yêu thích nhất trong những ngày hè oi ả chính là bơi lội. Vì vậy,[highlight] những bể bơi di động đã được các cô chuẩn bị ngay ở sân sau của cơ sở 1[/highlight] để các con thỏa sức chơi đùa với nước
-// AMG hiểu rằng vận động thể chất trong đó có các hoạt động với nước là những hoạt động cực kỳ quan trọng và tạo hứng thú lớn với con trẻ, vậy nên thầy giáo thể chất chuyên biệt của AMG luôn sẵn sàng tạo ra[highlight] những tiết học thú vị, an toàn, đúng quy cách và thật tự nhiên cho con trẻ[/highlight], với mong muốn con trẻ sẽ có những trải nghiệm vui và bổ ích nhất tại AMG
-// Có những bạn nhỏ rất thích nước nhưng cũng có những bạn lại hơi rụt rè. Các hoạt động dưới nước như tập nín thở, sải cánh tay hay đạp nước… dần dần giúp các con làm quen với nước, khắc phục sự nhút nhát ban đầu để trở nên dạn dĩ và tận hưởng thêm nhiều niềm vui
-// Tại AMG mỗi tiết học với nước của các con được diễn ra đều[highlight] đầy ắp tiếng cười và màu sắc[/highlight]. AMG lựa chọn một chiếc bể bơi không góc cạnh để làm cho tiết bơi của các con được an toàn và êm ái hơn... Những màu sắc sặc sỡ từ những bộ đồ bơi đáng yêu hay những chiếc phao bơi cùng bóng hơi đầy xinh động kèm theo đó là tiếng cười rộn ràng của con trẻ đã tạo nên những tiết bơi rất đặc trưng AMG. `,
-//             imageHeader: "/lessons/lesson1.png",
-//             image1: "/lessons/lesson1.png",
-//             image2: "/lessons/lesson1.png",
-//             image3: "/lessons/lesson1.png",
-//             image4: "/lessons/lesson1.png",
-//             image5: "",
-//         },
-//     ];
-    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
     if (error && !post) {
-        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải bài học.</p>;
+        return notFound();
     }
 
     if (!post) {

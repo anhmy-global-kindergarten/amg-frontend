@@ -1,5 +1,3 @@
-// utils/htmlTransformers.ts
-
 export function markToHighlighted(htmlString: string): string {
     if (!htmlString) return '';
     const parser = new DOMParser();

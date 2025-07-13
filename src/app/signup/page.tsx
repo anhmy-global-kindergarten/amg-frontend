@@ -184,13 +184,11 @@ export default function SignupPage() {
                     role="dialog"
                     tabIndex={-1}
                 >
-                    {/* Overlay nền mờ, chặn tương tác */}
                     <div
                         className="fixed inset-0 backdrop-blur-sm"
                         onClick={() => setShowModal(false)}
                     ></div>
 
-                    {/* Nội dung modal */}
                     <div className="relative bg-yellow-50 rounded-xl shadow-2xl max-w-xs sm:max-w-sm w-full p-6 z-10">
                         <button
                             onClick={() => setShowModal(false)}

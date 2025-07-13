@@ -40,21 +40,6 @@ export default function EventDetail() {
             setCommentAuthor(loggedInUserName);
         }
     }, [loggedInUserName]);
-    // const events = [
-    //     {
-    //         id: "1",
-    //         title: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH?",
-    //         date: "27/06/2022",
-    //         author: "admin",
-    //         content: `Trong bối cảnh dịch bệnh đầy thử thách, AMG mong muốn lan tỏa tinh thần tích cực và yêu thương qua cuộc thi ảnh đầy cảm xúc: “BABY, NEW VERSION”. Đây là sân chơi để các gia đình lưu giữ khoảnh khắc đáng yêu của các bé trong thời gian ở nhà. [highlight]Mỗi nụ cười, ánh mắt ngây thơ hay hành động hồn nhiên của bé[/highlight] đều có thể trở thành điều kỳ diệu chạm đến trái tim mọi người. Tham gia cuộc thi, bạn không chỉ lưu lại những ký ức đẹp mà còn có cơ hội [highlight]nhận được những phần quà hấp dẫn từ AMG[/highlight]. Đừng bỏ lỡ cơ hội để bé yêu của bạn tỏa sáng!`,
-    //         imageHeader: "/events/event1.png",
-    //         image1: "/events/event1.png",
-    //         image2: "/events/event2.png",
-    //         image3: "/events/event3.png",
-    //         image4: "/events/event4.png",
-    //         image5: "",
-    //     },
-    // ];
 
     const handleCommentSubmit = async () => {
         if (!userId?.trim()) {
@@ -90,15 +75,15 @@ export default function EventDetail() {
         setIsSubmitting(false);
     };
 
-    const handleCommentDelete = async (commentId: string) => {
-        if (window.confirm("Bạn có chắc muốn xóa bình luận này?")) {
-            await deleteComment(commentId);
-        }
-    };
-
-    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
     if (error && !post) {
-        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sự kiện.</p>;
+        return notFound();
     }
 
     if (!post) {

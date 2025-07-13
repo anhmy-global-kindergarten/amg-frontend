@@ -1,4 +1,3 @@
-// /hooks/usePostComments.ts
 /* eslint-disable */
 import { useEffect, useState, useCallback } from "react";
 import { Comment, CreateCommentPayload } from "@/app/utils/comment";
@@ -75,7 +74,6 @@ export function usePostComments(postId: string | undefined) {
         }
     };
 
-    // Hàm xóa comment
     const deleteComment = async (commentId: string): Promise<boolean> => {
         try {
             const res = await fetch(`/api-v1/comments/delete-comment/${commentId}`, {

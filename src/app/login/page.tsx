@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import {signIn} from "next-auth/react";
 
 export default function LoginPage() {
     const [userName, setUserName] = useState('');
@@ -31,10 +30,7 @@ export default function LoginPage() {
                 return;
             }
 
-            const user = await res.json();
-
-            localStorage.setItem('user', JSON.stringify(user));
-
+            router.refresh();
             router.push('/');
         } catch (err) {
             console.error(err);

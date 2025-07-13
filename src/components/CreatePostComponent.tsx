@@ -12,8 +12,8 @@ const TiptapEditor = () => {
       StarterKit,
         ImageResize,
       ImageExtension.configure({
-        inline: false,  // Ảnh hiển thị block (dễ căn chỉnh)
-        allowBase64: true,  // Cho phép dán ảnh dạng base64 (nhanh, test)
+        inline: false,
+        allowBase64: true,
       }),
     ],
     content: "<p>Viết nội dung ở đây...</p>",
@@ -24,14 +24,12 @@ const TiptapEditor = () => {
       },
   });
 
-  // Thêm ảnh từ file input
   const addImage = useCallback(
     (file: File) => {
       if (!editor) return;
 
       const reader = new FileReader();
       reader.onload = () => {
-        // Thêm ảnh dưới dạng base64 (hoặc upload lên server rồi lấy url thực)
         editor
           .chain()
           .focus()
@@ -52,7 +50,7 @@ const TiptapEditor = () => {
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) addImage(file);
-            e.target.value = ""; // reset input để có thể chọn lại file giống nhau
+            e.target.value = "";
           }}
         />
       </div>

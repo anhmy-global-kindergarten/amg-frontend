@@ -10,8 +10,8 @@ import {FaArrowUp, FaEdit, FaSave} from "react-icons/fa";
 
 import EditableText from "@/components/landing-page/EditableText";
 import EditableImage from "@/components/landing-page/EditableImage";
+import {useAuth} from "@/app/hooks/useAuth";
 
-// INTERFACE ĐÃ ĐƯỢC MỞ RỘNG
 interface PageContent {
     // Top Navbar
     topNavPhone: string;
@@ -112,7 +112,6 @@ interface PageContent {
     footerSupportLinks: { text: string; href: string }[];
 }
 
-// INITIAL CONTENT ĐÃ ĐƯỢC MỞ RỘNG
 const initialPageContent: PageContent = {
     topNavPhone: "0972556001",
     topNavEmail: "anhmykindergarten@gmail.com",
@@ -273,11 +272,11 @@ async function saveContentToAPI(content: PageContent): Promise<{ success: boolea
 }
 
 async function updateImagesStatusAPI(urls: string[]): Promise<boolean> {
-    if (urls.length === 0) return true; // Không có gì để cập nhật
+    if (urls.length === 0) return true;
 
     console.log("Đang gọi API để cập nhật trạng thái ảnh...");
     try {
-        const payload = urls.map(url => ({ url, style: '' })); // Style có thể để trống
+        const payload = urls.map(url => ({ url, style: '' }));
         const response = await fetch(`/api-v1/images/update-status`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -312,8 +311,6 @@ export default function LandingPage() {
     const [isMobile, setIsMobile] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [showScrollToTop, setShowScrollToTop] = useState(false);
-    const [role, setRole] = useState<string | null>(null);
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
@@ -371,24 +368,18 @@ export default function LandingPage() {
             const firstItem = listItems[0] as HTMLElement;
             const lastItem = listItems[listItems.length - 1] as HTMLElement;
 
-            // Tính vị trí tâm theo chiều dọc của mục đầu tiên
             const startY = firstItem.offsetTop + (firstItem.offsetHeight / 2);
 
-            // Tính vị trí tâm theo chiều dọc của mục cuối cùng
             const endY = lastItem.offsetTop + (lastItem.offsetHeight / 2);
 
-            // Áp dụng style cho thanh dọc
             verticalBar.style.top = `${startY}px`;
             verticalBar.style.height = `${endY - startY}px`;
         };
 
-        // Chạy lần đầu
         calculateBarPosition();
 
-        // Chạy lại mỗi khi thay đổi kích thước cửa sổ (quan trọng cho responsive)
         window.addEventListener('resize', calculateBarPosition);
 
-        // Dọn dẹp event listener khi component bị unmount
         return () => window.removeEventListener('resize', calculateBarPosition);
 
     }, [pageContent]);
@@ -505,8 +496,6 @@ export default function LandingPage() {
                 return {...newContent, classGalleryBoxes: newBoxes};
             }
 
-            // ... (Thêm các logic cho mảng khác nếu có)
-
             (newContent as any)[id] = value;
             return newContent;
         });
@@ -557,21 +546,10 @@ export default function LandingPage() {
 
     const scrollToTop = () => window.scrollTo({top: 0, behavior: 'smooth'});
 
-    useEffect(() => {
-        try {
-            const storedUser = localStorage.getItem("user");
-            if (storedUser) {
-                const parsed = JSON.parse(storedUser);
-                setRole(parsed?.user?.role || parsed?.role || null);
-                setIsAuthenticated(true);
-            }
-        } catch (error) {
-            console.error("Lỗi đọc user từ localStorage:", error);
-        }
-    }, []);
+    const { isAuthenticated, name, role } = useAuth();
 
-    const handleLogout = () => {
-        localStorage.removeItem("user");
+    const handleLogout = async () => {
+        await fetch('/api-v1/auth-self/logout', { method: 'POST' });
         window.location.href = "/";
     };
 
@@ -650,7 +628,7 @@ export default function LandingPage() {
         <div className="w-full min-h-screen bg-[#FFF6C7] overflow-hidden relative font-sans text-[#4D4D4D]">
             {/* EDIT MODE TOGGLE AND SAVE BUTTON - Only for admin/teacher */}
             {canEdit && (
-                <div className="font-mali-semibold fixed top-20 right-2 z-[99999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
+                <div className="font-mali-semibold fixed top-32 right-2 z-[9999] bg-white p-2 shadow-lg rounded-md flex flex-col gap-2">
                     <button
                         onClick={handleToggleEditMode}
                         className={`px-3 py-1.5 text-sm rounded ${isEditMode ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} text-white flex items-center gap-1.5`}
@@ -743,7 +721,7 @@ export default function LandingPage() {
                         {/* Login Button */}
                         {isAuthenticated ? (
                             <div className="flex gap-2">
-                                {(role === "admin" || role === "teacher") && (
+                                {(role === "admin") && (
                                     <div className="flex gap-x-2">
                                         <a
                                             href="/admin-dashboard"
@@ -758,6 +736,14 @@ export default function LandingPage() {
                                             Tạo bài viết
                                         </a>
                                     </div>
+                                )}
+                                {(role === "teacher") && (
+                                        <a
+                                            href="/post/create"
+                                            className="font-mali-bold bg-[#FFC107] text-white px-4 py-1 rounded hover:bg-[#e5a906] transition"
+                                        >
+                                            Tạo bài viết
+                                        </a>
                                 )}
                                 <button
                                     onClick={() => handleLogout()}
@@ -787,7 +773,6 @@ export default function LandingPage() {
                     priority
                 />
                 <div className={`absolute top-4 z-10 ${isMobile ? 'left-1/2 -translate-x-1/2' : 'left-4'}`}>
-                    {/* LOGO is content, not decorative */}
                     <EditableImage
                         id="headerLogoSrc"
                         initialSrc={pageContent.headerLogoSrc}
@@ -798,7 +783,7 @@ export default function LandingPage() {
                         width={120} height={80}
                     />
                 </div>
-                <HeaderMenu isAuthenticated={isAuthenticated}/> {/* HeaderMenu is static as requested */}
+                <HeaderMenu/>
             </header>
 
             {/* Banner Section - All content is editable */}
@@ -908,7 +893,6 @@ export default function LandingPage() {
                 </section>
             )}
 
-            {/* Gallery Section - All images now editable */}
             <section className="relative w-full mt-40 z-20 px-4">
                 <div className="grid grid-cols-3 gap-2 max-w-7xl mx-auto">
                     {/* Column 1 */}
@@ -1027,7 +1011,6 @@ export default function LandingPage() {
                             </div>
                         </div>
                     </div>
-                    {/* ClassGallery now receives editable content */}
                     <ClassGallery
                         title={pageContent.classGalleryTitle}
                         boxes={pageContent.classGalleryBoxes}
@@ -1046,7 +1029,6 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Meal Section - All images now editable */}
             <section className="relative w-full mt-10 z-50 px-4  text-center">
                 <Image src="/banner/icon_cloud.png" alt="" width={100} height={50}
                        className="absolute right-5 -top-[60px] lg:right-50 lg:top-[4700px]  z-99"/>
@@ -1119,7 +1101,6 @@ export default function LandingPage() {
                 </div>
             </section>
 
-            {/* Reasons Section - All content is editable */}
             <section className="w-full bg-[#FFF6C7] px-4 md:px-6 relative z-10">
                 <Image src="/icons/icon_elephant2.png" alt="" width={isMobile ? 75 : 150} height={isMobile ? 50 : 100}
                        className="left-5 lg:left-30 top-[8800px] lg:top-[4550px] z-99"/>
@@ -1260,7 +1241,6 @@ export default function LandingPage() {
                         <Image src="/icons/icon_elephant3.png" alt="elephant decorative" width={100} height={70}
                                    className="right-10 -top-[20px] lg:right-150 lg:-top-[35px] z-99"/>
                         </div>
-                        {/* TestimonialCarousel now receives editable content */}
                         <TestimonialCarousel testimonials={pageContent.testimonials} isEditMode={isEditMode}
                                              onSave={handleContentUpdate}
                                              onAddItem={() => handleAddItem('testimonials', newTestimonialTemplate)}

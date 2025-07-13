@@ -7,7 +7,6 @@ import { ChevronDownIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/20/solid
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
 import {useAuth} from "@/app/hooks/useAuth";
 import React from 'react';
-import {router} from "next/client";
 
 const menuItems = [
     {
@@ -79,13 +78,9 @@ const menuItems = [
     }
 ];
 
-type HeaderMenuProps = {
-    isAuthenticated: boolean;
-};
-
 type SubmenuPosition = 'left' | 'right';
 
-export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
+export default function HeaderMenu() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [isMobile, setIsMobile] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -93,8 +88,10 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     const [deepSubmenuPositions, setDeepSubmenuPositions] = useState<Record<string, SubmenuPosition>>({});
     const submenuRefs = useRef<(HTMLDivElement | null)[]>([]);
     const deepSubmenuRefs = useRef<Record<string, HTMLUListElement | null>>({});
-    const handleLogout = () => {
-        localStorage.removeItem("user");
+    const { isAuthenticated, name: userName, role: userRole } = useAuth();
+
+    const handleLogout = async () => {
+        await fetch('/api-v1/auth-self/logout', { method: 'POST' });
         window.location.href = "/";
     };
     const handleToggleMenu = () => {
@@ -123,17 +120,22 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
         setOpenIndex(openIndex === index ? null : index);
     };
 
-    const { name: userName, role: userRole } = useAuth();
     const AuthButtons = ({ isMobile = false }) => (
         <div className={isMobile ? "flex flex-col gap-2" : "flex items-center gap-4"}>
-            {/* Các nút chỉ hiển thị cho admin hoặc teacher */}
-            {(userRole === 'admin' || userRole === 'teacher') && (
+            {(userRole === 'admin') && (
                 <>
                     <Link href="/post/create" className="font-mali-bold px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
                         Tạo bài viết
                     </Link>
                     <Link href="/admin-dashboard" className="font-mali-bold px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
                         Dashboard
+                    </Link>
+                </>
+            )}
+            {(userRole === 'teacher') && (
+                <>
+                    <Link href="/post/create" className="font-mali-bold px-3 py-2 bg-[#FFD668] text-black rounded hover:bg-[#ffc107] font-semibold text-center" onClick={isMobile ? handleToggleMenu : undefined}>
+                        Tạo bài viết
                     </Link>
                 </>
             )}
@@ -146,7 +148,6 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
         </div>
     );
 
-    // Component nút cho khách
     const GuestButtons = ({ isMobile = false }) => (
         <Link
             href="/login"
@@ -178,8 +179,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
     };
 
     return (
-        <div className="relative z-50">
-            {isMobile ? (
+        <div className="relative z-[99999]">
                 <>
                     <button
                         className="p-2 text-black lg:hidden"
@@ -200,23 +200,24 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.5 }}
-                                    className="fixed top-0 left-0 bottom-0 w-72 bg-[#FFF8F5] z-50 shadow-lg overflow-y-auto"
+                                    className="fixed top-0 left-0 bottom-0 w-72 bg-[#FFF6C7] z-50 shadow-lg overflow-y-auto"
                                 >
                                     <div className="flex justify-between items-center px-4 py-4 border-b">
-                                        <span className="text-lg font-semibold">Menu</span>
+                                        <span
+                                            className="font-mali-bold text-lg font-bold text-[#EA570A]">AMG Menu</span>
                                         <button onClick={handleToggleMenu}>
-                                            <XMarkIcon className="w-6 h-6 text-gray-700" />
+                                            <XMarkIcon className="w-6 h-6 text-[#EA570A]"/>
                                         </button>
                                     </div>
                                     <nav className="flex flex-col gap-2 p-4">
-                                        {menuItems.map((item, index) => {
+                                    {menuItems.map((item, index) => {
                                             const hasSubmenu = Array.isArray(item.submenu);
                                             return (
                                                 <div key={index}>
                                                     {item.href && !hasSubmenu ? (
                                                         <Link
                                                             href={item.href}
-                                                            className="font-mali-semibold block px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold"
+                                                            className="font-mali-semibold block px-3 py-2 bg-white/70 text-gray-800 rounded-lg hover:bg-[#FFC107] hover:text-white font-semibold transition-colors"
                                                             onClick={handleToggleMenu}
                                                         >
                                                             {item.title}
@@ -225,7 +226,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                         <>
                                                             <button
                                                                 onClick={() => handleOpen(index)}
-                                                                className="font-mali-semibold flex items-center justify-between w-full px-3 py-2 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] font-semibold"
+                                                                className="font-mali-semibold flex items-center justify-between w-full px-3 py-2 bg-white/70 text-gray-800 rounded-lg hover:bg-[#FFC107] hover:text-white font-semibold transition-colors"
                                                             >
                                                                 {item.title}
                                                                 <ChevronDownIcon
@@ -247,7 +248,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                                 {'submenu' in sub ? (
                                                                                     <>
                                                                                         <span
-                                                                                            className="font-mali-semibold block px-2 py-1 text-sm font-normal text-gray-700">
+                                                                                            className="font-mali-semibold block px-2 py-1 text-sm font-semibold text-[#EA570A]">
                                                                                           {sub.title}
                                                                                         </span>
                                                                                         <ul className="pl-4 space-y-1">
@@ -255,7 +256,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                                                 <li key={deepIdx}>
                                                                                                     <Link
                                                                                                         href={deep.href}
-                                                                                                        className="font-mali-semibold block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
+                                                                                                        className="font-mali-semibold block px-2 py-1 text-sm text-gray-700 hover:bg-white/70 rounded-md transition-colors"
                                                                                                         onClick={handleToggleMenu}
                                                                                                     >
                                                                                                         {deep.title}
@@ -267,7 +268,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                                                 ) : (
                                                                                     <Link
                                                                                         href={sub.href}
-                                                                                        className="font-mali-semibold block px-2 py-1 text-sm text-gray-700 hover:bg-[#FFE5E5] rounded"
+                                                                                        className="font-mali-semibold block px-2 py-1 text-sm text-gray-700 hover:bg-white/70 rounded-md transition-colors"
                                                                                         onClick={handleToggleMenu}
                                                                                     >
                                                                                         {sub.title}
@@ -283,7 +284,7 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                                                 </div>
                                             );
                                         })}
-                                        <div className="mt-4 pt-4 border-t border-gray-300 flex flex-col gap-2">
+                                        <div className="mt-4 pt-4 border-t border-yellow-300/50 flex flex-col gap-2">
                                             {status === 'loading' ? (
                                                 <div className="text-center text-sm text-gray-500">Đang tải...</div>
                                             ) : isAuthenticated ? (
@@ -298,102 +299,6 @@ export default function HeaderMenu({ isAuthenticated }: HeaderMenuProps) {
                         )}
                     </AnimatePresence>
                 </>
-            ) : (
-                <nav
-                    className="absolute top-10 left-1/2 -translate-x-100 flex justify-between w-[60%] gap-2 px-4 py-2 text-sm font-semibold whitespace-nowrap">
-                    {menuItems.map((item, index) => {
-                        const hasSubmenu = Array.isArray(item.submenu);
-                        return (
-                            <div
-                                key={index}
-                                className="relative"
-                                onMouseEnter={() => setOpenIndex(index)}
-                                onMouseLeave={() => setOpenIndex(null)}
-                            >
-                                {item.href && !hasSubmenu ? (
-                                    <Link
-                                        href={item.href}
-                                        className="font-mali-semibold px-2 py-1 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] transition block"
-                                    >
-                                        {item.title}
-                                    </Link>
-                                ) : (
-                                    <>
-                                        <button
-                                            className="font-mali-semibold px-2 py-1 bg-[#FFE5E5] rounded hover:bg-[#ffd3d3] flex transition items-center"
-                                        >
-                                            {item.title}
-                                            {hasSubmenu && (
-                                                <ChevronDownIcon className="ml-2 h-4 w-4 text-gray-600" />
-                                            )}
-                                        </button>
-                                        <AnimatePresence>
-                                            {openIndex === index && hasSubmenu && (
-                                                <motion.div
-                                                    ref={el => { submenuRefs.current[index] = el; }}
-                                                    initial={{ opacity: 0, y: -5 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    exit={{ opacity: 0, y: -5 }}
-                                                    transition={{ duration: 0.2 }}
-                                                    className="absolute top-full left-0 mt-2 w-64 z-50 bg-white border shadow-lg rounded-xl"
-                                                >
-                                                    <ul className="py-2">
-                                                        {item.submenu?.map((sub, subIdx) => (
-                                                            <li
-                                                                key={subIdx}
-                                                                className="relative group"
-                                                                onMouseEnter={() => {
-                                                                    if ('submenu' in sub) {
-                                                                        setTimeout(() => calculateDeepSubmenuPosition(index, subIdx), 0);
-                                                                    }
-                                                                }}
-                                                            >
-                                                                {'submenu' in sub ? (
-                                                                    <>
-                                                                        <span className="font-mali-semibold block px-4 py-2 hover:bg-[#FFE5E5] transition cursor-pointer flex items-center justify-between">
-                                                                          {sub.title}
-                                                                            <ChevronRightIcon className="ml-auto h-4 w-4 text-gray-600" />
-                                                                        </span>
-                                                                        <ul
-                                                                            ref={el => {deepSubmenuRefs.current[`${index}-${subIdx}`] = el;}}
-                                                                            className={`font-mali-semibold absolute top-0 mt-0 w-64 bg-white shadow-lg rounded-xl border z-50 opacity-0 group-hover:opacity-100 transform group-hover:translate-x-0 transition duration-200 pointer-events-none group-hover:pointer-events-auto
-                                                                                ${deepSubmenuPositions[`${index}-${subIdx}`] === 'left' ? 'right-full mr-1' : 'left-full ml-1'} 
-                                                                            `}>
-                                                                            {sub.submenu?.map((deep, deepIdx) => (
-                                                                                <li key={deepIdx}>
-                                                                                    <Link
-                                                                                        href={deep.href}
-                                                                                        className="font-mali-semibold block px-4 py-2 hover:bg-[#FFE5E5] transition"
-                                                                                        onClick={() => setOpenIndex(null)}
-                                                                                    >
-                                                                                        {deep.title.split('\n').map((line, i) => <React.Fragment key={i}>{line}<br/></React.Fragment>)}
-                                                                                    </Link>
-                                                                                </li>
-                                                                            ))}
-                                                                        </ul>
-                                                                    </>
-                                                                ) : (
-                                                                    <Link
-                                                                        href={sub.href}
-                                                                        className="font-mali-semibold block px-4 py-2 hover:bg-[#FFE5E5] transition"
-                                                                        onClick={() => setOpenIndex(null)}
-                                                                    >
-                                                                        {sub.title.split('\n').map((line, i) => <React.Fragment key={i}>{line}<br/></React.Fragment>)}
-                                                                    </Link>
-                                                                )}
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </>
-                                )}
-                            </div>
-                        );
-                    })}
-                </nav>
-            )}
         </div>
     );
 }

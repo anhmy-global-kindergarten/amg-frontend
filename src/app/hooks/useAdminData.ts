@@ -115,27 +115,59 @@ export function useCandidates() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const performFetch = useCallback(async () => {
+        try {
+            const res = await fetch(`/api-v1/candidates/get-all-candidates`);
+            if (!res.ok) {
+                throw new Error('Failed to fetch candidates');
+            }
+            const data: Candidate[] = await res.json();
+            return data || [];
+        } catch (err: any) {
+            console.error("Fetch candidates error:", err);
+            throw err;
+        }
+    }, []);
+
+    const fetchCandidates = useCallback(async () => {
+        try {
+            const data = await performFetch();
+            setCandidates(data);
+        } catch (err: any) {
+            setError(err.message);
+        }
+    }, [performFetch]);
+
     useEffect(() => {
-        const fetchCandidates = async () => {
+        let isMounted = true;
+
+        const initialFetch = async () => {
             setLoading(true);
             setError(null);
             try {
-                const res = await fetch(`/api-v1/candidates/get-all-candidates`);
-                if (!res.ok) {
-                    throw new Error('Failed to fetch candidates');
+                const data = await performFetch();
+                if (isMounted) {
+                    setCandidates(data);
                 }
-                const data: Candidate[] = await res.json(); // Ép kiểu về Candidate[]
-                setCandidates(data || []);
             } catch (err: any) {
-                setError(err.message);
-                console.error("Fetch candidates error:", err);
+                if (isMounted) {
+                    setError(err.message);
+                }
             } finally {
-                setLoading(false);
+                if (isMounted) {
+                    setLoading(false);
+                }
             }
         };
-        fetchCandidates();
-    }, []);
-    return { candidates, loading, error, setCandidates };
+
+        initialFetch();
+
+        return () => {
+            isMounted = false;
+        };
+    }, [performFetch]);
+
+    return { candidates, loading, error, setCandidates, fetchCandidates };
 }
 
 export function useRegistrationChartData() {
@@ -148,13 +180,11 @@ export function useRegistrationChartData() {
             setLoading(true);
             setError(null);
             try {
-                // GIẢ SỬ bạn có một API endpoint như sau:
                 // const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/amg/v1/analytics/registrations-over-time`);
                 // if (!res.ok) throw new Error('Failed to fetch chart data');
                 // const data: ChartDataPoint[] = await res.json();
                 // setChartData(data || []);
 
-                // Dữ liệu giả lập trong khi chờ API
                 await new Promise(resolve => setTimeout(resolve, 500));
                 const mockData: ChartDataPoint[] = [
                     { date: '06/05', count: 2 }, { date: '07/05', count: 5 },

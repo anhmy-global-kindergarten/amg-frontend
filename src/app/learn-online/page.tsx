@@ -1,54 +1,27 @@
 'use client';
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import {notFound, useRouter} from "next/navigation";
 import {usePostsByCategory} from "@/app/hooks/usePostsByCategory";
 import {format} from "date-fns";
 import LineClampContent from "@/app/utils/lineClamp";
-
-// const articals = [
-//     {
-//         id: 1,
-//         date: "27/06/2022",
-//         title: "Chuyến tàu hoả số học",
-//         author: "admin",
-//         content: "AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-//         image: "/learnonline/learn_online1.png",
-//     },
-//     {
-//         id: 2,
-//         date: "14/06/2022",
-//         title: "Chiếc chong chóng từ cốc giấy",
-//         author: "admin",
-//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-//         image: "/learnonline/learn_online2.png",
-//     },
-//     {
-//         id: 3,
-//         date: "27/06/2022",
-//         title: "Chiếc bình số học",
-//         author: "admin",
-//         content: "Mùa hè lại đến rồi và chắc hẳn vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo vèo véo veo vèo veo veéo veo veo vèo",
-//         image: "/learnonline/learn_online3.png",
-//     },
-//     {
-//         id: 4,
-//         date: "14/06/2022",
-//         title: "Khám phá hệ mặt trời",
-//         author: "admin",
-//         content: "Bình minh vừa thức dậy Nắng vàng tỏa muôn nơi AMG PHÁT ĐỘNG CUỘC THI ẢNH : “BABY, NEW VERSION” – ĐIỀU KÌ DIỆU MÙA DỊCH? (Dành cho phụ huynh có ",
-//         image: "/learnonline/learn_online4.png",
-//     },
-// ];
 
 export default function LearningOnlinePage() {
     const { posts, loading, error } = usePostsByCategory("learn-online");
     const [page, setPage] = useState(0);
     const router = useRouter();
 
-    if (loading) return <div>Đang tải dữ liệu...</div>;
-    if (error) return <div>Lỗi: {error}</div>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
+    if (error) {
+        return notFound();
+    }
 
     const itemsPerPage = 6;
     const totalPages = Math.ceil(posts.length / itemsPerPage);

@@ -50,7 +50,6 @@ export function usePostById(articalId: string) {
                 });
             } catch (err: any) {
                 setError(err.message);
-                console.error("Fetch error:", err);
             } finally {
                 setLoading(false);
             }

@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Modal } from "@mantine/core";
-import { useParams, useRouter } from "next/navigation";
+import {notFound, useParams, useRouter} from "next/navigation";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
@@ -174,25 +174,21 @@ const EditPostPage = () => {
             router.push(`/`);
 
         } catch (err: any) {
-            console.error("Lỗi khi cập nhật bài viết:", err);
             setError(`Có lỗi xảy ra: ${err.message}`);
             alert(`Có lỗi xảy ra: ${err.message}`);
         }
     };
 
-    const categories = [
-        { value: "", label: "Chọn danh mục" },
-        { value: "artical-lessons", label: "Tiết học của con" },
-        { value: "events", label: "Sự kiện AMG" },
-        { value: "recruitments", label: "Tuyển dụng" },
-        { value: "handy-baby", label: "Bé khéo tay" },
-        { value: "handbooks", label: "Cẩm nang chăm trẻ" },
-        { value: "learn-online", label: "Học online cùng AMG" },
-        { value: "admissions", label: "Thông tin tuyển sinh" },
-    ];
-
-    if (loading) return <div className="flex justify-center items-center h-screen">Đang tải dữ liệu bài viết...</div>;
-    if (fetchError) return <div className="flex justify-center items-center h-screen text-red-500">Lỗi: {fetchError}</div>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
+    if (fetchError) {
+        return notFound();
+    }
 
     return (
         <div>

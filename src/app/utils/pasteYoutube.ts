@@ -1,4 +1,3 @@
-
 /* eslint-disable */
 
 import Youtube from "@tiptap/extension-youtube";
@@ -64,7 +63,7 @@ export const CustomYoutube = Youtube.extend({
 export const CustomImage = ImageExtension.extend({
     addAttributes() {
         return {
-            ...this.parent?.(), // Giữ lại các thuộc tính gốc như src, alt
+            ...this.parent?.(),
             style: {
                 default: null,
                 parseHTML: element => element.getAttribute('style'),
@@ -74,11 +73,10 @@ export const CustomImage = ImageExtension.extend({
     },
 });
 
-// 2. Custom Paragraph để lưu text-align
 export const CustomParagraph = Paragraph.extend({
     addAttributes() {
         return {
-            ...this.parent?.(), // Giữ lại thuộc tính gốc
+            ...this.parent?.(),
             style: {
                 default: null,
                 parseHTML: element => element.getAttribute('style'),
@@ -88,11 +86,10 @@ export const CustomParagraph = Paragraph.extend({
     },
 });
 
-// 3. Custom Heading để lưu text-align
 export const CustomHeading = Heading.extend({
     addAttributes() {
         return {
-            ...this.parent?.(), // Giữ lại thuộc tính gốc
+            ...this.parent?.(),
             style: {
                 default: null,
                 parseHTML: element => element.getAttribute('style'),

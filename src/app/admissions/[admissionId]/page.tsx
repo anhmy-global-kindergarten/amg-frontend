@@ -73,39 +73,15 @@ export default function AdmissionDetail() {
         setIsSubmitting(false);
     };
 
-    const handleCommentDelete = async (commentId: string) => {
-        if (window.confirm("Bạn có chắc muốn xóa bình luận này?")) {
-            await deleteComment(commentId);
-        }
-    };
-
-//     const admissions = [
-//         {
-//             id: "1",
-//             title: "TUYỂN SINH LỚP HỌC AMG TẠI NHÀ SAU KỲ NGHỈ TẾT",
-//             date: "27/06/2022",
-//             author: "admin",
-//             content: `Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ...
-// Sau khi triển khai một thời gian nhà trường rất hạnh phúc khi nhận được sự ủng hộ và động viên từ các quý bậc phụ huynh dành cho dự án “#Lớp_học_AMG_tại_nhà”
-// Một năm qua thật dài với cả cô và các con, lễ khai giảng online, Giáng sinh online... tất cả đã qua cùng với rất nhiều sự cố gắng của các con, các bố mẹ và cô giáo.
-// Kỳ nghỉ Tết lần này cũng kéo dài hơn mọi năm, bố mẹ cũng chuẩn bị quay trở lại với bộn bề công việc và mối bận tâm tìm kiếm phương án giáo dục, chăm sóc cho con. Nhưng bố mẹ đừng lo vì đã có AMG và giải pháp toàn diện giúp phụ huynh đồng hành cùng con phát triển mỗi ngày.
-// Không dừng lại ở việc chăm sóc, các con sẽ được tham gia các hoạt động học tập, trải nghiệm nhận biết khám phá với những ưu điểm vượt trội, giúp phụ huynh an tâm:
-// Giáo án chuẩn Quốc tế, áp dụng phương pháp giáo dục Phần Lan dành riêng cho trẻ từ 1 tuổi trở lên, nội dung chi tiết cụ thể theo từng ngày,
-// Cung cấp bộ sách bản quyền giúp trẻ phát triển toàn diện,
-// Giải pháp trọn gói từ giáo dục đến dinh dưỡng, cung cấp dịch vụ bữa ăn cho trẻ đảm bảo an toàn thực phẩm với sự tư vấn tận tình từ các chuyên gia,
-// Đội ngũ giáo viên yêu nghề, chuyên môn cao, bằng cấp quốc tế.
-// Liên hệ ngay AMG để được tư vấn và lựa chọn những gì tốt đẹp nhất cho con yêu của bạn! "Lớp học AMG tại nhà” đồng hành cùng bé phát triển, giáo dục sớm mùa dịch!`,
-//             imageHeader: "/admissions/admission1.png",
-//             image1: "",
-//             image2: "",
-//             image3: "",
-//             image4: "",
-//             image5: "",
-//         },
-//     ];
-    if (loading) return <p className="text-center">Đang tải dữ liệu...</p>;
+    if (loading) {
+        return (
+            <div className="w-full min-h-screen flex items-center justify-center bg-[#FFF6C7]">
+                <p className="text-2xl text-[#EA570A]">Đang tải nội dung trang...</p>
+            </div>
+        );
+    }
     if (error && !post) {
-        return <p className="text-center text-red-500">Đã xảy ra lỗi khi tải sổ tay.</p>;
+        return notFound();
     }
 
     if (!post) {

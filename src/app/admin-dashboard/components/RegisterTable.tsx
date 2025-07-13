@@ -1,8 +1,8 @@
 "use client";
 /* eslint-disable */
 
-import React, { useState, Fragment } from "react";
-import {useCandidates} from "@/app/hooks/useAdminData";
+import React, {useState, Fragment, useCallback} from "react";
+import {Candidate, useCandidates} from "@/app/hooks/useAdminData";
 import { format } from "date-fns";
 import { Menu, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
@@ -36,8 +36,74 @@ const CANDIDATE_ACTIONS = [
     { label: 'Phục hồi', newStatus: 'recovered', endpointSuffix: 'recovery-candidate' },
 ];
 
+const StatusMenu = ({ candidate, onUpdate }: { candidate: Candidate, onUpdate: () => void }) => {
+    const currentStatusInfo = CANDIDATE_STATUSES[candidate.status as keyof typeof CANDIDATE_STATUSES] || { label: candidate.status, color: 'bg-gray-100 text-gray-800' };
+
+    const handleStatusChange = async (newStatus: string, endpointSuffix: string) => {
+        let apiEndpoint = `/api-v1/candidates/${endpointSuffix}/${candidate.id}`;
+        let requestBody: any = { status: newStatus };
+        let method = 'POST';
+
+        if (endpointSuffix === 'delete-candidate' || endpointSuffix === 'recovery-candidate') {
+            requestBody = undefined;
+        }
+
+        if (window.confirm(`Bạn có chắc muốn chuyển trạng thái đơn này thành "${CANDIDATE_STATUSES[newStatus as keyof typeof CANDIDATE_STATUSES]?.label || newStatus}"?`)) {
+            try {
+                const response = await fetch(apiEndpoint, {
+                    method: method,
+                    headers: requestBody ? { 'Content-Type': 'application/json' } : {},
+                    body: requestBody ? JSON.stringify(requestBody) : undefined,
+                });
+
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || 'Cập nhật trạng thái thất bại');
+                }
+                onUpdate();
+            } catch (err: any) {
+                alert(`Lỗi: ${err.message}`);
+                console.error("Change status error:", err);
+            }
+        }
+    };
+
+    return (
+        <Menu as="div" className="relative inline-block text-left w-full">
+            <div>
+                <Menu.Button className={`w-full inline-flex justify-center items-center rounded-md px-3 py-1.5 text-xs font-medium shadow-sm hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${currentStatusInfo.color}`}>
+                    {currentStatusInfo.label}
+                    <ChevronDownIcon className="ml-2 -mr-1 h-4 w-4" aria-hidden="true" />
+                </Menu.Button>
+            </div>
+                <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1">
+                        {CANDIDATE_ACTIONS.map((action) => {
+                            if (candidate.status === action.newStatus) return null;
+                            if (candidate.status === 'deleted' && action.endpointSuffix !== 'recovery-candidate') return null;
+                            if (candidate.status !== 'deleted' && action.endpointSuffix === 'recovery-candidate') return null;
+
+                            return (
+                                <Menu.Item key={action.newStatus}>
+                                    {({ active }) => (
+                                        <button
+                                            onClick={() => handleStatusChange(action.newStatus, action.endpointSuffix)}
+                                            className={`${active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'} group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                                        >
+                                            {action.label}
+                                        </button>
+                                    )}
+                                </Menu.Item>
+                            );
+                        })}
+                    </div>
+                </Menu.Items>
+        </Menu>
+    );
+};
+
 export default function RegisterTable() {
-    const { candidates, loading, error, setCandidates } = useCandidates();
+    const { candidates, loading, error, fetchCandidates } = useCandidates();
     const [currentPage, setCurrentPage] = useState(1);
     const [recordsPerPage, setRecordsPerPage] = useState(5);
 
@@ -52,41 +118,6 @@ export default function RegisterTable() {
             setCurrentPage(page);
         }
     };
-
-    const handleChangeStatus = async (candidateId: string, newStatus: string, endpointSuffix: string) => {
-        let apiEndpoint = `/api-v1/candidates/${endpointSuffix}/${candidateId}`;
-        let requestBody: any = { status: newStatus };
-        let method = 'POST';
-
-        if (endpointSuffix === 'delete-candidate' || endpointSuffix === 'recovery-candidate') {
-            requestBody = undefined;
-        }
-        // API update-candidate có thể nhận body khác nếu cần
-        // Ví dụ: nếu update-candidate cần toàn bộ object candidate:
-        // const candidateToUpdate = candidates.find(c => c.id === candidateId);
-        // if (!candidateToUpdate) return;
-        // requestBody = { ...candidateToUpdate, status: newStatus, update_at: new Date().toISOString() };
-
-        if (window.confirm(`Bạn có chắc muốn chuyển trạng thái đơn này thành "${CANDIDATE_STATUSES[newStatus as keyof typeof CANDIDATE_STATUSES]?.label || newStatus}"?`)) {
-            try {
-                const response = await fetch(apiEndpoint, {
-                    method: method,
-                    headers: requestBody ? { 'Content-Type': 'application/json' } : {},
-                    body: requestBody ? JSON.stringify(requestBody) : undefined,
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json();
-                    throw new Error(errData.error || 'Cập nhật trạng thái thất bại');
-                }
-                setCandidates(prev => prev.map(c => c.id === candidateId ? { ...c, status: newStatus, update_at: new Date().toISOString() } : c));
-            } catch (err: any) {
-                alert(`Lỗi: ${err.message}`);
-                console.error("Change status error:", err);
-            }
-        }
-    };
-
 
     if (loading) {
         return <div className="bg-white p-6 rounded-xl shadow-md text-center">Đang tải danh sách đăng ký...</div>;
@@ -144,51 +175,7 @@ export default function RegisterTable() {
                             <td className="py-2 px-4 border">{item.phone}</td>
                             <td className="py-2 px-4 border">{formatDate(item.create_at, 'dd/MM/yyyy HH:mm')}</td>
                             <td className="py-2 px-4 border">
-                                <Menu as="div" className="relative inline-block text-left w-full">
-                                    <div>
-                                        <Menu.Button className={`w-full inline-flex justify-center items-center rounded-md px-3 py-1.5 text-xs font-medium shadow-sm hover:opacity-80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ${currentStatusInfo.color}`}>
-                                            {currentStatusInfo.label}
-                                            <ChevronDownIcon className="ml-2 -mr-1 h-4 w-4" aria-hidden="true" />
-                                        </Menu.Button>
-                                    </div>
-
-                                    <Transition
-                                        as={Fragment}
-                                        enter="transition ease-out duration-100"
-                                        enterFrom="transform opacity-0 scale-95"
-                                        enterTo="transform opacity-100 scale-100"
-                                        leave="transition ease-in duration-75"
-                                        leaveFrom="transform opacity-100 scale-100"
-                                        leaveTo="transform opacity-0 scale-95"
-                                    >
-                                        <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                                            <div className="py-1">
-                                                {CANDIDATE_ACTIONS.map((action) => {
-                                                    // Chỉ hiển thị action nếu trạng thái hiện tại khác với trạng thái mới của action đó
-                                                    // và một số logic đặc biệt (ví dụ: không thể duyệt đơn đã xóa)
-                                                    if (item.status === action.newStatus) return null;
-                                                    if (item.status === 'deleted' && action.endpointSuffix !== 'recovery-candidate') return null;
-                                                    if (item.status !== 'deleted' && action.endpointSuffix === 'recovery-candidate') return null;
-
-                                                    return (
-                                                        <Menu.Item key={action.newStatus}>
-                                                            {({ active }) => (
-                                                                <button
-                                                                    onClick={() => handleChangeStatus(item.id, action.newStatus, action.endpointSuffix)}
-                                                                    className={`${
-                                                                        active ? 'bg-gray-100 text-gray-900' : 'text-gray-700'
-                                                                    } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                                                                >
-                                                                    {action.label}
-                                                                </button>
-                                                            )}
-                                                        </Menu.Item>
-                                                    );
-                                                })}
-                                            </div>
-                                        </Menu.Items>
-                                    </Transition>
-                                </Menu>
+                                <StatusMenu candidate={item} onUpdate={fetchCandidates} />
                             </td>
                         </tr>
                     );

@@ -82,9 +82,6 @@ const EditableImage: React.FC<EditableImageProps> = ({
         ? { fill: true, objectFit: objectFit || 'cover' }
         : { width, height };
 
-    const isCurrentlyUploading = isUploading && uploadingImageId === id;
-
-
     if (!isEditMode) {
         return (
             <div className={`${className} relative`}>
